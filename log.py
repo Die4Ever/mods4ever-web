@@ -49,8 +49,8 @@ if os.environ.get('QUERY_STRING'):
 	version = os.environ.get('QUERY_STRING')
 	version = version.replace("version=", "").replace("%20", " ")
 
-if version != 'v1.7.1.3' and 'v1.7.2' not in version:
-	response += " notification: New v1.7.1 available!\nSupport for Crowd Control v6!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
+if version != 'v1.7.2.9' and 'v1.7.3' not in version:
+	response += " notification: New v1.7.2 available!\nMany updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
 
 try:
 	foldername = "/home/rcarro/dxrando_logs/"+ now.strftime("%Y-%m") +"/"
