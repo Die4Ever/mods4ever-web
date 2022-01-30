@@ -1,0 +1,6 @@
+<IfModule mod_dir.c>
+  DirectoryIndex index.html
+  Options +ExecCGI
+  AddHandler cgi-script .py
+</IfModule>
+
