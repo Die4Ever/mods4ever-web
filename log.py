@@ -32,6 +32,10 @@ def main():
 
 	content, content_length = get_content()
 
+	if content_length == 0:
+		run_tests()
+		return
+
 	response = ""
 	if len(content) != content_length:
 		response = "ERROR: only received "+str(len(content))+"/"+str(content_length)+" bytes"
@@ -48,8 +52,8 @@ def main():
 		write_db(version, content)
 	except Exception as e:
 		print("failed to write to db")
-		print("failed to write to db", file=sys.stderr)
-		print(repr(e), file=sys.stderr)
+		err("failed to write to db")
+		err(repr(e))
 
 	print(response)
 
@@ -60,11 +64,11 @@ def write_db(version, content):
 		config = json.load(f)
 	mydb = None
 	try:
-		mydb = None# mysql.connector.connect(**config)
+		mydb = mysql.connector.connect(**config)
 	except Exception as e:
 		print("failed to connect to db")
-		print("failed to connect to db", file=sys.stderr)
-		print(repr(e), file=sys.stderr)
+		err("failed to connect to db")
+		err(repr(e))
 	
 
 
@@ -101,12 +105,27 @@ def get_content():
 
 	try:
 		#while len(args) < content_length AND (datetime.datetime.now() - now).total_seconds() < 10:
-		content = content + sys.stdin.read()
-		content = content.replace('\x00','').replace('\r','')
+		if content_length > 0:
+			content = content + sys.stdin.read()
+			content = content.replace('\x00','').replace('\r','')
 	except Exception as e:
 		print(repr(e))
 	
 	return content, content_length
 
+
+def run_tests():
+	info("path: "+os.path.dirname(os.path.realpath(__file__)))
+	info("cwd: "+os.getcwd())
+	info("test success")
+
+def info(msg):
+	print("INFO: "+msg, file=sys.stderr)
+
+def warn(msg):
+	print("WARNING: "+msg, file=sys.stderr)
+
+def err(msg):
+	print("ERROR: "+msg, file=sys.stderr)
 
 main()
