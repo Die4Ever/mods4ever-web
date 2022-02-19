@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-# enable debugging
 
+import sys
 if sys.version_info[0] < 3:
     raise ImportError('Python < 3 is unsupported.')
 
@@ -10,7 +11,6 @@ if sys.version_info[0] == 3 and sys.version_info[1] < 5:
 #import cgi
 import cgitb
 #cgitb.enable()
-import sys
 import time
 import requests
 import json
