@@ -170,6 +170,7 @@ def run_tests():
 	info("cwd: "+os.getcwd())
 	info("logdir: "+logdir)
 	info("db config: " + repr(get_db_config()))
+	write_db("0", "test")
 	info("test success")
 
 error_log = logdir + "error_log"
