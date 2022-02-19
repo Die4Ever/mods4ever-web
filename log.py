@@ -73,6 +73,7 @@ def write_db(version, content):
 	mydb = None
 	try:
 		mydb = mysql.connector.connect(**config)
+		info("connected to db")
 	except Exception as e:
 		print("failed to connect to db")
 		err("failed to connect to db")
@@ -134,7 +135,7 @@ error_log = logdir + "error_log"
 def write_error_log(msg):
 	print(msg, file=sys.stderr)
 	with open(error_log, "a") as file:
-			file.write(msg)
+			file.write(msg+"\n")
 
 
 def info(msg):
