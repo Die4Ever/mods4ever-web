@@ -86,13 +86,16 @@ def write_db(version, ip, content):
 		cursor = db.cursor()
 		cursor.execute("INSERT INTO logs SET created=NOW(), version=%s, ip=%s, message=%s", (version, ip, content))
 		log_id = cursor.lastrowid
+		info("inserted logs id "+str(log_id))
 		for d in get_deaths(content):
 			log_death(cursor, log_id, d)
+		db.commit()
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
 		logex(e)
 	
+	db.commit()
 	cursor.close()
 	db.close()
 
@@ -106,7 +109,7 @@ def get_deaths(content):
 	return deaths
 
 def log_death(cursor, log_id, death):
-	info(death)
+	info(repr(death))
 	cursor.execute("INSERT INTO deaths SET log_id=%s, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
 		(log_id, death['player'], death['killer'], death['killerclass'], death['dmgtype'], death['x'], death['y'], death['z']))
 
