@@ -11,6 +11,7 @@ import json
 import os
 import datetime
 import pathlib
+import mysql.connector
 
 def main():
 	debug=False
@@ -37,7 +38,29 @@ def main():
 		response += " notification: New v1.7.2 available!\nMany updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
 
 	write_log(version, content, response)
+	try:
+		write_db(version, content)
+	except Exception as e:
+		print("failed to write to db")
+		print("failed to write to db", file=sys.stderr)
+		print(repr(e), file=sys.stderr)
+
 	print(response)
+
+
+def write_db():
+	config = {}
+	with open('/home/rcarro/dxrando_logs/config.json', 'r') as f:
+		config = json.load(f)
+	mydb = None
+	try:
+		mydb = None# mysql.connector.connect(**config)
+	except Exception as e:
+		print("failed to connect to db")
+		print("failed to connect to db", file=sys.stderr)
+		print(repr(e), file=sys.stderr)
+	
+
 
 
 def get_version():
