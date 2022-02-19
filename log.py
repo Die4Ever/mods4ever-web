@@ -106,7 +106,7 @@ def get_deaths(content):
 
 def log_death(cursor, log_id, death):
 	info(death)
-	cursor.execute("INSERT INTO deaths SET log_id=%d, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
+	cursor.execute("INSERT INTO deaths SET log_id=%s, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
 		(log_id, death['player'], death['killer'], death['killerclass'], death['dmgtype'], death['x'], death['y'], death['z']))
 
 def try_exec(cursor, query):
