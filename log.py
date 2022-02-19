@@ -54,7 +54,7 @@ def main():
 	print(response)
 
 
-def write_db():
+def write_db(version, content):
 	config = {}
 	with open('/home/rcarro/dxrando_logs/config.json', 'r') as f:
 		config = json.load(f)
