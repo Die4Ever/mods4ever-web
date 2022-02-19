@@ -1,0 +1,7 @@
+{
+    "user":"username",
+    "password":"thepassword",
+    "host":"localhost",
+    "database":"dxrando",
+    "raise_on_warnings":true
+}

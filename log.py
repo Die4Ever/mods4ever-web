@@ -19,11 +19,14 @@ import datetime
 import pathlib
 import mysql.connector
 
+path = os.path.dirname(os.path.realpath(__file__))
+logdir = path + "/dxrando_logs/"
+
 def main():
 	debug=False
 
 	#cgitb.enable()
-	cgitb.enable(display=1, logdir="/home/rcarro/dxrando_logs/")
+	cgitb.enable(display=1, logdir=logdir)
 	#exit(0)
 
 	print("Status: 200" )
@@ -58,10 +61,15 @@ def main():
 	print(response)
 
 
+def get_db_config():
+	with open(path+'/config.json', 'r') as f:
+		return json.load(f)
+	err("failed to load db config")
+	return {}
+
+
 def write_db(version, content):
-	config = {}
-	with open('/home/rcarro/dxrando_logs/config.json', 'r') as f:
-		config = json.load(f)
+	config = get_db_config()
 	mydb = None
 	try:
 		mydb = mysql.connector.connect(**config)
@@ -115,17 +123,27 @@ def get_content():
 
 
 def run_tests():
+	info("running tests...")
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
+	info("logdir: "+logdir)
+	info("db config: " + repr(get_db_config()))
 	info("test success")
 
+error_log = logdir + "error_log"
+def write_error_log(msg):
+	print(msg, file=sys.stderr)
+	with open(error_log, "a") as file:
+			file.write(msg)
+
+
 def info(msg):
-	print("INFO: "+msg, file=sys.stderr)
+	write_error_log("INFO: "+msg)
 
 def warn(msg):
-	print("WARNING: "+msg, file=sys.stderr)
+	write_error_log("INFO: "+msg)
 
 def err(msg):
-	print("ERROR: "+msg, file=sys.stderr)
+	write_error_log("INFO: "+msg)
 
 main()
