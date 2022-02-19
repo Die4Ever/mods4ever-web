@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-# enable debugging
 
+from csv import excel_tab
 import sys
 if sys.version_info[0] < 3:
     raise ImportError('Python < 3 is unsupported.')
@@ -96,30 +97,36 @@ def write_db(version, content):
 	db.close()
 
 
-def create_table(db, name, desc):
-	cursor = db.cursor()
-	desc = "CREATE TABLE " + name + " (" + desc + ")"
+def try_exec(cursor, query):
 	try:
-		curr_desc = ""
-		try:
-			cursor.execute("SHOW CREATE TABLE "+name)
-			for (table, tdesc) in cursor:
-				curr_desc = tdesc
-		except Exception as e:
-			err(repr(e))
-		if curr_desc.count(',') != desc.count(','):
-			info("old table: "+curr_desc)
-			try:
-				cursor.execute("RENAME TABLE "+name+" TO old_"+name)
-			except Exception as e:
-				err(repr(e))
-			info("create_table: "+desc)
-			cursor.execute(desc)
+		cursor.execute(query)
 	except mysql.connector.Error as e:
 		if e.errno == mysql.connector.errorcode.ER_TABLE_EXISTS_ERROR:
 			print("table already exists.")
 		else:
 			err(repr(e))
+		return ()
+	except Exception as e:
+		err(repr(e))
+		return ()
+	return cursor
+
+
+def create_table(db, name, desc):
+	cursor = db.cursor()
+	desc = "CREATE TABLE " + name + " (" + desc + ")"
+	curr_desc = ""
+
+	results = try_exec(cursor, "SHOW CREATE TABLE "+name)
+	for (table, tdesc) in results:
+		curr_desc = tdesc
+	
+	if curr_desc.count(',') != desc.count(','):
+		info("old table: "+curr_desc)
+		try_exec(cursor, "DROP TABLE old_"+name)
+		try_exec(cursor, "RENAME TABLE "+name+" TO old_"+name)
+		info("create_table: "+desc)
+		try_exec(cursor, desc)
 	cursor.close()
 
 
@@ -169,8 +176,19 @@ def get_content():
 	return content, content_length
 
 
+class MockFail:
+	def execute(self, q):
+		raise Exception("MockFail: "+q)
+
 def run_tests():
 	info("running tests...")
+
+	# ensure proper error handling
+	results = try_exec(MockFail(), "expected failure")
+	for (table, tdesc) in results:
+		print(table)
+		print(tdesc)
+	
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
 	info("logdir: "+logdir)
