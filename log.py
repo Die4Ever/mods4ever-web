@@ -18,6 +18,7 @@ import os
 import datetime
 import pathlib
 import mysql.connector
+import mysql.connector.errorcode
 
 path = os.path.dirname(os.path.realpath(__file__))
 logdir = path + "/dxrando_logs/"
@@ -68,19 +69,59 @@ def get_db_config():
 	return {}
 
 
-def write_db(version, content):
+def db_connect():
 	config = get_db_config()
-	mydb = None
+	db = None
 	try:
-		mydb = mysql.connector.connect(**config)
-		info("connected to db")
+		db = mysql.connector.connect(**config)
 	except Exception as e:
 		print("failed to connect to db")
 		err("failed to connect to db")
 		err(repr(e))
+	return db
+
+
+def write_db(version, content):
+	db = db_connect()
+	cursor = None
+	try:
+		create_tables(db)
+		cursor = db.cursor()
+	except Exception as e:
+		print("failed to write to db")
+		err("failed to write to db")
+		err(repr(e))
 	
+	cursor.close()
+	db.close()
 
 
+def create_table(db, name, desc):
+	cursor = db.cursor()
+	desc = "CREATE TABLE " + name + " (" + desc + ")"
+	try:
+		cursor.execute("SHOW CREATE TABLE deaths")
+		curr_desc = ""
+		for (table, tdesc) in cursor:
+			curr_desc = tdesc
+		if curr_desc.count(',') != desc.count(','):
+			info("old deaths table: "+curr_desc)
+			try:
+				cursor.execute("RENAME TABLE deaths TO old_deaths")
+			except Exception as e:
+				err(repr(e))
+			cursor.execute(desc)
+	except mysql.connector.Error as e:
+		if e.errno == mysql.connector.errorcode.ER_TABLE_EXISTS_ERROR:
+			print("table already exists.")
+		else:
+			err(repr(e))
+	cursor.close()
+
+
+def create_tables(db):
+	create_table(db, "deaths", "id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)")
+	create_table(db, "logs", "id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)")
 
 def get_version():
 	version = ""
