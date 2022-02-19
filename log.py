@@ -100,16 +100,20 @@ def create_table(db, name, desc):
 	cursor = db.cursor()
 	desc = "CREATE TABLE " + name + " (" + desc + ")"
 	try:
-		cursor.execute("SHOW CREATE TABLE deaths")
 		curr_desc = ""
-		for (table, tdesc) in cursor:
-			curr_desc = tdesc
+		try:
+			cursor.execute("SHOW CREATE TABLE "+name)
+			for (table, tdesc) in cursor:
+				curr_desc = tdesc
+		except Exception as e:
+			err(repr(e))
 		if curr_desc.count(',') != desc.count(','):
-			info("old deaths table: "+curr_desc)
+			info("old table: "+curr_desc)
 			try:
-				cursor.execute("RENAME TABLE deaths TO old_deaths")
+				cursor.execute("RENAME TABLE "+name+" TO old_"+name)
 			except Exception as e:
 				err(repr(e))
+			info("create_table: "+desc)
 			cursor.execute(desc)
 	except mysql.connector.Error as e:
 		if e.errno == mysql.connector.errorcode.ER_TABLE_EXISTS_ERROR:
@@ -120,8 +124,9 @@ def create_table(db, name, desc):
 
 
 def create_tables(db):
-	create_table(db, "deaths", "id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)")
-	create_table(db, "logs", "id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)")
+	base = ", id int unsigned NOT NULL AUTO_INCREMENT, map varchar(255), when datetime, version varchar(255), ip varchar(100), PRIMARY KEY(id), INDEX(map, when)"
+	create_table(db, "deaths", "name varchar(255), killer varchar(255), killerclass varchar(255), damagetype varchar(255), seed int unsigned, flagshash int unsigned, x float, y float, z float" + base)
+	create_table(db, "logs", "message varchar(65000)" + base)
 
 def get_version():
 	version = ""
