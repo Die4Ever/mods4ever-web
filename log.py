@@ -144,7 +144,7 @@ def create_table(db, name, desc):
 
 def create_tables(db):
 	base = ", id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)"
-	create_table(db, "deaths", "int unsigned log_id, name varchar(255), killer varchar(255), killerclass varchar(255), damagetype varchar(255), x float, y float, z float" + base)
+	create_table(db, "deaths", "log_id int unsigned, name varchar(255), killer varchar(255), killerclass varchar(255), damagetype varchar(255), x float, y float, z float" + base)
 	create_table(db, "logs", "map varchar(255), created datetime, version varchar(255), ip varchar(100), message varchar(30000), seed int unsigned, flagshash int unsigned, INDEX(map, created)" + base)
 
 def get_version():
