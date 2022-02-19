@@ -83,7 +83,7 @@ def write_db(version, ip, content):
 	try:
 		create_tables(db)
 		cursor = db.cursor()
-		cursor.execute("INSERT INTO logs SET created=NOW(), version=%s message=%s, ip=%s", (version, content, ip))
+		cursor.execute("INSERT INTO logs SET created=NOW(), version=%s, ip=%s, message=%s", (version, ip, content))
 		log_id = cursor.lastrowid
 		for d in get_deaths(content):
 			log_death(cursor, log_id, d)
