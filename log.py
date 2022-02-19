@@ -126,7 +126,7 @@ def create_table(db, name, desc):
 def create_tables(db):
 	base = ", id int unsigned NOT NULL AUTO_INCREMENT, map varchar(255), created datetime, version varchar(255), ip varchar(100), PRIMARY KEY(id), INDEX(map, created)"
 	create_table(db, "deaths", "name varchar(255), killer varchar(255), killerclass varchar(255), damagetype varchar(255), seed int unsigned, flagshash int unsigned, x float, y float, z float" + base)
-	create_table(db, "logs", "message varchar(65000)" + base)
+	create_table(db, "logs", "message varchar(60000)" + base)
 
 def get_version():
 	version = ""
