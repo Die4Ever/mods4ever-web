@@ -19,6 +19,7 @@ import pathlib
 import mysql.connector
 import mysql.connector.errorcode
 import re
+import traceback
 
 path = os.path.dirname(os.path.realpath(__file__))
 logdir = path + "/dxrando_logs/"
@@ -53,7 +54,7 @@ def main():
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
-		err(repr(e))
+		logex(e)
 
 	print(response)
 
@@ -73,7 +74,7 @@ def db_connect():
 	except Exception as e:
 		print("failed to connect to db")
 		err("failed to connect to db")
-		err(repr(e))
+		logex(e)
 	return db
 
 
@@ -90,7 +91,7 @@ def write_db(version, ip, content):
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
-		err(repr(e))
+		logex(e)
 	
 	cursor.close()
 	db.close()
@@ -116,10 +117,10 @@ def try_exec(cursor, query):
 		if e.errno == mysql.connector.errorcode.ER_TABLE_EXISTS_ERROR:
 			print("table already exists.")
 		else:
-			err(repr(e))
+			logex(e)
 		return ()
 	except Exception as e:
-		err(repr(e))
+		logex(e)
 		return ()
 	return cursor
 
@@ -164,7 +165,7 @@ def write_log(version, ip, content, response):
 		with open( filename, "a") as file:
 			file.write( "\n" + now.strftime("%Y-%m-%d %H:%M:%S") + ": " + version + ": " + response +"\n" + content + "\n")
 	except Exception as e:
-		print(repr(e))
+		logex(e)
 
 
 def get_content():
@@ -183,7 +184,7 @@ def get_content():
 			content = content + sys.stdin.read()
 			content = content.replace('\x00','').replace('\r','')
 	except Exception as e:
-		print(repr(e))
+		logex(e)
 	
 	return content, content_length
 
@@ -221,9 +222,12 @@ def info(msg):
 	write_error_log("INFO: "+msg)
 
 def warn(msg):
-	write_error_log("INFO: "+msg)
+	write_error_log("WARNING: "+msg)
 
 def err(msg):
-	write_error_log("INFO: "+msg)
+	write_error_log("ERROR: "+msg)
+
+def logex(e):
+	write_error_log("ERROR: "+traceback.format_exc())
 
 main()
