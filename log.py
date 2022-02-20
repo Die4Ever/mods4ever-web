@@ -56,7 +56,8 @@ def main():
 
 	write_log(version, ip, content, response)
 	try:
-		write_db(version, ip, content)
+		db_data = write_db(version, ip, content)
+		response.update(db_data)
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
@@ -95,11 +96,12 @@ def db_connect():
 
 
 def write_db(version, ip, content):
+	ret = {}
 	db = db_connect()
 	cursor = None
 	try:
 		create_tables(db)
-		cursor = db.cursor()
+		cursor = db.cursor(dictionary=True)
 		d = parse_content(content)
 		cursor.execute("INSERT INTO logs SET "
 						+ "created=NOW(), version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s",
@@ -109,6 +111,7 @@ def write_db(version, ip, content):
 		for d in get_deaths(content):
 			log_death(cursor, log_id, d)
 		db.commit()
+		ret = get_deaths(cursor, d.get('map'))
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
@@ -117,7 +120,19 @@ def write_db(version, ip, content):
 	db.commit()
 	cursor.close()
 	db.close()
+	return ret
 
+
+def get_deaths(cursor, map):
+	if not map:
+		return []
+	ret = []
+	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
+	cursor.execute("SELECT name, killer, damagetype, x, y, z, now()-created as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 100", (map))
+	for (d) in cursor:
+		ret.append(d)
+	
+	return ret[:50]
 
 def parse_content(content):
 	d = {}
@@ -132,6 +147,8 @@ def parse_content(content):
 			d.pop('remaining', None)
 		except Exception as e:
 			logex(e)
+	if 'map' not in d:
+		warn("parse_content didn't find map in: "+content)
 	return d
 
 def get_deaths(content):
@@ -262,7 +279,7 @@ def run_tests():
 	
 	info("testing parse_content")
 	d = parse_content("INFO: 01_NYC_UNATCOIsland.DXRMachines0: _SpawnNewActor 01_NYC_UNATCOIsland.DataCube12 at (6404.268066,4184.700195,-123.422623)\nINFO: 01_NYC_UNATCOIsland.DXRando12: done randomizing 01_NYC_UNATCOISLAND using seed 191616\nINFO: 01_NYC_UNATCOIsland.DXRFlags12: AnyEntry 01_NYC_UNATCOISLAND DeusEx.DXRFlags - v1.7.3.2 Alpha, seed: 191616, flagshash: 1192551168, playthrough_id: 1686588103, flagsversion: 1070302, gamemode: 0, difficulty: 1.500000, loadout: 0, brightness: 15, newgameplus_loops: 0, autosave: 0, crowdcontrol: 0, codes_mode: 2\nINFO: 01_NYC_UNATCOIsland.DXRFlags12: AnyEntry 01_NYC_UNATCOISLAND - ammo: 70, merchants: 30, minskill: 50, maxskill: 300, skills_disable_downgrades: 0, skills_reroll_missions: 5, skills_independent_levels: 0, multitools: 70, lockpicks: 70, biocells: 70, medkits: 70, speedlevel: 1, keysrando: 4, doorsmode: 259, doorspickable: 50, doorsdestructible: 50, deviceshackable: 100, passwordsrandomized: 100, enemiesrandomized: 30, enemyrespawn: 0, infodevices: 100, startinglocations: 100, goals: 100, equipment: 2, dancingpercent: 25, medbots: 25, repairbots: 25, medbotuses: 0, repairbotuses: 0, medbotcooldowns: 1, repairbotcooldowns: 1, medbotamount: 1, repairbotamount: 1, turrets_move: 50, turrets_add: 70, banned_skills: 5, banned_skill_levels: 5, enemies_nonhumans: 60, swapitems: 100, swapcontainers: 100, augcans: 100, aug_value_rando: 100, skill_value_rando: 100, min_weapon_dmg: 50, max_weapon_dmg: 150, min_weapon_shottime: 50, max_weapon_shottime: 150\nINFO: 01_NYC_UNATCOIsland.DXRTelemetry8: health: 100, HealthLegLeft: 100, HealthLegRight: 100, HealthTorso: 100, HealthHead: 100, HealthArmLeft: 100, HealthArmRight: 100")
-	info(repr(d))
+	parse_content("DEATH: 01_NYC_UNATCOIsland.JCDentonMale8: JC Denton was killed by JCDentonMale JC Denton with exploded damage in 01_NYC_UNATCOISLAND (748.419373,-433.573730,-123.300003)\nINFO: 01_NYC_UNATCOIsland.JCDentonMale8: Speed Enhancement deactivated")
 
 	assert VersionStringToInt("v1.3.1") == VersionToInt(1, 3, 1, 0)
 	assert VersionStringToInt("v1.7.2.5") == VersionToInt(1, 7, 2, 5)
