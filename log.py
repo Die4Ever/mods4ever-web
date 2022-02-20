@@ -29,7 +29,8 @@ def main():
 
 	print("Status: 200" )
 	print("")
-	print( os.environ.get('REMOTE_ADDR') )
+	ip = os.environ.get('REMOTE_ADDR')
+	#info( ip )
 
 	content, content_length = get_content()
 
@@ -53,9 +54,9 @@ def main():
 		response['notification'] = "Test notification!"
 		response['message'] = "Many updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
 
-	write_log(version, os.environ.get('REMOTE_ADDR'), content, response)
+	write_log(version, ip, content, response)
 	try:
-		write_db(version, os.environ.get('REMOTE_ADDR'), content)
+		write_db(version, ip, content)
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
