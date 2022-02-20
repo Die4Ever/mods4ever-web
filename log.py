@@ -48,6 +48,10 @@ def main():
 	if VersionStringToInt(version) < VersionToInt(1, 7, 2, 9):
 		response['notification'] = "New v1.7.2 available!"
 		response['message'] = "Many updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
+	
+	if VersionStringToInt(version) == VersionToInt(1, 7, 3, 3):
+		response['notification'] = "Test notification!"
+		response['message'] = "Many updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
 
 	write_log(version, os.environ.get('REMOTE_ADDR'), content, response)
 	try:
@@ -61,7 +65,7 @@ def main():
 
 
 def print_response(version, response):
-	if VersionStringToInt(version) >= VersionToInt(99, 7, 4, 0):
+	if VersionStringToInt(version) >= VersionToInt(1, 7, 3, 3):
 		print(json.dumps(response))
 	else:
 		print(response['status'])
@@ -190,9 +194,9 @@ def VersionToInt(major, minor, patch, build):
 def VersionStringToInt(version):
 	try:
 		m = re.search(r'v(\d+)\.(\d+)\.(\d+)(\.(\d+))?', version)
-		group5 = 0
-		if len(m.groups()) > 5:
-			group5 = m.group(5)
+		group5 = m.group(5)
+		if group5 is None:
+			group5 = "0"
 		return VersionToInt(m.group(1), m.group(2), m.group(3), group5)
 	except Exception as e:
 		print("VersionStringToInt error parsing "+version)
@@ -249,7 +253,7 @@ def run_tests():
 
 	# ensure proper error handling
 	results = try_exec(MockFailCursor(), "expected failure")
-	for t in results:
+	for t in (results):
 		err("we shouldn't hit this")
 	
 	for d in get_deaths("\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale2: JC Denton was killed by SecurityBot3 UJ-31 with shot damage in 01_NYC_UNATCOISLAND (-502.167694,40.753559,-119.199997)\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale2: Die4Ever was killed in 01_NYC_UNATCOISLAND (-502.167694,40.753559,-119.199997)"):
@@ -259,10 +263,10 @@ def run_tests():
 	d = parse_content("INFO: 01_NYC_UNATCOIsland.DXRMachines0: _SpawnNewActor 01_NYC_UNATCOIsland.DataCube12 at (6404.268066,4184.700195,-123.422623)\nINFO: 01_NYC_UNATCOIsland.DXRando12: done randomizing 01_NYC_UNATCOISLAND using seed 191616\nINFO: 01_NYC_UNATCOIsland.DXRFlags12: AnyEntry 01_NYC_UNATCOISLAND DeusEx.DXRFlags - v1.7.3.2 Alpha, seed: 191616, flagshash: 1192551168, playthrough_id: 1686588103, flagsversion: 1070302, gamemode: 0, difficulty: 1.500000, loadout: 0, brightness: 15, newgameplus_loops: 0, autosave: 0, crowdcontrol: 0, codes_mode: 2\nINFO: 01_NYC_UNATCOIsland.DXRFlags12: AnyEntry 01_NYC_UNATCOISLAND - ammo: 70, merchants: 30, minskill: 50, maxskill: 300, skills_disable_downgrades: 0, skills_reroll_missions: 5, skills_independent_levels: 0, multitools: 70, lockpicks: 70, biocells: 70, medkits: 70, speedlevel: 1, keysrando: 4, doorsmode: 259, doorspickable: 50, doorsdestructible: 50, deviceshackable: 100, passwordsrandomized: 100, enemiesrandomized: 30, enemyrespawn: 0, infodevices: 100, startinglocations: 100, goals: 100, equipment: 2, dancingpercent: 25, medbots: 25, repairbots: 25, medbotuses: 0, repairbotuses: 0, medbotcooldowns: 1, repairbotcooldowns: 1, medbotamount: 1, repairbotamount: 1, turrets_move: 50, turrets_add: 70, banned_skills: 5, banned_skill_levels: 5, enemies_nonhumans: 60, swapitems: 100, swapcontainers: 100, augcans: 100, aug_value_rando: 100, skill_value_rando: 100, min_weapon_dmg: 50, max_weapon_dmg: 150, min_weapon_shottime: 50, max_weapon_shottime: 150\nINFO: 01_NYC_UNATCOIsland.DXRTelemetry8: health: 100, HealthLegLeft: 100, HealthLegRight: 100, HealthTorso: 100, HealthHead: 100, HealthArmLeft: 100, HealthArmRight: 100")
 	info(repr(d))
 
-	info(str(VersionStringToInt("v1.3.1")))
-	info(str(VersionStringToInt("v1.7.2.5")))
-	info(str(VersionStringToInt("v1.7.3.5 Alpha")))
-
+	assert VersionStringToInt("v1.3.1") == VersionToInt(1, 3, 1, 0)
+	assert VersionStringToInt("v1.7.2.5") == VersionToInt(1, 7, 2, 5)
+	assert VersionStringToInt("v1.7.3.5 Alpha") == VersionToInt(1, 7, 3, 5)
+	
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
 	info("logdir: "+logdir)
