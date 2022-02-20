@@ -111,7 +111,7 @@ def write_db(version, ip, content):
 		for d in get_deaths(content):
 			log_death(cursor, log_id, d)
 		db.commit()
-		ret = get_deaths(cursor, d.get('map'))
+		ret = select_deaths(cursor, d.get('map'))
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
@@ -123,7 +123,7 @@ def write_db(version, ip, content):
 	return ret
 
 
-def get_deaths(cursor, map):
+def select_deaths(cursor, map):
 	if not map:
 		return []
 	ret = []
