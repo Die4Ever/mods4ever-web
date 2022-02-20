@@ -125,14 +125,18 @@ def write_db(version, ip, content):
 
 def select_deaths(cursor, map):
 	if not map:
-		return []
-	ret = []
+		map = "01_nyc_unatcoisland"
+	ret = {}
 	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
-	cursor.execute("SELECT name, killer, damagetype, x, y, z, now()-created as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 100", (map))
+	cursor.execute("SELECT deaths.id as deathid, ip, name, killer, damagetype, x, y, z, now()-created as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 100", (map))
 	for (d) in cursor:
-		ret.append(d)
+		key = 'deaths.'+d['deathid'] #d['x']+','+d['y']+','+d['z']
+		d.pop('ip', None)
+		ret[key] = []
+		for k in ['name', 'killer', 'damagetype', 'age', 'x', 'y', 'z']:
+			ret[key].append(d[k])
 	
-	return ret[:50]
+	return ret
 
 def parse_content(content):
 	d = {}
