@@ -34,7 +34,7 @@ def main():
 
 	content, content_length = get_content()
 
-	if content_length == 0:
+	if ip is None:
 		run_tests()
 		return
 
