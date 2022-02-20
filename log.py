@@ -123,18 +123,26 @@ def write_db(version, ip, content):
 	return ret
 
 
+def unrealscript_sanitize(s):
+	allow = "-_[]\{\}()`~!@#$%^&*\+=|;:<>,."
+	s = re.sub('[^\w\d %s]' % allow, '', s)
+	s = re.sub('\s+', ' ', s)
+	return s
+
 def select_deaths(cursor, map):
 	if not map:
 		map = "01_nyc_unatcoisland"
 	ret = {}
 	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
-	cursor.execute("SELECT deaths.id as deathid, ip, name, killer, damagetype, x, y, z, now()-created as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 100", (map))
+	cursor.execute("SELECT deaths.id as deathid, ip, name, killer, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 100", (map,))
 	for (d) in cursor:
-		key = 'deaths.'+d['deathid'] #d['x']+','+d['y']+','+d['z']
+		# need to sanitize these because unrealscript's json parsing isn't perfect
+		key = 'deaths.' + str(d['deathid']) #d['x']+','+d['y']+','+d['z']
 		d.pop('ip', None)
-		ret[key] = []
+		ret[key] = [1] # 1 death in the group
 		for k in ['name', 'killer', 'damagetype', 'age', 'x', 'y', 'z']:
-			ret[key].append(d[k])
+			s = unrealscript_sanitize(d[k])
+			ret[key].append(s)
 	
 	return ret
 
@@ -288,6 +296,8 @@ def run_tests():
 	assert VersionStringToInt("v1.3.1") == VersionToInt(1, 3, 1, 0)
 	assert VersionStringToInt("v1.7.2.5") == VersionToInt(1, 7, 2, 5)
 	assert VersionStringToInt("v1.7.3.5 Alpha") == VersionToInt(1, 7, 3, 5)
+
+	info(unrealscript_sanitize("this is a test, Die4Ever; ok: another test {      } \\  bye "))
 	
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
