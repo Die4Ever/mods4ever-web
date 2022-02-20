@@ -134,7 +134,7 @@ def select_deaths(cursor, map):
 		map = "01_nyc_unatcoisland"
 	ret = {}
 	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
-	cursor.execute("SELECT deaths.id as deathid, ip, name, killer, killerclass, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 100", (map,))
+	cursor.execute("SELECT deaths.id as deathid, ip, name, killer, killerclass, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 50", (map,))
 	for (d) in cursor:
 		# need to sanitize these because unrealscript's json parsing isn't perfect
 		key = 'deaths.' + str(d['deathid']) #d['x']+','+d['y']+','+d['z']
