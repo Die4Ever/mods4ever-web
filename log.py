@@ -125,7 +125,7 @@ def write_db(version, ip, content):
 
 def unrealscript_sanitize(s):
 	allow = "-_[]\{\}()`~!@#$%^&*\+=|;:<>,."
-	s = re.sub('[^\w\d %s]' % allow, '', s)
+	s = re.sub('[^\w\d %s]' % allow, '', str(s))
 	s = re.sub('\s+', ' ', s)
 	return s
 
