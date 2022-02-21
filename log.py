@@ -11,7 +11,7 @@ if sys.version_info[0] == 3 and sys.version_info[1] < 5:
 
 import cgitb
 import time
-import requests
+#import requests
 import json
 import os
 import datetime
@@ -44,29 +44,27 @@ def main():
 	else:
 		response['status'] = "ok received "+str(len(content))+"/"+str(content_length)+" bytes"
 
-	version = get_version()
+	qps = query_params()
+	version = qps['version']
+	mod = qps.get('mod')
 
 	if VersionStringToInt(version) < VersionToInt(1, 7, 2, 9):
 		response['notification'] = "New v1.7.2 available!"
 		response['message'] = "Many updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
-	
-	if VersionStringToInt(version) == VersionToInt(1, 7, 3, 3):
-		response['notification'] = "Test notification!"
-		response['message'] = "Many updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
 
-	write_log(version, ip, content, response)
+	write_log(mod, version, ip, content, response)
 	try:
-		db_data = write_db(version, ip, content)
+		db_data = write_db(mod, version, ip, content)
 		response.update(db_data)
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
 		logex(e)
 
-	print_response(version, response)
+	print_response(mod, version, response)
 
 
-def print_response(version, response):
+def print_response(mod, version, response):
 	if VersionStringToInt(version) >= VersionToInt(1, 7, 3, 3):
 		print(json.dumps(response))
 	else:
@@ -95,23 +93,23 @@ def db_connect():
 	return db
 
 
-def write_db(version, ip, content):
+def write_db(mod, version, ip, content):
 	ret = {}
 	db = db_connect()
 	cursor = None
 	try:
-		create_tables(db)
+		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
 		d = parse_content(content)
 		cursor.execute("INSERT INTO logs SET "
-						+ "created=NOW(), version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s",
-												(version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash')))
+						+ "created=NOW(), firstword, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s",
+										(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash')))
 		log_id = cursor.lastrowid
 		info("inserted logs id "+str(log_id))
 		for d in get_deaths(content):
 			log_death(cursor, log_id, d)
 		db.commit()
-		ret = select_deaths(cursor, d.get('map'))
+		ret = select_deaths(cursor, mod, d.get('map'))
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
@@ -129,12 +127,24 @@ def unrealscript_sanitize(s):
 	s = re.sub('\s+', ' ', s)
 	return s
 
-def select_deaths(cursor, map):
+def select_deaths(cursor, mod, map):
 	if not map:
 		map = "01_nyc_unatcoisland"
 	ret = {}
 	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
-	cursor.execute("SELECT deaths.id as deathid, ip, name, killer, killerclass, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age FROM deaths JOIN logs on(deaths.log_id=logs.id) WHERE map=%s ORDER BY created DESC LIMIT 50", (map,))
+	modcondition = None
+	if mod == "RevRandomizer":
+		modcondition = " AND modname == \"RevRandomizer\" "
+	else:
+		modcondition = " AND modname != \"RevRandomizer\" "
+
+	cursor.execute("SELECT "
+		+ "deaths.id as deathid, modname, ip, name, killer, killerclass, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age "
+		+ "FROM deaths JOIN logs on(deaths.log_id=logs.id) "
+		+ "WHERE map=%s "
+		+ modcondition
+		+ " ORDER BY created DESC LIMIT 50", (map,))
+	
 	for (d) in cursor:
 		# need to sanitize these because unrealscript's json parsing isn't perfect
 		key = 'deaths.' + str(d['deathid']) #d['x']+','+d['y']+','+d['z']
@@ -214,7 +224,7 @@ def create_table(db, name, desc):
 def create_tables(db):
 	base = ", id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)"
 	create_table(db, "deaths", "log_id int unsigned, name varchar(255), killer varchar(255), killerclass varchar(255), damagetype varchar(255), x float, y float, z float" + base)
-	create_table(db, "logs", "map varchar(255), created datetime, version varchar(255), ip varchar(100), message varchar(30000), seed int unsigned, flagshash int unsigned, INDEX(map, created)" + base)
+	create_table(db, "logs", "map varchar(255), created datetime, version varchar(255), ip varchar(100), message varchar(30000), seed int unsigned, flagshash int unsigned, modname varchar(255), firstword varchar(255), INDEX(modname, created), INDEX(firstword, created), INDEX(map, created)" + base)
 
 
 # copied from DXRando
@@ -233,15 +243,19 @@ def VersionStringToInt(version):
 		logex(e)
 	return 0
 
-def get_version():
-	version = 0
+def parse_query_string(q):
+	d = {}
+	for m in re.finditer(r'(([^=]+)=([^\&]+)&?)', q):
+		d[m.group(2)] = m.group(3).replace("%20", " ")
+	return d
+
+def query_params():
 	if os.environ.get('QUERY_STRING'):
-		version = os.environ.get('QUERY_STRING')
-		version = version.replace("version=", "").replace("%20", " ")
-	return version
+		return parse_query_string(os.environ.get('QUERY_STRING'))
+	return {}
 
 
-def write_log(version, ip, content, response):
+def write_log(mod, version, ip, content, response):
 	try:
 		now = datetime.datetime.now()
 		foldername = logdir + now.strftime("%Y-%m") +"/"
@@ -290,9 +304,14 @@ def run_tests():
 		info(repr(d))
 	
 	info("testing parse_content")
-	d = parse_content("INFO: 01_NYC_UNATCOIsland.DXRMachines0: _SpawnNewActor 01_NYC_UNATCOIsland.DataCube12 at (6404.268066,4184.700195,-123.422623)\nINFO: 01_NYC_UNATCOIsland.DXRando12: done randomizing 01_NYC_UNATCOISLAND using seed 191616\nINFO: 01_NYC_UNATCOIsland.DXRFlags12: AnyEntry 01_NYC_UNATCOISLAND DeusEx.DXRFlags - v1.7.3.2 Alpha, seed: 191616, flagshash: 1192551168, playthrough_id: 1686588103, flagsversion: 1070302, gamemode: 0, difficulty: 1.500000, loadout: 0, brightness: 15, newgameplus_loops: 0, autosave: 0, crowdcontrol: 0, codes_mode: 2\nINFO: 01_NYC_UNATCOIsland.DXRFlags12: AnyEntry 01_NYC_UNATCOISLAND - ammo: 70, merchants: 30, minskill: 50, maxskill: 300, skills_disable_downgrades: 0, skills_reroll_missions: 5, skills_independent_levels: 0, multitools: 70, lockpicks: 70, biocells: 70, medkits: 70, speedlevel: 1, keysrando: 4, doorsmode: 259, doorspickable: 50, doorsdestructible: 50, deviceshackable: 100, passwordsrandomized: 100, enemiesrandomized: 30, enemyrespawn: 0, infodevices: 100, startinglocations: 100, goals: 100, equipment: 2, dancingpercent: 25, medbots: 25, repairbots: 25, medbotuses: 0, repairbotuses: 0, medbotcooldowns: 1, repairbotcooldowns: 1, medbotamount: 1, repairbotamount: 1, turrets_move: 50, turrets_add: 70, banned_skills: 5, banned_skill_levels: 5, enemies_nonhumans: 60, swapitems: 100, swapcontainers: 100, augcans: 100, aug_value_rando: 100, skill_value_rando: 100, min_weapon_dmg: 50, max_weapon_dmg: 150, min_weapon_shottime: 50, max_weapon_shottime: 150\nINFO: 01_NYC_UNATCOIsland.DXRTelemetry8: health: 100, HealthLegLeft: 100, HealthLegRight: 100, HealthTorso: 100, HealthHead: 100, HealthArmLeft: 100, HealthArmRight: 100")
 	parse_content("DEATH: 01_NYC_UNATCOIsland.JCDentonMale8: JC Denton was killed by JCDentonMale JC Denton with exploded damage in 01_NYC_UNATCOISLAND (748.419373,-433.573730,-123.300003)\nINFO: 01_NYC_UNATCOIsland.JCDentonMale8: Speed Enhancement deactivated")
 
+	d = parse_query_string("version=v1.2.3 Alpha&mod=DeusEx&another=param")
+	assert d['version'] == "v1.2.3 Alpha"
+	assert d['mod'] == "DeusEx"
+	assert d['another'] == "param"
+
+	assert VersionStringToInt(d['version']) == VersionToInt(1, 2, 3, 0)
 	assert VersionStringToInt("v1.3.1") == VersionToInt(1, 3, 1, 0)
 	assert VersionStringToInt("v1.7.2.5") == VersionToInt(1, 7, 2, 5)
 	assert VersionStringToInt("v1.7.3.5 Alpha") == VersionToInt(1, 7, 3, 5)
