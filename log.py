@@ -133,11 +133,11 @@ def select_deaths(cursor, mod, map):
 		map = "01_nyc_unatcoisland"
 	ret = {}
 	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
-	modcondition = None
+	modcondition = ""
 	if mod == "RevRandomizer":
 		modcondition = " AND modname == \"RevRandomizer\" "
 	else:
-		modcondition = " AND modname != \"RevRandomizer\" "
+		modcondition = " AND NOT modname <=> \"RevRandomizer\" "
 
 	cursor.execute("SELECT "
 		+ "deaths.id as deathid, modname, ip, name, killer, killerclass, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age "
