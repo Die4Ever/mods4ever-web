@@ -45,7 +45,7 @@ def main():
 		response['status'] = "ok received "+str(len(content))+"/"+str(content_length)+" bytes"
 
 	qps = query_params()
-	version = qps['version']
+	version = qps.get('version', "v1.0.0")
 	mod = qps.get('mod')
 
 	if VersionStringToInt(version) < VersionToInt(1, 7, 2, 9):
@@ -101,9 +101,10 @@ def write_db(mod, version, ip, content):
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
 		d = parse_content(content)
-		cursor.execute("INSERT INTO logs SET "
-						+ "created=NOW(), firstword, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s",
-										(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash')))
+		cursor.execute(
+			"INSERT INTO logs SET created=NOW(), "
+			+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s",
+			(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash')))
 		log_id = cursor.lastrowid
 		info("inserted logs id "+str(log_id))
 		for d in get_deaths(content):
@@ -162,7 +163,11 @@ def parse_content(content):
 	r2 = re.compile(r' (?P<key>\w+): (?P<value>[\w\d]+)')
 	for i in r.finditer(content):
 		try:
-			d.update(i.groupdict())
+			t = i.groupdict()
+			firstword = t.pop('firstword', None)
+			if  firstword and 'firstword' not in d and t.get('module')=='DXRFlags':
+				d['firstword'] = firstword
+			d.update(t)
 			if d.get('remaining') is not None:
 				for j in r2.finditer(d['remaining']):
 					d[j.group('key')] = j.group('value')
@@ -304,7 +309,9 @@ def run_tests():
 		info(repr(d))
 	
 	info("testing parse_content")
-	parse_content("DEATH: 01_NYC_UNATCOIsland.JCDentonMale8: JC Denton was killed by JCDentonMale JC Denton with exploded damage in 01_NYC_UNATCOISLAND (748.419373,-433.573730,-123.300003)\nINFO: 01_NYC_UNATCOIsland.JCDentonMale8: Speed Enhancement deactivated")
+	d = parse_content("DX.DXRando0: RandoEnter() firstTime: True, IsTravel: False, seed: 601088 DX\nINFO: DX.DXRando0: randomizing DX using seed 601088\nINFO: DX.DXRFlags0: PreFirstEntry DX DeusEx.DXRFlags - v1.7.3.5 Beta, seed: 601088, flagshash: 90622488, playthrough_id: 1686707255, flagsversion: 1070305, gamemode: 0, difficulty: 1.000000, loadout: 0, brightness: 15, newgameplus_loops: 0, autosave: 2, crowdcontrol: 0, codes_mode: 2\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale8: JC Denton was killed by JCDentonMale JC Denton with exploded damage in 01_NYC_UNATCOISLAND (748.419373,-433.573730,-123.300003)\nINFO: 01_NYC_UNATCOIsland.JCDentonMale8: Speed Enhancement deactivated")
+	print(d['firstword'])
+	assert d['firstword'] == "PreFirstEntry"
 
 	d = parse_query_string("version=v1.2.3 Alpha&mod=DeusEx&another=param")
 	assert d['version'] == "v1.2.3 Alpha"
