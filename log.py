@@ -179,6 +179,7 @@ def filter_deaths(deaths):
 			if compare_deaths(deaths[keys[i]], deaths[keys[j]]):
 				bads += 1
 				if bads > 3:
+					deaths[keys[i]][0] += 1
 					del keys[j]
 					end -= 1
 					j -= 1
@@ -401,7 +402,7 @@ def run_tests():
 	d3[5] = '10'
 	d4 = d.copy()
 	d4[5] = 16*150 # 150 feet
-	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d, 'e':d4, 'f':d, 'g':d3, 'h':d})
+	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d.copy(), 'e':d4, 'f':d.copy(), 'g':d3.copy(), 'h':d.copy()})
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
 	
