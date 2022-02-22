@@ -141,15 +141,15 @@ def unrealscript_sanitize(s):
 
 
 def compare_deaths(a, b):
-	if a[0] != b[0]:
+	if a[1] != b[1]:
 		return False
-	if abs(a[3] - b[3]) > 3600:
-		return False
-	if abs(a[4] - b[4]) > 16*10:
+	if abs(a[4] - b[4]) > 3600:
 		return False
 	if abs(a[5] - b[5]) > 16*10:
 		return False
 	if abs(a[6] - b[6]) > 16*10:
+		return False
+	if abs(a[7] - b[7]) > 16*10:
 		return False
 	return True
 
@@ -158,12 +158,12 @@ def filter_deaths(deaths):
 		return deaths
 	
 	for d in deaths.values():
-		d[3] = int(d[3])
-		d[4] = float(d[4])
+		d[4] = int(d[4])
 		d[5] = float(d[5])
 		d[6] = float(d[6])
+		d[7] = float(d[7])
 	
-	keys = sorted(deaths.keys(), key=lambda d: deaths[d][3])
+	keys = sorted(deaths.keys(), key=lambda d: deaths[d][4])
 	end = len(keys)
 	
 	i = 0
@@ -208,9 +208,12 @@ def select_deaths(cursor, mod, map):
 		# need to sanitize these because unrealscript's json parsing isn't perfect
 		key = 'deaths.' + str(d['deathid']) #d['x']+','+d['y']+','+d['z']
 		d.pop('ip', None)
-		ret[key] = [1] # 1 death in the group
-		for k in ['name', 'killer', 'damagetype', 'age', 'x', 'y', 'z', 'killerclass']:
+		d['num'] = 1
+		ret[key] = []
+		for k in ['num', 'name', 'killer', 'damagetype', 'age', 'x', 'y', 'z', 'killerclass']:
 			s = unrealscript_sanitize(d[k])
+			if not s:
+				s = ''
 			ret[key].append(s)
 	
 	return filter_deaths(ret)
@@ -384,14 +387,14 @@ def run_tests():
 	info(unrealscript_sanitize("this is a test, Die4Ever; ok: another test {      } \\  bye "))
 
 	# for k in ['name', 'killer', 'damagetype', 'age', 'x', 'y', 'z', 'killerclass']:
-	d = ['Die4Ever', '', '', 3600, 0, 0, 0]
+	d = [1, 'Die4Ever', '', '', 3600, 0, 0, 0]
 	d2 = d.copy()
-	d2[0] = 'TheAstropath'
+	d2[1] = 'TheAstropath'
 	d3 = d.copy()
-	d3[3] = '3000'
-	d3[4] = 10
+	d3[4] = '3000'
+	d3[5] = 10
 	d4 = d.copy()
-	d4[4] = '1600'
+	d4[5] = '1600'
 	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d, 'e':d4, 'f':d, 'g':d3, 'h':d})
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
