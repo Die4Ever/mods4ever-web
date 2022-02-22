@@ -141,15 +141,15 @@ def unrealscript_sanitize(s):
 
 
 def compare_deaths(a, b):
-	if a['name'] != b['name']:
+	if a[0] != b[0]:
 		return False
-	if abs(a['age'] - b['age']) > 3600:
+	if abs(a[3] - b[3]) > 3600:
 		return False
-	if abs(a['x'] - b['x']) > 16*10:
+	if abs(a[4] - b[4]) > 16*10:
 		return False
-	if abs(a['y'] - b['y']) > 16*10:
+	if abs(a[5] - b[5]) > 16*10:
 		return False
-	if abs(a['z'] - b['z']) > 16*10:
+	if abs(a[6] - b[6]) > 16*10:
 		return False
 	return True
 
@@ -158,12 +158,12 @@ def filter_deaths(deaths):
 		return deaths
 	
 	for d in deaths.values():
-		d['age'] = int(d['age'])
-		d['x'] = float(d['x'])
-		d['y'] = float(d['y'])
-		d['z'] = float(d['z'])
+		d[3] = int(d[3])
+		d[4] = float(d[4])
+		d[5] = float(d[5])
+		d[6] = float(d[6])
 	
-	keys = sorted(deaths.keys(), key=lambda d: deaths[d]['age'])
+	keys = sorted(deaths.keys(), key=lambda d: deaths[d][3])
 	end = len(keys)
 	
 	i = 0
@@ -383,14 +383,15 @@ def run_tests():
 
 	info(unrealscript_sanitize("this is a test, Die4Ever; ok: another test {      } \\  bye "))
 
-	d = {'name':'Die4Ever', 'age':3600, 'x':0, 'y':0, 'z':0}
+	# for k in ['name', 'killer', 'damagetype', 'age', 'x', 'y', 'z', 'killerclass']:
+	d = ['Die4Ever', '', '', 3600, 0, 0, 0]
 	d2 = d.copy()
-	d2['name'] = 'TheAstropath'
+	d2[0] = 'TheAstropath'
 	d3 = d.copy()
-	d3['age'] = '3000'
-	d3['x'] = 10
+	d3[3] = '3000'
+	d3[4] = 10
 	d4 = d.copy()
-	d4['x'] = '1600'
+	d4[4] = '1600'
 	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d, 'e':d4, 'f':d, 'g':d3, 'h':d})
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
