@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-# enable debugging
 
 from csv import excel_tab
+from ctypes import sizeof
 import sys
 if sys.version_info[0] < 3:
 	raise ImportError('Python < 3 is unsupported.')
@@ -138,6 +139,47 @@ def unrealscript_sanitize(s):
 	s = re.sub('\s+', ' ', s)
 	return s
 
+
+def compare_deaths(a, b):
+	if a['name'] != b['name']:
+		return False
+	if abs(a['age'] - b['age']) > 3600:
+		return False
+	if abs(a['x'] - b['x']) > 16*10:
+		return False
+	if abs(a['y'] - b['y']) > 16*10:
+		return False
+	if abs(a['z'] - b['z']) > 16*10:
+		return False
+	return True
+
+def filter_deaths(deaths):
+	for i in range(0, len(deaths)):
+		d = deaths[i]
+		d['age'] = int(d['age'])
+		d['x'] = float(d['x'])
+		d['y'] = float(d['y'])
+		d['z'] = float(d['z'])
+	
+	deaths = sorted(deaths, key=lambda d: d['age'])
+	end = len(deaths)
+	
+	i = 0
+	while i < end:
+		j = i + 1
+		bads = 0
+		while j < end:
+			if compare_deaths(deaths[i], deaths[j]):
+				bads += 1
+				if bads > 3:
+					del deaths[j]
+					end -= 1
+					j -= 1
+			j += 1
+		i += 1
+	return deaths
+
+
 def select_deaths(cursor, mod, map):
 	if not map:
 		map = "01_nyc_unatcoisland"
@@ -165,7 +207,7 @@ def select_deaths(cursor, mod, map):
 			s = unrealscript_sanitize(d[k])
 			ret[key].append(s)
 	
-	return ret
+	return filter_deaths(ret)
 
 def parse_content(content):
 	d = {}
@@ -334,6 +376,19 @@ def run_tests():
 	assert VersionStringToInt("v1.7.3.5 Alpha") == VersionToInt(1, 7, 3, 5)
 
 	info(unrealscript_sanitize("this is a test, Die4Ever; ok: another test {      } \\  bye "))
+
+	d = {'name':'Die4Ever', 'age':3600, 'x':0, 'y':0, 'z':0}
+	d2 = d.copy()
+	d2['name'] = 'TheAstropath'
+	d3 = d.copy()
+	d3['age'] = '3000'
+	d3['x'] = 10
+	d4 = d.copy()
+	d4['x'] = '1600'
+	deaths = filter_deaths([d, d2, d3, d, d4, d, d3, d])
+	info("filter_deaths down to "+repr(deaths))
+	assert len(deaths) == 6
+	assert deaths[0]['age'] == 3000
 	
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
