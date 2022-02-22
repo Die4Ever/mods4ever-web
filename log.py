@@ -101,10 +101,11 @@ def write_db(mod, version, ip, content):
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
 		d = parse_content(content)
+		d = get_playthrough(cursor, mod, ip, d)
 		cursor.execute(
 			"INSERT INTO logs SET created=NOW(), "
-			+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s",
-			(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash')))
+			+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s, playthrough_id=%s",
+			(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id') ))
 		log_id = cursor.lastrowid
 		info("inserted logs id "+str(log_id))
 		for d in get_deaths(content):
@@ -121,6 +122,15 @@ def write_db(mod, version, ip, content):
 	db.close()
 	return ret
 
+
+def get_playthrough(cursor, mod, ip, d):
+	if 'playthrough_id' in d:
+		return d
+	cursor.execute("SELECT playthrough_id FROM logs WHERE ip=%s ORDER BY id DESC LIMIT 1", (ip,))
+	for (r) in cursor:
+		if 'playthrough_id' in r:
+			d['playthrough_id'] = r['playthrough_id']
+	return d
 
 def unrealscript_sanitize(s):
 	allow = "-_[]\{\}()`~!@#$%^&*\+=|;:<>,."
@@ -229,7 +239,7 @@ def create_table(db, name, desc):
 def create_tables(db):
 	base = ", id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)"
 	create_table(db, "deaths", "log_id int unsigned, name varchar(255), killer varchar(255), killerclass varchar(255), damagetype varchar(255), x float, y float, z float" + base)
-	create_table(db, "logs", "map varchar(255), created datetime, version varchar(255), ip varchar(100), message varchar(30000), seed int unsigned, flagshash int unsigned, modname varchar(255), firstword varchar(255), INDEX(modname, created), INDEX(firstword, created), INDEX(map, created)" + base)
+	create_table(db, "logs", "map varchar(255), created datetime, version varchar(255), ip varchar(100), message varchar(30000), seed int unsigned, flagshash int unsigned, modname varchar(255), firstword varchar(255), playthrough_id int unsigned, INDEX(modname, seed, playthrough_id, created), INDEX(modname, created), INDEX(firstword, created), INDEX(map, created)" + base)
 
 
 # copied from DXRando
