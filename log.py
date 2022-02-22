@@ -21,6 +21,7 @@ import mysql.connector
 import mysql.connector.errorcode
 import re
 import traceback
+import math
 
 path = os.path.dirname(os.path.realpath(__file__))
 logdir = path + "/dxrando_logs/"
@@ -140,17 +141,21 @@ def unrealscript_sanitize(s):
 	return s
 
 
+# for k in ['num', 'name', 'killer', 'damagetype', 'age', 'x', 'y', 'z', 'killerclass']:
 def compare_deaths(a, b):
+	# name
 	if a[1] != b[1]:
 		return False
+
+	# age, difference of 1 hour
 	if abs(a[4] - b[4]) > 3600:
 		return False
-	if abs(a[5] - b[5]) > 16*10:
+	
+	# x, y, z, checking for > 100 feet
+	dist = math.sqrt((a[5] - b[5]) ** 2 + (a[6] - b[6]) ** 2 + (a[7] - b[7]) ** 2)
+	if dist > 16*100:
 		return False
-	if abs(a[6] - b[6]) > 16*10:
-		return False
-	if abs(a[7] - b[7]) > 16*10:
-		return False
+	
 	return True
 
 def filter_deaths(deaths):
@@ -181,7 +186,7 @@ def filter_deaths(deaths):
 		i += 1
 	
 	newdeaths = {}
-	for k in keys:
+	for k in keys[:50]:
 		newdeaths[k] = deaths[k]
 	return newdeaths
 
@@ -197,12 +202,13 @@ def select_deaths(cursor, mod, map):
 	else:
 		modcondition = " AND NOT modname <=> \"RevRandomizer\" "
 
+	# select more than we want, because filter_deaths will remove the excess
 	cursor.execute("SELECT "
 		+ "deaths.id as deathid, modname, ip, name, killer, killerclass, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age "
 		+ "FROM deaths JOIN logs on(deaths.log_id=logs.id) "
 		+ "WHERE map=%s "
 		+ modcondition
-		+ " ORDER BY created DESC LIMIT 50", (map,))
+		+ " ORDER BY created DESC LIMIT 100", (map,))
 	
 	for (d) in cursor:
 		# need to sanitize these because unrealscript's json parsing isn't perfect
@@ -392,9 +398,9 @@ def run_tests():
 	d2[1] = 'TheAstropath'
 	d3 = d.copy()
 	d3[4] = '3000'
-	d3[5] = 10
+	d3[5] = '10'
 	d4 = d.copy()
-	d4[5] = '1600'
+	d4[5] = 16*150 # 150 feet
 	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d, 'e':d4, 'f':d, 'g':d3, 'h':d})
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
