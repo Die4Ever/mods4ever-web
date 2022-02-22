@@ -154,13 +154,16 @@ def compare_deaths(a, b):
 	return True
 
 def filter_deaths(deaths):
+	if not deaths:
+		return deaths
+	
 	for d in deaths.values():
 		d['age'] = int(d['age'])
 		d['x'] = float(d['x'])
 		d['y'] = float(d['y'])
 		d['z'] = float(d['z'])
 	
-	keys = sorted(deaths, key=lambda d: deaths[d]['age'])
+	keys = sorted(deaths.keys(), key=lambda d: deaths[d]['age'])
 	end = len(keys)
 	
 	i = 0
