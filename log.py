@@ -154,30 +154,33 @@ def compare_deaths(a, b):
 	return True
 
 def filter_deaths(deaths):
-	for i in range(0, len(deaths)):
-		d = deaths[i]
+	for d in deaths.values():
 		d['age'] = int(d['age'])
 		d['x'] = float(d['x'])
 		d['y'] = float(d['y'])
 		d['z'] = float(d['z'])
 	
-	deaths = sorted(deaths, key=lambda d: d['age'])
-	end = len(deaths)
+	keys = sorted(deaths, key=lambda d: deaths[d]['age'])
+	end = len(keys)
 	
 	i = 0
 	while i < end:
 		j = i + 1
 		bads = 0
 		while j < end:
-			if compare_deaths(deaths[i], deaths[j]):
+			if compare_deaths(deaths[keys[i]], deaths[keys[j]]):
 				bads += 1
 				if bads > 3:
-					del deaths[j]
+					del keys[j]
 					end -= 1
 					j -= 1
 			j += 1
 		i += 1
-	return deaths
+	
+	newdeaths = {}
+	for k in keys:
+		newdeaths[k] = deaths[k]
+	return newdeaths
 
 
 def select_deaths(cursor, mod, map):
@@ -385,10 +388,9 @@ def run_tests():
 	d3['x'] = 10
 	d4 = d.copy()
 	d4['x'] = '1600'
-	deaths = filter_deaths([d, d2, d3, d, d4, d, d3, d])
+	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d, 'e':d4, 'f':d, 'g':d3, 'h':d})
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
-	assert deaths[0]['age'] == 3000
 	
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
