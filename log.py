@@ -128,12 +128,19 @@ def write_db(mod, version, ip, content):
 
 
 def get_playthrough(cursor, mod, ip, d):
-	if 'playthrough_id' in d:
+	if 'playthrough_id' in d and 'seed' in d and 'flagshash' in d:
 		return d
-	cursor.execute("SELECT playthrough_id FROM logs WHERE ip=%s ORDER BY id DESC LIMIT 1", (ip,))
+	if 'playthrough_id' not in d:
+		cursor.execute("SELECT playthrough_id, seed, flagshash FROM logs WHERE ip=%s ORDER BY id DESC LIMIT 1", (ip,))
+	else:
+		cursor.execute("SELECT playthrough_id, seed, flagshash FROM logs WHERE ip=%s AND playthrough_id=%s ORDER BY id DESC LIMIT 1", (ip,d['playthrough_id']))
 	for (r) in cursor:
 		if 'playthrough_id' in r:
 			d['playthrough_id'] = r['playthrough_id']
+		if 'seed' in r and 'seed' not in d:
+			d['seed'] = r['seed']
+		if 'flagshash' in r and 'flagshash' not in d:
+			d['flagshash'] = r['flagshash']
 	return d
 
 def unrealscript_sanitize(s):
