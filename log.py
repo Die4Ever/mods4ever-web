@@ -172,6 +172,7 @@ def filter_deaths(deaths):
 		return deaths
 	
 	for d in deaths.values():
+		d[0] = int(d[0])
 		d[4] = int(d[4])
 		d[5] = float(d[5])
 		d[6] = float(d[6])
