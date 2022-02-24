@@ -237,15 +237,16 @@ def select_deaths(cursor, mod, map):
 
 def parse_content(content):
 	d = {}
-	r = re.compile(r'^(?P<level>\w+): (?P<map>[^\.]*)\.(?P<module>[^:]+)\d+: ((?P<firstword>\w+) (?P<remaining>.*)$)?', flags=re.MULTILINE)
+	r = re.compile(r'^(?P<level>\w+): (?P<map>[^\.]+)\.(?P<module>[^:]+)\d+: ((?P<firstword>\w+) )?(?P<remaining>.*)$', flags=re.MULTILINE)
 	r2 = re.compile(r' (?P<key>\w+): (?P<value>[\w\d]+)')
 	for i in r.finditer(content):
 		try:
 			t = i.groupdict()
 			firstword = t.pop('firstword', None)
-			if  firstword and 'firstword' not in d and t.get('module')=='DXRFlags':
+			if firstword and 'firstword' not in d and t.get('module')=='DXRFlags':
 				d['firstword'] = firstword
-			d.update(t)
+			# order is semi-important because we want to keep the first value found for each key
+			d = {**d, **t}
 			if d.get('remaining') is not None:
 				for j in r2.finditer(d['remaining']):
 					d[j.group('key')] = j.group('value')
