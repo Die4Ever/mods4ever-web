@@ -50,9 +50,7 @@ def main():
 	version = qps.get('version', "v1.0.0")
 	mod = qps.get('mod')
 
-	if VersionStringToInt(version) < VersionToInt(1, 7, 2, 9):
-		response['notification'] = "New v1.7.2 available!"
-		response['message'] = "Many updates!|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
+	response.update(update_notification(mod, version))
 
 	write_log(mod, version, ip, content, response)
 	try:
@@ -65,6 +63,20 @@ def main():
 
 	print_response(mod, version, response)
 
+
+def update_notification(mod, version):
+	response = {}
+	desc = "Death Markers, Enemy Shuffling"
+	detail = "and balance updates!"
+	assert len(desc) < 35
+	assert len(detail) < 35
+	if VersionStringToInt(version) < VersionToInt(1, 7, 3, 11):
+		response['notification'] = "New v1.7.3 available!"
+		response['message'] = desc
+		if detail:
+			response['message'] += "|n" + detail
+		response['message'] += "|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
+	return response
 
 def print_response(mod, version, response):
 	if VersionStringToInt(version) >= VersionToInt(1, 7, 3, 3):
@@ -378,6 +390,8 @@ class MockFailCursor:
 
 def run_tests():
 	info("running tests...")
+
+	info(repr(update_notification("vanilla", "v1.3.0")))
 
 	# ensure proper error handling
 	results = try_exec(MockFailCursor(), "expected failure")
