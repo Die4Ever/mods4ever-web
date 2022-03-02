@@ -66,15 +66,14 @@ def main():
 
 def update_notification(mod, version):
 	response = {}
-	desc = "Death Markers, Enemy Shuffling"
-	detail = "and balance updates!"
+	desc = "Death Markers and Enemy Shuffling!"
+	detail = ""
 	assert len(desc) < 35
 	assert len(detail) < 35
 	if VersionStringToInt(version) < VersionToInt(1, 7, 3, 11):
 		response['notification'] = "New v1.7.3 available!"
 		response['message'] = desc
-		if detail:
-			response['message'] += "|n" + detail
+		response['message'] += "|n" + detail
 		response['message'] += "|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
 	return response
 
