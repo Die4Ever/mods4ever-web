@@ -64,30 +64,26 @@ def main():
 		print("failed to write to db")
 		err("failed to write to db")
 		logex(e)
-		
-	prepare_tweet(config,content)	
 	
 	print_response(mod, version, response)
 
-def prepare_tweet(config, content):
-	d = parse_content(content)
-	deaths = get_deaths(content)
-	if len(deaths)>0:
+def prepare_tweet(config, d, deaths):
+	if len(deaths) == 0:
+		return
+	if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
+		return
 	
-		if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
-			return
-		
-		twitApi = tweepy.Client( bearer_token=config["twit_bearer_token"], 
-								 consumer_key=config["twit_consumer_key"], 
-								 consumer_secret=config["twit_consumer_secret"], 
-								 access_token=config["twit_access_token"], 
-								 access_token_secret=config["twit_access_token_secret"], 
-								 return_type = requests.Response,
-								 wait_on_rate_limit=True)
-		profanity.load_censor_words()
-		for death in deaths:
-			msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'])
-			send_tweet(twitApi,msg)
+	twitApi = tweepy.Client( bearer_token=config["twit_bearer_token"], 
+								consumer_key=config["twit_consumer_key"], 
+								consumer_secret=config["twit_consumer_secret"], 
+								access_token=config["twit_access_token"], 
+								access_token_secret=config["twit_access_token_secret"], 
+								return_type = requests.Response,
+								wait_on_rate_limit=True)
+	profanity.load_censor_words()
+	for death in deaths:
+		msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'], d.get('seed'), d.get('flagshash'))
+		send_tweet(twitApi,msg)
 
 def damage_string(dmgtype):
 	if dmgtype=="shot":
@@ -117,9 +113,11 @@ def damage_string(dmgtype):
 	else:
 		return dmgtype
 
-def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z):
+def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagshash):
 	safePlayerName = profanity.censor(player)
-	
+	if safePlayerName.count('*') >= len(safePlayerName)*0.7:
+		safePlayerName = 'Inappropriate Player'
+
 	msg = safePlayerName+" was "+damage_string(dmgtype.lower())
 	
 	if (killer==player):
@@ -130,9 +128,14 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z):
 		msg+=" by "+killer+" ("+killerclass+")"
 	
 	msg+=" in "+mapname
+
+	if seed:
+		msg += ' on seed '+str(seed)
+	if flagshash:
+		msg += ' (flagshash: '+str(flagshash)
 	
-	msg+="\n\nPosition: "+x+", "+y+", "+z
-		
+	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
+	msg = profanity.censor(msg)
 	return msg
 	
 def send_tweet(api,msg):
@@ -141,7 +144,7 @@ def send_tweet(api,msg):
 
 	if len(tweet)>280:
 		diff = len(tweet)-280
-		tweet = msg[:-diff-3]+"...\n"+url
+		tweet = msg[:-diff-3]+"..."
 	try:
 		response = api.create_tweet(text=tweet)
 	except Exception as e:
@@ -215,8 +218,10 @@ def write_db(mod, version, ip, content, config):
 			(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id') ))
 		log_id = cursor.lastrowid
 		info("inserted logs id "+str(log_id))
-		for d in get_deaths(content):
-			log_death(cursor, log_id, d)
+		deaths = get_deaths(content)
+		for death in deaths:
+			log_death(cursor, log_id, death)
+		prepare_tweet(config, d, deaths)
 		db.commit()
 		ret = {}
 		if d.get('firstword'):
@@ -523,11 +528,19 @@ def run_tests():
 	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d.copy(), 'e':d4, 'f':d.copy(), 'g':d3.copy(), 'h':d.copy()})
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
+
+	profanity.load_censor_words()
+	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'shot', 'fuck', '1', '2', '3', 123, 456)
+	info(msg)
+	assert 'fuck' not in msg
+	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'fucked', 'fuck', '1', '2', '3', 123, 456)
+	info(msg)
+	assert 'fuck' not in msg
 	
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
 	info("logdir: "+logdir)
-	info("db config: " + repr(get_db_config()))
+	info("db config: " + repr(get_config()))
 	#write_db("0", "test")
 	info("test success")
 
