@@ -9,10 +9,9 @@ if sys.version_info[0] < 3:
 
 if sys.version_info[0] == 3 and sys.version_info[1] < 5:
 	raise ImportError('Python < 3.5 is unsupported.')
-
 import cgitb
 import time
-#import requests
+import requests
 import json
 import os
 import datetime
@@ -22,13 +21,15 @@ import mysql.connector.errorcode
 import re
 import traceback
 import math
+import tweepy
+import time
+from better_profanity import profanity
 
 path = os.path.dirname(os.path.realpath(__file__))
 logdir = path + "/dxrando_logs/"
 
 def main():
 	#cgitb.enable(display=1, logdir=logdir)
-
 	print("Status: 200" )
 	print("")
 	ip = os.environ.get('REMOTE_ADDR')
@@ -51,18 +52,100 @@ def main():
 	mod = qps.get('mod')
 
 	response.update(update_notification(mod, version))
+	
+	config = get_config()
 
 	write_log(mod, version, ip, content, response)
+	
 	try:
-		db_data = write_db(mod, version, ip, content)
+		db_data = write_db(mod, version, ip, content,config)
 		response.update(db_data)
 	except Exception as e:
 		print("failed to write to db")
 		err("failed to write to db")
 		logex(e)
-
+		
+	prepare_tweet(config,content)	
+	
 	print_response(mod, version, response)
 
+def prepare_tweet(config, content):
+	d = parse_content(content)
+	deaths = get_deaths(content)
+	if len(deaths)>0:
+	
+		if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
+			return
+		
+		twitApi = tweepy.Client( bearer_token=config["twit_bearer_token"], 
+								 consumer_key=config["twit_consumer_key"], 
+								 consumer_secret=config["twit_consumer_secret"], 
+								 access_token=config["twit_access_token"], 
+								 access_token_secret=config["twit_access_token_secret"], 
+								 return_type = requests.Response,
+								 wait_on_rate_limit=True)
+		profanity.load_censor_words()
+		for death in deaths:
+			msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'])
+			send_tweet(twitApi,msg)
+
+def damage_string(dmgtype):
+	if dmgtype=="shot":
+		return "murdered"
+	elif dmgtype=="teargas":
+		return "tear gassed to death"
+	elif dmgtype=="poisongas":
+		return "poison gassed to death"
+	elif dmgtype=="radiation":
+		return "radiated to death"
+	elif dmgtype=="halongas":
+		return "gassed to death"
+	elif dmgtype=="poisoneffect" or dmgtype=="poison":
+		return "poisoned to death"
+	elif dmgtype=="sabot" or dmgtype=="autoshot":
+		return "filled with holes"
+	elif dmgtype=="burned" or dmgtype=="flamed":
+		return "burned to death"
+	elif dmgtype=="drowned":
+		return "tear gassed to death"
+	elif dmgtype=="emp" or dmgtype=="shocked":
+		return "shocked to death"
+	elif dmgtype=="exploded":
+		return "exploded to bits"
+	elif dmgtype=="fell":
+		return "splattered all over the floor"
+	else:
+		return dmgtype
+
+def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z):
+	safePlayerName = profanity.censor(player)
+	
+	msg = safePlayerName+" was "+damage_string(dmgtype.lower())
+	
+	if (killer==player):
+		msg+=" by themselves"
+	elif (killer==None):
+		msg+=""
+	else:
+		msg+=" by "+killer+" ("+killerclass+")"
+	
+	msg+=" in "+mapname
+	
+	msg+="\n\nPosition: "+x+", "+y+", "+z
+		
+	return msg
+	
+def send_tweet(api,msg):
+	info("Tweeting '"+msg+"'")
+	tweet = msg
+
+	if len(tweet)>280:
+		diff = len(tweet)-280
+		tweet = msg[:-diff-3]+"...\n"+url
+	try:
+		response = api.create_tweet(text=tweet)
+	except Exception as e:
+		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
 
 def update_notification(mod, version):
 	response = {}
@@ -87,18 +170,25 @@ def print_response(mod, version, response):
 			print(response['message'])
 
 
-def get_db_config():
+def get_config():
 	with open(path+'/config.json', 'r') as f:
 		return json.load(f)
-	err("failed to load db config")
+	err("failed to load config")
 	return {}
 
 
-def db_connect():
-	config = get_db_config()
+def db_connect(config):
 	db = None
+	
+	dbconfig = {}
+	dbconfig["user"]=config["user"]
+	dbconfig["password"]=config["password"]
+	dbconfig["host"]=config["host"]
+	dbconfig["database"]=config["database"]
+	dbconfig["raise_on_warnings"]=config["raise_on_warnings"]
+	
 	try:
-		db = mysql.connector.connect(**config)
+		db = mysql.connector.connect(**dbconfig)
 	except Exception as e:
 		print("failed to connect to db")
 		err("failed to connect to db")
@@ -106,10 +196,14 @@ def db_connect():
 	return db
 
 
-def write_db(mod, version, ip, content):
+def write_db(mod, version, ip, content, config):
 	ret = {}
-	db = db_connect()
+	db = db_connect(config)
 	cursor = None
+	
+	if db == None:
+		return ret
+	
 	try:
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
