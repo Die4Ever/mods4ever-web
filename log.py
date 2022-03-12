@@ -221,6 +221,7 @@ def write_db(mod, version, ip, content, config):
 		log_id = cursor.lastrowid
 		info("inserted logs id "+str(log_id))
 		deaths = get_deaths(content)
+		info("got deaths: "+repr(deaths))
 		for death in deaths:
 			log_death(cursor, log_id, death)
 		prepare_tweet(config, d, deaths)
@@ -452,6 +453,7 @@ def query_params():
 
 
 def write_log(mod, version, ip, content, response):
+	warn('obsolete write_log function')
 	try:
 		now = datetime.datetime.now()
 		foldername = logdir + now.strftime("%Y-%m") +"/"
