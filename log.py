@@ -67,7 +67,7 @@ def main():
 	
 	print_response(mod, version, response)
 
-def prepare_tweet(config, d, deaths):
+def prepare_tweet(config, d, deaths, mod, version):
 	if len(deaths) == 0:
 		return
 	if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
@@ -82,7 +82,7 @@ def prepare_tweet(config, d, deaths):
 								wait_on_rate_limit=True)
 	profanity.load_censor_words()
 	for death in deaths:
-		msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'], d.get('seed'), d.get('flagshash'))
+		msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'], d.get('seed'), d.get('flagshash'), mod, version)
 		send_tweet(twitApi,msg)
 
 def damage_string(dmgtype):
@@ -114,7 +114,7 @@ def damage_string(dmgtype):
 		err('unknown dmgtype: '+dmgtype)
 		return dmgtype
 
-def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagshash):
+def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagshash, mod, version):
 	safePlayerName = profanity.censor(player)
 	if safePlayerName.count('*') >= len(safePlayerName)*0.7:
 		safePlayerName = 'Inappropriate Player'
@@ -137,6 +137,10 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagsha
 	
 	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
 	msg += '\n#DeusEx #Randomizer'
+	if mod and mod != 'DeusEx':
+		msg += ' #' + mod
+	if version:
+		msg += ' ' + str(version)
 	msg = profanity.censor(msg)
 	return msg
 	
@@ -224,7 +228,7 @@ def write_db(mod, version, ip, content, config):
 		info("got deaths: "+repr(deaths))
 		for death in deaths:
 			log_death(cursor, log_id, death)
-		prepare_tweet(config, d, deaths)
+		prepare_tweet(config, d, deaths, mod, version)
 		db.commit()
 		ret = {}
 		if d.get('firstword'):
@@ -534,10 +538,10 @@ def run_tests():
 	assert len(deaths) == 6
 
 	profanity.load_censor_words()
-	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'shot', 'fuck', '1', '2', '3', 123, 456)
+	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'shot', 'fuck', '1', '2', '3', 123, 456, 'DeusEx', 'v.1.8.1')
 	info(msg)
 	assert 'fuck' not in msg
-	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'fucked', 'fuck', '1', '2', '3', 123, 456)
+	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'fucked', 'fuck', '1', '2', '3', 123, 456, 'GMDX', 'v.1.8.1')
 	info(msg)
 	assert 'fuck' not in msg
 	
