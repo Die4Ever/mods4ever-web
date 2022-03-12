@@ -55,7 +55,7 @@ def main():
 	
 	config = get_config()
 
-	write_log(mod, version, ip, content, response)
+	#write_log(mod, version, ip, content, response)
 	
 	try:
 		db_data = write_db(mod, version, ip, content,config)
