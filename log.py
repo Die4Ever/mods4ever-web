@@ -80,7 +80,7 @@ def prepare_tweet(config, d, deaths, mod, version):
 								access_token_secret=config["twit_access_token_secret"], 
 								return_type = requests.Response,
 								wait_on_rate_limit=True)
-	profanity.load_censor_words()
+	profanity.load_censor_words(whitelist_words=['thug'])
 	for death in deaths:
 		msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'], d.get('seed'), d.get('flagshash'), mod, version)
 		send_tweet(twitApi,msg)
@@ -538,10 +538,11 @@ def run_tests():
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
 
-	profanity.load_censor_words()
-	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'shot', 'fuck', '1', '2', '3', 123, 456, 'DeusEx', 'v.1.8.1')
+	profanity.load_censor_words(whitelist_words=['thug'])
+	msg = gen_death_msg('fuck', 'thug', 'fuck', 'shot', 'fuck', '1', '2', '3', 123, 456, 'DeusEx', 'v.1.8.1')
 	info(msg)
 	assert 'fuck' not in msg
+	assert 'thug' in msg
 	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'fucked', 'fuck', '1', '2', '3', 123, 456, 'GMDX', 'v.1.8.1')
 	info(msg)
 	assert 'fuck' not in msg
