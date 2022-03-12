@@ -67,6 +67,9 @@ def main():
 	
 	print_response(mod, version, response)
 
+def load_profanity_filter():
+	profanity.load_censor_words(whitelist_words=['thug'])
+
 def prepare_tweet(config, d, deaths, mod, version):
 	if len(deaths) == 0:
 		return
@@ -80,7 +83,7 @@ def prepare_tweet(config, d, deaths, mod, version):
 								access_token_secret=config["twit_access_token_secret"], 
 								return_type = requests.Response,
 								wait_on_rate_limit=True)
-	profanity.load_censor_words(whitelist_words=['thug'])
+	load_profanity_filter()
 	for death in deaths:
 		msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'], d.get('seed'), d.get('flagshash'), mod, version)
 		send_tweet(twitApi,msg)
@@ -538,7 +541,7 @@ def run_tests():
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
 
-	profanity.load_censor_words(whitelist_words=['thug'])
+	load_profanity_filter()
 	msg = gen_death_msg('fuck', 'thug', 'fuck', 'shot', 'fuck', '1', '2', '3', 123, 456, 'DeusEx', 'v.1.8.1')
 	info(msg)
 	assert 'fuck' not in msg
