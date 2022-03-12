@@ -111,6 +111,7 @@ def damage_string(dmgtype):
 	elif dmgtype=="fell":
 		return "splattered all over the floor"
 	else:
+		err('unknown dmgtype: '+dmgtype)
 		return dmgtype
 
 def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagshash):
@@ -135,6 +136,7 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagsha
 		msg += ' (flagshash: '+str(flagshash)
 	
 	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
+	msg += '\n#DeusEx #Randomizer'
 	msg = profanity.censor(msg)
 	return msg
 	
