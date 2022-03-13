@@ -139,9 +139,9 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagsha
 	if flagshash:
 		msg += ' (flagshash: '+str(flagshash)
 	
-	x = int(float(x))
-	y = int(float(y))
-	z = int(float(z))
+	x = int(round(float(x), 3))
+	y = int(round(float(y), 3))
+	z = int(round(float(z), 3))
 	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
 	msg += '\n#DeusEx #Randomizer'
 	if mod and mod != 'DeusEx':
