@@ -139,6 +139,9 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagsha
 	if flagshash:
 		msg += ' (flagshash: '+str(flagshash)
 	
+	x = int(float(x))
+	y = int(float(y))
+	z = int(float(z))
 	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
 	msg += '\n#DeusEx #Randomizer'
 	if mod and mod != 'DeusEx':
@@ -542,7 +545,7 @@ def run_tests():
 	assert len(deaths) == 6
 
 	load_profanity_filter()
-	msg = gen_death_msg('fuck', 'thug', 'fuck', 'shot', 'fuck', '1', '2', '3', 123, 456, 'DeusEx', 'v.1.8.1')
+	msg = gen_death_msg('fuck', 'thug', 'fuck', 'shot', 'fuck', '1.34', '2', '3', 123, 456, 'DeusEx', 'v.1.8.1')
 	info(msg)
 	assert 'fuck' not in msg
 	assert 'thug' in msg
