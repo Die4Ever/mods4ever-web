@@ -28,6 +28,7 @@ from better_profanity import profanity
 
 path = os.path.dirname(os.path.realpath(__file__))
 logdir = path + "/dxrando_logs/"
+location_split = re.compile('\s*,\s*')
 
 def main():
 	#cgitb.enable(display=1, logdir=logdir)
@@ -71,8 +72,8 @@ def main():
 def load_profanity_filter():
 	profanity.load_censor_words(whitelist_words=['thug'])
 
-def prepare_tweet(config, d, deaths, events, mod, version):
-	if len(deaths) == 0 and len(events) == 0:
+def prepare_tweet(config, playthrough_data, events, mod, version):
+	if len(events) == 0:
 		return
 	if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
 		return
@@ -84,13 +85,9 @@ def prepare_tweet(config, d, deaths, events, mod, version):
 								access_token_secret=config["twit_access_token_secret"], 
 								return_type = requests.Response,
 								wait_on_rate_limit=True)
-	load_profanity_filter()
-	for death in deaths:
-		msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'], d.get('seed'), d.get('flagshash'), mod, version)
-		send_tweet(twitApi,msg)
-	
+	load_profanity_filter()	
 	for event in events:
-		msg = gen_event_msg(event,mod,version)
+		msg = gen_event_msg(event, playthrough_data, mod, version)
 		if msg!=None:
 			send_tweet(twitApi,msg)
 
@@ -124,7 +121,7 @@ def damage_string(dmgtype):
 			err('unknown dmgtype: '+dmgtype)
 		return 'killed'
 
-def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagshash, mod, version):
+def gen_death_msg(player,killer,killerclass,dmgtype,mapname,location, seed, flagshash):
 	safePlayerName = profanity.censor(player)
 	if safePlayerName.count('*') >= len(safePlayerName)*0.7:
 		safePlayerName = 'Inappropriate Player'
@@ -143,21 +140,16 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagsha
 	if seed:
 		msg += ' on seed '+str(seed)
 	if flagshash:
-		msg += ' (flagshash: '+str(flagshash)
+		msg += ' (flagshash: '+str(flagshash)+')'
 	
-	x = round(float(x), 3)
-	y = round(float(y), 3)
-	z = round(float(z), 3)
+	location = location_split.split(location)
+	x = round(float(location[0]), 3)
+	y = round(float(location[1]), 3)
+	z = round(float(location[2]), 3)
 	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
-	msg += '\n#DeusEx #Randomizer'
-	if mod and mod != 'DeusEx':
-		msg += ' #' + mod
-	if version:
-		msg += ' ' + str(version)
-	msg = profanity.censor(msg)
 	return msg
 
-def gen_event_msg(event,mod,version):
+def gen_event_msg(event,d,mod,version):
 	msg = None
 	
 	info("Generating message for event: "+str(event))
@@ -166,7 +158,10 @@ def gen_event_msg(event,mod,version):
 		err("Event has no type field")
 		return None
 	
-	if event["type"]=="BeatGame":
+	if event['type']=='DEATH':
+		msg = gen_death_msg(event['player'],event['killer'],event['killerclass'],event['dmgtype'],event['map'],event['location'], d.get('seed'), d.get('flagshash'))
+	
+	elif event["type"]=="BeatGame":
 		if   event["ending"]==1:
 			msg = event["PlayerName"]+" destroyed Area 51, beginning a new dark age\n"
 		elif event["ending"]==2:
@@ -278,12 +273,13 @@ def write_db(mod, version, ip, content, config):
 		log_id = cursor.lastrowid
 		info("inserted logs id "+str(log_id))
 		deaths = get_deaths(content)
-		info("got deaths: "+repr(deaths))
 		events = get_events(content)
+		events.extend(deaths)
 		info("got events: "+repr(events))
-		for death in deaths:
-			log_death(cursor, log_id, death)
-		prepare_tweet(config, d, deaths, events, mod, version)
+		for event in events:
+			if event.type == 'DEATH':
+				log_death(cursor, log_id, event)
+		prepare_tweet(config, d, events, mod, version)
 		db.commit()
 		ret = {}
 		if d.get('firstword'):
@@ -430,12 +426,15 @@ def parse_content(content):
 	return d
 
 def get_deaths(content):
+	# deprecated
 	deaths = []
 	r = re.compile(
 		r'^DEATH: [^:]+: (?P<player>.*) was killed( by (?P<killerclass>.*?) (?P<killer>.*?))?( with (?P<dmgtype>.*?) damage)? in (?P<map>.*?) \((?P<x>.*?),(?P<y>.*?),(?P<z>.*?)\)'
 		, flags=re.MULTILINE)
 	for i in r.finditer(content):
 		d = i.groupdict()
+		d['type'] = 'DEATH'
+		d['location'] = d['x'] + ', ' + d['y'] + ', ' + d['z']
 		deaths.append(d)
 	return deaths
 
@@ -452,18 +451,24 @@ def get_json_from_event_msg(eventmsg):
 def get_events(content):
 	events = []
 	for line in content.splitlines():
-		if "EVENT" in line:
+		try:
+			if 'EVENT: ' not in line:
+				continue
 			eventjsonstr = get_json_from_event_msg(line)
 			event = json.loads(eventjsonstr)
 			events.append(event)
+		except Exception as e:
+			err('failed to get_events in line: ' + line)
+			logex(e)
 	return events
 			
 		
 		
 def log_death(cursor, log_id, death):
 	info(repr(death))
+	location = location_split.split(death['location'])
 	cursor.execute("INSERT INTO deaths SET log_id=%s, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
-		(log_id, death['player'], death['killer'], death['killerclass'], death['dmgtype'], death['x'], death['y'], death['z']))
+		(log_id, death['player'], death['killer'], death['killerclass'], death['dmgtype'], location[0], location[1], location[2]))
 
 def try_exec(cursor, query):
 	try:
@@ -614,13 +619,15 @@ def run_tests():
 	assert len(deaths) == 6
 
 	load_profanity_filter()
-	msg = gen_death_msg('fuck', 'thug', 'fuck', 'shot', 'fuck', '1.34', '2', '3', 123, 456, 'DeusEx', 'v.1.8.1')
+	msg = gen_event_msg({'type': 'DEATH', 'player': 'fuck', 'killer': 'thug', 'killerclass': 'thug', 'dmgtype': 'shot', 'location': '1.7456324, 2, 3.0,', 'map': 'fuck'}, {}, 'DeusEx', 'v1.5.0')
 	info(msg)
 	assert 'fuck' not in msg
 	assert 'thug' in msg
-	msg = gen_death_msg('fuck', 'fuck', 'fuck', 'fucked', 'fuck', '1', '2', '3', 123, 456, 'GMDX', 'v.1.8.1')
+	msg = gen_event_msg({'type': 'DEATH', 'player': 'fuck', 'killer': 'fucker', 'killerclass': 'fucker', 'dmgtype': 'fucked', 'location': '1.1, 2.34, 0.3,', 'map': 'fuck'}, {}, 'DeusEx', 'v1.5.0')
 	info(msg)
 	assert 'fuck' not in msg
+
+	info(repr(get_events('EVENT: {"location":"12.3, 4.56, 7.89"}')))
 	
 	info("path: "+os.path.dirname(os.path.realpath(__file__)))
 	info("cwd: "+os.getcwd())
