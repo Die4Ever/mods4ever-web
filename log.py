@@ -277,7 +277,7 @@ def write_db(mod, version, ip, content, config):
 		events.extend(deaths)
 		info("got events: "+repr(events))
 		for event in events:
-			if event.type == 'DEATH':
+			if event['type'] == 'DEATH':
 				log_death(cursor, log_id, event)
 		prepare_tweet(config, d, events, mod, version)
 		db.commit()
