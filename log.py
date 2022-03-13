@@ -11,6 +11,7 @@ if sys.version_info[0] == 3 and sys.version_info[1] < 5:
 	raise ImportError('Python < 3.5 is unsupported.')
 import cgitb
 import time
+import datetime
 import requests
 import json
 import os
@@ -70,8 +71,8 @@ def main():
 def load_profanity_filter():
 	profanity.load_censor_words(whitelist_words=['thug'])
 
-def prepare_tweet(config, d, deaths, mod, version):
-	if len(deaths) == 0:
+def prepare_tweet(config, d, deaths, events, mod, version):
+	if len(deaths) == 0 and len(events) == 0:
 		return
 	if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
 		return
@@ -87,6 +88,11 @@ def prepare_tweet(config, d, deaths, mod, version):
 	for death in deaths:
 		msg = gen_death_msg(death['player'],death['killer'],death['killerclass'],death['dmgtype'],death['map'],death['x'],death['y'],death['z'], d.get('seed'), d.get('flagshash'), mod, version)
 		send_tweet(twitApi,msg)
+	
+	for event in events:
+		msg = gen_event_msg(event,mod,version)
+		if msg!=None:
+			send_tweet(twitApi,msg)
 
 def damage_string(dmgtype):
 	if dmgtype=="shot":
@@ -150,7 +156,47 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,x,y,z, seed, flagsha
 		msg += ' ' + str(version)
 	msg = profanity.censor(msg)
 	return msg
+
+def gen_event_msg(event,mod,version):
+	msg = None
 	
+	info("Generating message for event: "+str(event))
+	
+	if "type" not in event:
+		err("Event has no type field")
+		return None
+	
+	if event["type"]=="BeatGame":
+		if   event["ending"]==1:
+			msg = event["PlayerName"]+" destroyed Area 51, beginning a new dark age\n"
+		elif event["ending"]==2:
+			msg = event["PlayerName"]+" merged with Helios to create a benevolent cybernetic dictatorship\n"
+		elif event["ending"]==3:
+			msg = event["PlayerName"]+" killed Bob Page and joined the Illuminati to rule the world unopposed\n"
+		elif event["ending"]==4:
+			msg = event["PlayerName"]+" decided this whole conspiracy thing was boring and decided to have a dance party instead\n"
+		else:
+			#unknown ending
+			err("Unknown ending value "+str(event["ending"]))
+			return None
+		
+		msg+= "\n"
+		msg+= "Seed: "+str(event["seed"])+"\n"
+		msg+= "Time: "+str(datetime.timedelta(seconds=event["time"]))+"\n"
+		
+	else:
+		err("Unrecognized event type: "+str(event["type"]))
+		return None
+		
+	msg+= "\n#DeusEx #Randomizer"
+	if mod and mod != 'DeusEx':
+		msg += ' #' + mod
+	if version:
+		msg += ' ' + str(version)
+	msg = profanity.censor(msg)
+		
+	return msg
+
 def send_tweet(api,msg):
 	info("Tweeting '"+msg+"'")
 	tweet = msg
@@ -159,7 +205,7 @@ def send_tweet(api,msg):
 		diff = len(tweet)-280
 		tweet = msg[:-diff-3]+"..."
 	try:
-		response = api.create_tweet(text=tweet)
+		response = api.create_tweet(text=tweet) 
 	except Exception as e:
 		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
 
@@ -233,9 +279,11 @@ def write_db(mod, version, ip, content, config):
 		info("inserted logs id "+str(log_id))
 		deaths = get_deaths(content)
 		info("got deaths: "+repr(deaths))
+		events = get_events(content)
+		info("got events: "+repr(events))
 		for death in deaths:
 			log_death(cursor, log_id, death)
-		prepare_tweet(config, d, deaths, mod, version)
+		prepare_tweet(config, d, deaths, events, mod, version)
 		db.commit()
 		ret = {}
 		if d.get('firstword'):
@@ -391,6 +439,27 @@ def get_deaths(content):
 		deaths.append(d)
 	return deaths
 
+def get_json_from_event_msg(eventmsg):
+	jsonstr = ""
+	
+	jsonstart = eventmsg.find("{")
+	
+	if jsonstart != -1:
+		jsonstr = eventmsg[jsonstart:]
+		
+	return jsonstr
+
+def get_events(content):
+	events = []
+	for line in content.splitlines():
+		if "EVENT" in line:
+			eventjsonstr = get_json_from_event_msg(line)
+			event = json.loads(eventjsonstr)
+			events.append(event)
+	return events
+			
+		
+		
 def log_death(cursor, log_id, death):
 	info(repr(death))
 	cursor.execute("INSERT INTO deaths SET log_id=%s, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
