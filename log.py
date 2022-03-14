@@ -149,6 +149,13 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,location, seed, flag
 	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
 	return msg
 
+
+def twitter_sanitize(val):
+	if not val:
+		return ''
+	return str(val).replace('#', '').replace('@', '')
+
+
 def gen_event_msg(event,d,mod,version):
 	msg = None
 	
@@ -157,9 +164,16 @@ def gen_event_msg(event,d,mod,version):
 	if "type" not in event:
 		err("Event has no type field")
 		return None
+
+	for k in event:
+		event[k] = twitter_sanitize(event[k])
+	seed = twitter_sanitize(d.get('seed'))
+	flagshash = twitter_sanitize(d.get('flagshash'))
+	mod = twitter_sanitize(mod)
+	version = twitter_sanitize(version)
 	
 	if event['type']=='DEATH':
-		msg = gen_death_msg(event['player'],event['killer'],event['killerclass'],event['dmgtype'],event['map'],event['location'], d.get('seed'), d.get('flagshash'))
+		msg = gen_death_msg(event['player'],event['killer'],event['killerclass'],event['dmgtype'],event['map'],event['location'], seed, flagshash)
 	
 	elif event["type"]=="BeatGame":
 		if   event["ending"]==1:
@@ -176,7 +190,7 @@ def gen_event_msg(event,d,mod,version):
 			return None
 		
 		msg+= "\n"
-		msg+= "Seed: "+str(event["seed"])+"\n"
+		msg+= "Seed: "+seed+"\n"
 		msg+= "Time: "+str(datetime.timedelta(seconds=event["time"]))+"\n"
 		
 	else:
@@ -187,7 +201,7 @@ def gen_event_msg(event,d,mod,version):
 	if mod and mod != 'DeusEx':
 		msg += ' #' + mod
 	if version:
-		msg += ' ' + str(version)
+		msg += ' ' + version
 	msg = profanity.censor(msg)
 		
 	return msg
@@ -623,9 +637,13 @@ def run_tests():
 	info(msg)
 	assert 'fuck' not in msg
 	assert 'thug' in msg
-	msg = gen_event_msg({'type': 'DEATH', 'player': 'fuck', 'killer': 'fucker', 'killerclass': 'fucker', 'dmgtype': 'fucked', 'location': '1.1, 2.34, 0.3,', 'map': 'fuck'}, {}, 'DeusEx', 'v1.5.0')
+	msg = gen_event_msg({'type': 'DEATH', 'player': '# fuck @', 'killer': 'fucker', 'killerclass': 'fucker', 'dmgtype': 'fucked', 'location': '1.1, 2.34, 0.3,', 'map': 'fuck'}, {}, 'Fake#Mod@', 'v1.5.0')
 	info(msg)
 	assert 'fuck' not in msg
+	assert '@' not in msg
+	assert '# ****' not in msg
+	assert 'Fake#Mod@' not in msg
+	assert 'FakeMod' in msg
 
 	info(repr(get_events('EVENT: {"location":"12.3, 4.56, 7.89"}')))
 	
