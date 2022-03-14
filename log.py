@@ -121,6 +121,15 @@ def damage_string(dmgtype):
 			err('unknown dmgtype: '+dmgtype)
 		return 'killed'
 
+
+def location_to_string(location):
+	location = location_split.split(location)
+	x = round(float(location[0]), 3)
+	y = round(float(location[1]), 3)
+	z = round(float(location[2]), 3)
+	return str(x)+', '+str(y)+', '+str(z)
+
+
 def gen_death_msg(player,killer,killerclass,dmgtype,mapname,location, seed, flagshash):
 	safePlayerName = profanity.censor(player)
 	if safePlayerName.count('*') >= len(safePlayerName)*0.7:
@@ -142,11 +151,7 @@ def gen_death_msg(player,killer,killerclass,dmgtype,mapname,location, seed, flag
 	if flagshash:
 		msg += ' (flagshash: '+str(flagshash)+')'
 	
-	location = location_split.split(location)
-	x = round(float(location[0]), 3)
-	y = round(float(location[1]), 3)
-	z = round(float(location[2]), 3)
-	msg+="\n\nPosition: "+str(x)+", "+str(y)+", "+str(z)
+	msg+="\n\nPosition: " + location_to_string(location)
 	return msg
 
 
