@@ -140,7 +140,7 @@ def gen_death_msg(event, player, location):
 	
 	if (killer==player):
 		msg+=" by themselves"
-	elif (killer==None):
+	elif not killer:
 		msg+=""
 	else:
 		msg+=' by '+killer
