@@ -130,7 +130,7 @@ def location_to_string(location):
 	return str(x)+', '+str(y)+', '+str(z)
 
 
-def gen_death_msg(event, player,location, seed, flagshash):
+def gen_death_msg(event, player, location):
 	safePlayerName = profanity.censor(player)
 	if safePlayerName.count('*') >= len(safePlayerName)*0.7:
 		safePlayerName = 'Inappropriate Player'
@@ -146,14 +146,9 @@ def gen_death_msg(event, player,location, seed, flagshash):
 		msg+=' by '+killer
 	
 	if 'mapname' in event:
-		msg += ' in '+event['mapname'] + ' (' + event['map'] + ')'
+		msg += ' in '+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')'
 	else:
 		msg+=" in "+event['map']
-
-	if seed:
-		msg += ' on seed '+str(seed)
-	if flagshash:
-		msg += ' (flagshash: '+str(flagshash)+')'
 	
 	msg+="\n\nPosition: " + location_to_string(location)
 	return msg
@@ -182,30 +177,35 @@ def gen_event_msg(event,d,mod,version):
 	version = twitter_sanitize(version)
 	
 	if event['type']=='DEATH':
-		msg = gen_death_msg(event, event['player'],event['location'], seed, flagshash)
+		msg = gen_death_msg(event, event['player'], event['location'])
 	
 	elif event["type"]=="BeatGame":
-		if   event["ending"]==1:
+		ending = int(event["ending"])
+		if   ending==1:
 			msg = event["PlayerName"]+" destroyed Area 51, beginning a new dark age\n"
-		elif event["ending"]==2:
+		elif ending==2:
 			msg = event["PlayerName"]+" merged with Helios to create a benevolent cybernetic dictatorship\n"
-		elif event["ending"]==3:
+		elif ending==3:
 			msg = event["PlayerName"]+" killed Bob Page and joined the Illuminati to rule the world unopposed\n"
-		elif event["ending"]==4:
+		elif ending==4:
 			msg = event["PlayerName"]+" decided this whole conspiracy thing was boring and decided to have a dance party instead\n"
 		else:
 			#unknown ending
 			err("Unknown ending value "+str(event["ending"]))
 			return None
-		
-		msg+= "\n"
-		msg+= "Seed: "+seed+"\n"
-		msg+= "Time: "+str(datetime.timedelta(seconds=event["time"]))+"\n"
+		gametime = int(event["time"])
+		msg+= "\nTime: "+str(datetime.timedelta(seconds=gametime))
 		
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
 		return None
 		
+	
+	if seed:
+		msg += '\nSeed: '+str(seed)
+		if flagshash:
+			msg += ', flagshash: '+str(flagshash)
+	
 	msg+= "\n#DeusEx #Randomizer"
 	if mod and mod != 'DeusEx':
 		msg += ' #' + mod
@@ -642,17 +642,20 @@ def run_tests():
 	assert len(deaths) == 6
 
 	load_profanity_filter()
-	msg = gen_event_msg({'type': 'DEATH', 'player': 'fuck', 'killer': 'thug', 'killerclass': 'thug', 'dmgtype': 'shot', 'location': '1.7456324, 2, 3.0,', 'map': 'fuck'}, {}, 'DeusEx', 'v1.5.0')
+	msg = gen_event_msg({'type': 'DEATH', 'player': 'fuck', 'killer': 'thug', 'killerclass': 'thug', 'dmgtype': 'shot', 'location': '1.7456324, 2, 3.0,', 'map': 'fuck', 'mapname': 'fucking map', 'mission': 12}, {'seed': 123, 'flagshash': 456}, 'DeusEx', 'v1.5.0')
 	info(msg)
 	assert 'fuck' not in msg
 	assert 'thug' in msg
-	msg = gen_event_msg({'type': 'DEATH', 'player': '# fuck @', 'killer': 'fucker', 'killerclass': 'fucker', 'dmgtype': 'fucked', 'location': '1.1, 2.34, 0.3,', 'map': 'fuck'}, {}, 'Fake#Mod@', 'v1.5.0')
+	msg = gen_event_msg({'type': 'DEATH', 'player': '# fuck @', 'killer': 'fucker', 'killerclass': 'fucker', 'dmgtype': 'fucked', 'location': '1.1, 2.34, 0.3,', 'map': 'fuck', 'mapname': 'fucking map', 'mission': 12}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
 	info(msg)
 	assert 'fuck' not in msg
 	assert '@' not in msg
 	assert '# ****' not in msg
 	assert 'Fake#Mod@' not in msg
 	assert 'FakeMod' in msg
+
+	msg = gen_event_msg({'type': 'BeatGame', 'PlayerName': '# fuck @', 'ending': '1', 'time': '123'}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
+	info(msg)
 
 	info(repr(get_events('EVENT: {"location":"12.3, 4.56, 7.89"}')))
 	
