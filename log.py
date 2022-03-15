@@ -93,33 +93,33 @@ def prepare_tweet(config, playthrough_data, events, mod, version):
 
 def damage_string(dmgtype):
 	if dmgtype=="shot":
-		return "murdered"
+		return "was murdered"
 	elif dmgtype=="teargas":
-		return "tear gassed to death"
+		return "was tear gassed to death"
 	elif dmgtype=="poisongas":
-		return "poison gassed to death"
+		return "was poison gassed to death"
 	elif dmgtype=="radiation":
-		return "radiated to death"
+		return "was radiated to death"
 	elif dmgtype=="halongas":
-		return "gassed to death"
+		return "was gassed to death"
 	elif dmgtype=="poisoneffect" or dmgtype=="poison":
-		return "poisoned to death"
+		return "was poisoned to death"
 	elif dmgtype=="sabot" or dmgtype=="autoshot":
-		return "filled with holes"
+		return "was filled with holes"
 	elif dmgtype=="burned" or dmgtype=="flamed":
-		return "burned to death"
+		return "was burned to death"
 	elif dmgtype=="drowned":
 		return "drowned"
 	elif dmgtype=="emp" or dmgtype=="shocked":
-		return "shocked to death"
+		return "was shocked to death"
 	elif dmgtype=="exploded":
-		return "exploded to bits"
+		return "was blown to bits"
 	elif dmgtype=="fell":
-		return "splattered all over the floor"
+		return "was splattered all over the floor"
 	else:
 		if dmgtype:
 			err('unknown dmgtype: '+dmgtype)
-		return 'killed'
+		return 'was killed'
 
 
 def location_to_string(location):
@@ -136,7 +136,7 @@ def gen_death_msg(event, player,location, seed, flagshash):
 		safePlayerName = 'Inappropriate Player'
 	killer = event.get('killer')
 	dmgtype = event.get('dmgtype')
-	msg = safePlayerName+" was "+damage_string(dmgtype.lower())
+	msg = safePlayerName+" "+damage_string(dmgtype.lower())
 	
 	if (killer==player):
 		msg+=" by themselves"
