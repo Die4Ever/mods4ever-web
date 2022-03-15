@@ -109,7 +109,7 @@ def damage_string(dmgtype):
 	elif dmgtype=="burned" or dmgtype=="flamed":
 		return "burned to death"
 	elif dmgtype=="drowned":
-		return "tear gassed to death"
+		return "drowned"
 	elif dmgtype=="emp" or dmgtype=="shocked":
 		return "shocked to death"
 	elif dmgtype=="exploded":
