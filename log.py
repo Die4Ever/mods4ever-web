@@ -30,6 +30,20 @@ path = os.path.dirname(os.path.realpath(__file__))
 logdir = path + "/dxrando_logs/"
 location_split = re.compile('\s*,\s*')
 
+def update_notification(mod, version):
+	response = {}
+	desc = "Bug fixes and a small balance fix!"
+	detail = ""
+	assert len(desc) < 35
+	assert len(detail) < 35
+	if VersionStringToInt(version) < VersionToInt(1, 7, 4, 7):
+		response['notification'] = "New v1.7.4 available!"
+		response['message'] = desc
+		response['message'] += "|n" + detail
+		response['message'] += "|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
+	return response
+
+
 def main():
 	#cgitb.enable(display=1, logdir=logdir)
 	print("Status: 200" )
@@ -226,19 +240,6 @@ def send_tweet(api,msg):
 		response = api.create_tweet(text=tweet) 
 	except Exception as e:
 		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
-
-def update_notification(mod, version):
-	response = {}
-	desc = "Death Markers and Enemy Shuffling!"
-	detail = ""
-	assert len(desc) < 35
-	assert len(detail) < 35
-	if VersionStringToInt(version) < VersionToInt(1, 7, 3, 11):
-		response['notification'] = "New v1.7.3 available!"
-		response['message'] = desc
-		response['message'] += "|n" + detail
-		response['message'] += "|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
-	return response
 
 def print_response(mod, version, response):
 	if VersionStringToInt(version) >= VersionToInt(1, 7, 3, 3):
