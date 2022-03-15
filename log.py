@@ -130,11 +130,12 @@ def location_to_string(location):
 	return str(x)+', '+str(y)+', '+str(z)
 
 
-def gen_death_msg(event, player,killer,dmgtype,location, seed, flagshash):
+def gen_death_msg(event, player,location, seed, flagshash):
 	safePlayerName = profanity.censor(player)
 	if safePlayerName.count('*') >= len(safePlayerName)*0.7:
 		safePlayerName = 'Inappropriate Player'
-
+	killer = event.get('killer')
+	dmgtype = event.get('dmgtype')
 	msg = safePlayerName+" was "+damage_string(dmgtype.lower())
 	
 	if (killer==player):
@@ -181,7 +182,7 @@ def gen_event_msg(event,d,mod,version):
 	version = twitter_sanitize(version)
 	
 	if event['type']=='DEATH':
-		msg = gen_death_msg(event, event['player'],event['killer'],event['dmgtype'],event['location'], seed, flagshash)
+		msg = gen_death_msg(event, event['player'],event['location'], seed, flagshash)
 	
 	elif event["type"]=="BeatGame":
 		if   event["ending"]==1:
