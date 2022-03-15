@@ -145,7 +145,7 @@ def gen_death_msg(event, player,killer,dmgtype,location, seed, flagshash):
 		msg+=' by '+killer
 	
 	if 'mapname' in event:
-		msg += ' in '+event['mapname'] + '(' + event['map'] + ')'
+		msg += ' in '+event['mapname'] + ' (' + event['map'] + ')'
 	else:
 		msg+=" in "+event['map']
 
