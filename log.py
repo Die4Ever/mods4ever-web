@@ -173,6 +173,9 @@ def twitter_sanitize(val):
 		return ''
 	return str(val).replace('#', '').replace('@', '')
 
+def gametime_to_string(time):
+	time = int(float(time) / 10)
+	return str(datetime.timedelta(seconds=time))
 
 def gen_event_msg(event,d,mod,version):
 	msg = None
@@ -207,8 +210,7 @@ def gen_event_msg(event,d,mod,version):
 			#unknown ending
 			err("Unknown ending value "+str(event["ending"]))
 			return None
-		gametime = int(float(event["time"]) / 10)
-		msg+= "\nTime: "+str(datetime.timedelta(seconds=gametime))
+		msg+= "\nTime: "+gametime_to_string(event["time"])
 		if 'loadout' in event and event['loadout'] != 'All Items Allowed':
 			msg+= '\nLoadout: '+event['loadout']
 		if 'deaths' in event:
