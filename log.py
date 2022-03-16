@@ -207,8 +207,12 @@ def gen_event_msg(event,d,mod,version):
 			#unknown ending
 			err("Unknown ending value "+str(event["ending"]))
 			return None
-		gametime = int(event["time"])
+		gametime = int(float(event["time"]) / 10)
 		msg+= "\nTime: "+str(datetime.timedelta(seconds=gametime))
+		if 'loadout' in event and event['loadout'] != 'All Items Allowed':
+			msg+= '\nLoadout: '+event['loadout']
+		if 'deaths' in event:
+			msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
 		
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
