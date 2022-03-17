@@ -215,7 +215,13 @@ def gen_event_msg(event,d,mod,version):
 			msg+= '\nLoadout: '+event['loadout']
 		if 'deaths' in event:
 			msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
-		
+
+	elif event['type']=='Trigger' and event['tag']=='MadeBasket':
+		msg = 'Sign '+event['instigator']+' up for the Knicks!!!! (Mission: ' + str(event['mission']).zfill(2) + ')'
+
+	elif event['type']=='Flag' and event['flag']=='BathroomBarks_Played':
+		msg = 'By the way, '+event['PlayerName']+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.'
+
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
 		return None
