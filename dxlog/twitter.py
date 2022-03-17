@@ -72,7 +72,7 @@ def censor_name(name):
 		name = 'Inappropriate Name'
 	return name
 
-def gen_death_msg(event, location):
+def gen_death_msg(isPlayer, event, location):
 	victim = ''
 	if 'victim' in event:
 		victim = event['victim']
@@ -94,7 +94,10 @@ def gen_death_msg(event, location):
 	else:
 		msg+=" in "+event['map']
 	
-	msg+="\n\nPosition: " + location_to_string(location)
+	if location:
+		msg+="\n\nPosition: " + location_to_string(location)
+	else:
+		msg+='\n'
 	return msg
 
 
@@ -109,6 +112,11 @@ def gametime_to_string(time):
 
 
 mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'VanillaMadder' }
+flag_to_character_names = {
+	'TerroristCommander_Dead': 'Terrorist Commander',
+	'TiffanySavage_Dead': 'Tiffany Savage'
+}
+
 def gen_event_msg(event,d,mod,version):
 	msg = None
 	
@@ -125,8 +133,20 @@ def gen_event_msg(event,d,mod,version):
 	mod = twitter_sanitize(mod)
 	version = twitter_sanitize(version)
 	
+	# player died
 	if event['type']=='DEATH':
-		msg = gen_death_msg(event, event['location'])
+		msg = gen_death_msg(True, event, event['location'])
+	
+	# important character died, only works for vanilla with injects/shims
+	elif event['type']=='PawnDeath':
+		msg = gen_death_msg(False, event, event['location'])
+
+	# flag for character's death, we assume the player killed them, location is None or player's location?
+	elif event['type']=='Flag' and event['flag'] in flag_to_character_names:
+		event['victim'] = flag_to_character_names[event['flag']]
+		event['killer'] = event['PlayerName']
+		#immediate = event['immediate'] # we might need this, maybe to ignore the location?
+		msg = gen_death_msg(False, event, event.get('location'))
 	
 	elif event["type"]=="BeatGame":
 		ending = int(event["ending"])
