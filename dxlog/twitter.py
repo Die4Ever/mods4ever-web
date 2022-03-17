@@ -107,6 +107,8 @@ def gametime_to_string(time):
 	time = int(float(time) / 10)
 	return str(datetime.timedelta(seconds=time))
 
+
+mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'VanillaMadder' }
 def gen_event_msg(event,d,mod,version):
 	msg = None
 	
@@ -165,8 +167,8 @@ def gen_event_msg(event,d,mod,version):
 			msg += ', flagshash: '+str(flagshash)
 	
 	msg+= "\n#DeusEx #Randomizer"
-	if mod and mod != 'DeusEx':
-		msg += ' #' + mod
+	if mod and mod_names.get(mod):
+		msg += ' #' + mod_names.get(mod)
 	if version:
 		msg += ' ' + version
 	msg = profanity.censor(msg)

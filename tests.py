@@ -23,7 +23,7 @@ class TestLog(unittest.TestCase):
 		assert '@' not in msg
 		assert '# ****' not in msg
 		assert 'Fake#Mod@' not in msg
-		assert 'FakeMod' in msg
+		assert 'FakeMod' not in msg
 
 		msg = gen_event_msg({'type': 'BeatGame', 'PlayerName': '# fuck @', 'ending': '1', 'time': '123'}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
 		info(msg)
