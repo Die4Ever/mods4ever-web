@@ -81,8 +81,7 @@ def get_playthrough(cursor, mod, ip, d):
 			d['flagshash'] = r['flagshash']
 	return d
 
-
-# for k in ['num', 'name', 'killer', 'damagetype', 'age', 'x', 'y', 'z', 'killerclass']:
+# for k in [0: 'num', 1: 'name', 2: 'killer', 3: 'damagetype', 4: 'age', 5: 'x', 6: 'y', 7: 'z', 8: 'killerclass']:
 def compare_deaths(a, b):
 	# name
 	if a[1] != b[1]:

@@ -25,6 +25,8 @@ def main():
 		response['status'] = "ok received "+str(len(content))+"/"+str(content_length)+" bytes"
 
 	version = qps.get('version', "v1.0.0")
+	if VersionStringToInt(version) <= VersionToInt(1, 1, 0, 0):
+		warn('unknown version '+version)
 	mod = qps.get('mod')
 
 	response.update(update_notification(mod, version))
