@@ -147,10 +147,12 @@ def gen_event_msg(event,d,mod,version):
 			msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
 
 	elif event['type']=='Trigger' and event['tag']=='MadeBasket':
-		msg = 'Sign '+event['instigator']+' up for the Knicks!!!! (Mission: ' + str(event['mission']).zfill(2) + ')'
+		msg = 'Sign '+event['instigator']+' up for the Knicks!!!! (Mission: ' + str(event['mission']).zfill(2) + ')\n'
 
 	elif event['type']=='Flag' and event['flag']=='BathroomBarks_Played':
-		msg = 'By the way, '+event['PlayerName']+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.'
+		msg = 'By the way, '+event['PlayerName']+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.\n'
+	elif event['type']=='Flag' and event['flag']=='ManBathroomBarks_Played':
+		msg = 'By the way, '+event['PlayerName']+', stay out of the men\'s restroom. That kind of activity embarasses the agency more than it does you.\n'
 
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
