@@ -5,7 +5,7 @@ from better_profanity import profanity
 from dxlog.base import *
 
 def load_profanity_filter():
-	profanity.load_censor_words(whitelist_words=['thug'])
+	profanity.load_censor_words(whitelist_words=['thug', 'hooker', 'junkie'])
 
 def tweet(config, playthrough_data, events, mod, version):
 	if len(events) == 0:
@@ -66,20 +66,28 @@ def location_to_string(location):
 	return str(x)+', '+str(y)+', '+str(z)
 
 
-def gen_death_msg(event, player, location):
-	safePlayerName = profanity.censor(player)
-	if safePlayerName.count('*') >= len(safePlayerName)*0.7:
-		safePlayerName = 'Inappropriate Player'
+def censor_name(name):
+	name = profanity.censor(name)
+	if name.count('*') >= len(name)*0.7:
+		name = 'Inappropriate Name'
+	return name
+
+def gen_death_msg(event, location):
+	victim = ''
+	if 'victim' in event:
+		victim = event['victim']
+	else:# player is deprecated
+		victim = event.get('player')
+
+	safeVictimName = censor_name(victim)
 	killer = event.get('killer')
 	dmgtype = event.get('dmgtype')
-	msg = safePlayerName+" "+damage_string(dmgtype.lower())
+	msg = safeVictimName+" "+damage_string(dmgtype.lower())
 	
-	if (killer==player):
+	if (killer==victim):
 		msg+=" by themselves"
-	elif not killer:
-		msg+=""
-	else:
-		msg+=' by '+killer
+	elif killer:
+		msg+=' by '+censor_name(killer)
 	
 	if 'mapname' in event:
 		msg += ' in '+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')'
@@ -116,7 +124,7 @@ def gen_event_msg(event,d,mod,version):
 	version = twitter_sanitize(version)
 	
 	if event['type']=='DEATH':
-		msg = gen_death_msg(event, event['player'], event['location'])
+		msg = gen_death_msg(event, event['location'])
 	
 	elif event["type"]=="BeatGame":
 		ending = int(event["ending"])

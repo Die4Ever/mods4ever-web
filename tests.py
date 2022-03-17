@@ -11,6 +11,30 @@ class TestLog(unittest.TestCase):
 		print(d['firstword'])
 		self.assertEqual(d['firstword'], "PreFirstEntry")
 
+	def test_twitter(self):
+		load_profanity_filter()
+		msg = gen_event_msg({'type': 'DEATH', 'player': 'fuck', 'killer': 'thug', 'killerclass': 'thug', 'dmgtype': 'shot', 'location': '1.7456324, 2, 3.0,', 'map': 'fuck', 'mapname': 'fucking map', 'mission': 12}, {'seed': 123, 'flagshash': 456}, 'DeusEx', 'v1.5.0')
+		info(msg)
+		assert 'fuck' not in msg
+		assert 'thug' in msg
+		msg = gen_event_msg({'type': 'DEATH', 'victim': '# fuck @', 'killer': 'fucker', 'killerclass': 'fucker', 'dmgtype': 'fucked', 'location': '1.1, 2.34, 0.3,', 'map': 'fuck', 'mapname': 'fucking map', 'mission': 12}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
+		info(msg)
+		assert 'fuck' not in msg
+		assert '@' not in msg
+		assert '# ****' not in msg
+		assert 'Fake#Mod@' not in msg
+		assert 'FakeMod' in msg
+
+		msg = gen_event_msg({'type': 'BeatGame', 'PlayerName': '# fuck @', 'ending': '1', 'time': '123'}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
+		info(msg)
+		self.assertEqual(censor_name('Thug'), 'Thug')
+		self.assertEqual(censor_name('Hooker'), 'Hooker')
+		self.assertEqual(censor_name('Bum'), 'Bum')
+		self.assertEqual(censor_name('Terrorist'), 'Terrorist')
+		self.assertEqual(censor_name('Junkie'), 'Junkie')
+		self.assertEqual(censor_name('Smuggler'), 'Smuggler')
+
+
 class MockFailCursor:
 	def execute(self, q):
 		raise Exception("MockFailCursor: "+q)
@@ -53,22 +77,6 @@ def run_tests():
 	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d.copy(), 'e':d4, 'f':d.copy(), 'g':d3.copy(), 'h':d.copy()})
 	info("filter_deaths down to "+repr(deaths))
 	assert len(deaths) == 6
-
-	load_profanity_filter()
-	msg = gen_event_msg({'type': 'DEATH', 'player': 'fuck', 'killer': 'thug', 'killerclass': 'thug', 'dmgtype': 'shot', 'location': '1.7456324, 2, 3.0,', 'map': 'fuck', 'mapname': 'fucking map', 'mission': 12}, {'seed': 123, 'flagshash': 456}, 'DeusEx', 'v1.5.0')
-	info(msg)
-	assert 'fuck' not in msg
-	assert 'thug' in msg
-	msg = gen_event_msg({'type': 'DEATH', 'player': '# fuck @', 'killer': 'fucker', 'killerclass': 'fucker', 'dmgtype': 'fucked', 'location': '1.1, 2.34, 0.3,', 'map': 'fuck', 'mapname': 'fucking map', 'mission': 12}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
-	info(msg)
-	assert 'fuck' not in msg
-	assert '@' not in msg
-	assert '# ****' not in msg
-	assert 'Fake#Mod@' not in msg
-	assert 'FakeMod' in msg
-
-	msg = gen_event_msg({'type': 'BeatGame', 'PlayerName': '# fuck @', 'ending': '1', 'time': '123'}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
-	info(msg)
 
 	info(repr(get_events('EVENT: {"location":"12.3, 4.56, 7.89"}')))
 	
