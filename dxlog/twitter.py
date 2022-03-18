@@ -114,7 +114,8 @@ def gametime_to_string(time):
 mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'VanillaMadder' }
 flag_to_character_names = {
 	'TerroristCommander_Dead': 'Terrorist Commander',
-	'TiffanySavage_Dead': 'Tiffany Savage'
+	'TiffanySavage_Dead': 'Tiffany Savage',
+	'PaulDenton_Dead': 'Paul Denton'
 }
 
 def gen_event_msg(event,d,mod,version):
@@ -139,8 +140,11 @@ def gen_event_msg(event,d,mod,version):
 	
 	# important character died, only works for vanilla with injects/shims
 	# Check against the character list to see if they deserve a tweet
-	elif event['type']=='PawnDeath' and event['victimBindName']+"_Dead" in flag_to_character_names:
-		msg = gen_death_msg(False, event, event['location'])
+	elif event['type']=='PawnDeath':
+		if event['victimBindName']+"_Dead" in flag_to_character_names:
+			msg = gen_death_msg(False, event, event['location'])
+		else:
+			info('PawnDeath unknown name: '+event['victimBindName'])
 
 	# flag for character's death, we assume the player killed them, location is None or player's location?
 	elif event['type']=='Flag' and event['flag'] in flag_to_character_names:
@@ -196,6 +200,8 @@ def gen_event_msg(event,d,mod,version):
 		msg = event['PlayerName']+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
 	elif event['type']=='Flag' and event['flag']=='MiguelHack_Played':
 		msg = event['PlayerName']+' helped Miguel escape the MJ12 facility under UNATCO HQ\n'
+	elif event['type']=='Flag':
+		info('Flag event, unknown flag name: '+event['flag'])
     
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
