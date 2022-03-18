@@ -170,6 +170,8 @@ def select_deaths(cursor, mod, map):
 def log_death(cursor, log_id, death):
 	info(repr(death))
 	location = location_split.split(death['location'])
+	if 'victim' not in death:
+		death['victim'] = death['player']
 	cursor.execute("INSERT INTO deaths SET log_id=%s, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
 		(log_id, death['victim'], death.get('killer'), death.get('killerclass'), death.get('dmgtype'), location[0], location[1], location[2]))
 
