@@ -227,6 +227,8 @@ def gen_event_msg(event,d,mod,version):
 	
 	elif event['type']=='SavedPaul':
 		msg = event['PlayerName']+' saved Paul\'s life during the raid!\n'
+		if 'PaulHealth' in event:
+			msg += 'Paul had ' + str(int(event['PaulHealth'])) + '% health remaining\n'
 
 	else:
 		err("Unrecognized event type: "+str(event["type"]))

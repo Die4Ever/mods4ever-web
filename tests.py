@@ -27,6 +27,8 @@ class TestLog(unittest.TestCase):
 
 		msg = gen_event_msg({'type': 'BeatGame', 'PlayerName': '# fuck @', 'ending': '1', 'time': '123'}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
 		info(msg)
+		msg = gen_event_msg({'type': 'SavedPaul', 'PlayerName': '# fuck @', 'PaulHealth': '69'}, {'seed': '123', 'flagshash': '456'}, 'Fake#Mod@', 'v1.5.0')
+		info(msg)
 		self.assertEqual(censor_name('Thug'), 'Thug')
 		self.assertEqual(censor_name('Hooker'), 'Hooker')
 		self.assertEqual(censor_name('Bum'), 'Bum')
