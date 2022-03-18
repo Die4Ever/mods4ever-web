@@ -5,7 +5,7 @@ from better_profanity import profanity
 from dxlog.base import *
 
 def load_profanity_filter():
-	profanity.load_censor_words(whitelist_words=['thug', 'hooker', 'junkie'])
+	profanity.load_censor_words(whitelist_words=['thug', 'hooker', 'junkie', 'god', 'hell'])
 
 def tweet(config, playthrough_data, events, mod, version):
 	if len(events) == 0:
@@ -138,7 +138,8 @@ def gen_event_msg(event,d,mod,version):
 		msg = gen_death_msg(True, event, event['location'])
 	
 	# important character died, only works for vanilla with injects/shims
-	elif event['type']=='PawnDeath':
+	# Check against the character list to see if they deserve a tweet
+	elif event['type']=='PawnDeath' and event['victimBindName']+"_Dead" in flag_to_character_names:
 		msg = gen_death_msg(False, event, event['location'])
 
 	# flag for character's death, we assume the player killed them, location is None or player's location?
@@ -175,7 +176,27 @@ def gen_event_msg(event,d,mod,version):
 		msg = 'By the way, '+event['PlayerName']+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.\n'
 	elif event['type']=='Flag' and event['flag']=='ManBathroomBarks_Played':
 		msg = 'By the way, '+event['PlayerName']+', stay out of the men\'s restroom. That kind of activity embarasses the agency more than it does you.\n'
-
+	elif event['type']=='Flag' and event['flag']=='GotHelicopterInfo':
+		msg = '\"Oh my god! '+event['PlayerName']+'! A bomb!\"\nJock found and disarmed the bomb planted in his helicopter by the fake mechanic.\n'
+	elif event['type']=='Flag' and event['flag']=='JoshFed':
+		msg = event['PlayerName']+' gave some food to Josh the homeless kid in Battery Park in exchange for some info about the soda machine\n'
+	elif event['type']=='Flag' and event['flag']=='M02BillyDone':
+		msg = event['PlayerName']+' gave some food to Billy the homeless kid in Castle Clinton for some info about the NSF tunnels\n'
+	elif event['type']=='Flag' and event['flag']=='FordSchickRescued':
+		msg = event['PlayerName']+' successfully rescued Ford Schick from the MJ12 base in the New York sewers\n'
+	elif event['type']=='Flag' and event['flag']=='M10EnteredBakery':
+		msg = event['PlayerName']+' went looking for a nice baguette in the Paris bakery\n'
+	elif event['type']=='Flag' and event['flag']=='AlleyCopSeesPlayer_Played':
+		msg = event['PlayerName']+' got caught doing a bit of breaking and entering in Paris\n'
+	elif event['type']=='Flag' and event['flag']=='FreshWaterOpened':
+		msg = event['PlayerName']+' opened up a fresh water supply for the people living in Brooklyn Bridge Station\n'
+	elif event['type']=='Flag' and event['flag']=='assassinapartment':
+		msg = event['PlayerName']+' decided to pay a visit to the local assassin\n'
+	elif event['type']=='Flag' and event['flag']=='GaveRentonGun':
+		msg = event['PlayerName']+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
+	elif event['type']=='Flag' and event['flag']=='MiguelHack_Played':
+		msg = event['PlayerName']+' helped Miguel escape the MJ12 facility under UNATCO HQ\n'
+    
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
 		return None
@@ -203,7 +224,7 @@ def send_tweet(api,msg):
 		diff = len(tweet)-280
 		tweet = msg[:-diff-3]+"..."
 	try:
-		response = api.create_tweet(text=tweet) 
+		response = api.create_tweet(text=tweet)
 	except Exception as e:
 		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
 
