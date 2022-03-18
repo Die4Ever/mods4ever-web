@@ -67,6 +67,8 @@ def location_to_string(location):
 
 
 def censor_name(name):
+	if not name:
+		return ''
 	name = profanity.censor(name)
 	if name.count('*') >= len(name)*0.7:
 		name = 'Inappropriate Name'
@@ -115,6 +117,58 @@ def gametime_to_string(time):
 	return str(datetime.timedelta(seconds=time))
 
 
+def BeatGameMsg(event):
+	ending = int(event["ending"])
+	if   ending==1:
+		msg = event["PlayerName"]+" destroyed Area 51, beginning a new dark age\n"
+	elif ending==2:
+		msg = event["PlayerName"]+" merged with Helios to create a benevolent cybernetic dictatorship\n"
+	elif ending==3:
+		msg = event["PlayerName"]+" killed Bob Page and joined the Illuminati to rule the world unopposed\n"
+	elif ending==4:
+		msg = event["PlayerName"]+" decided this whole conspiracy thing was boring and decided to have a dance party instead\n"
+	else:
+		#unknown ending
+		err("Unknown ending value "+str(event["ending"]))
+		return None
+	msg+= "\nTime: "+gametime_to_string(event["time"])
+	if 'loadout' in event and event['loadout'] != 'All Items Allowed':
+		msg+= '\nLoadout: '+event['loadout']
+	if 'deaths' in event:
+		msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
+
+
+def FlagEventMsg(event):
+	flag = event.get('flag')
+	if flag=='BathroomBarks_Played':
+		return 'By the way, '+event['PlayerName']+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.\n'
+	elif flag=='ManBathroomBarks_Played':
+		return 'By the way, '+event['PlayerName']+', stay out of the men\'s restroom. That kind of activity embarasses the agency more than it does you.\n'
+	elif flag=='GotHelicopterInfo':
+		return '\"Oh my god! '+event['PlayerName']+'! A bomb!\"\nJock found and disarmed the bomb planted in his helicopter by the fake mechanic.\n'
+	elif flag=='JoshFed':
+		return event['PlayerName']+' gave some food to Josh the homeless kid in Battery Park in exchange for some info about the soda machine\n'
+	elif flag=='M02BillyDone':
+		return event['PlayerName']+' gave some food to Billy the homeless kid in Castle Clinton for some info about the NSF tunnels\n'
+	elif flag=='FordSchickRescued':
+		return event['PlayerName']+' successfully rescued Ford Schick from the MJ12 base in the New York sewers\n'
+	elif flag=='M10EnteredBakery':
+		return event['PlayerName']+' went looking for a nice baguette in the Paris bakery\n'
+	elif flag=='AlleyCopSeesPlayer_Played':
+		return event['PlayerName']+' got caught doing a bit of breaking and entering in Paris\n'
+	elif flag=='FreshWaterOpened':
+		return event['PlayerName']+' opened up a fresh water supply for the people living in Brooklyn Bridge Station\n'
+	elif flag=='assassinapartment':
+		return event['PlayerName']+' decided to pay a visit to the local assassin\n'
+	elif flag=='GaveRentonGun':
+		return event['PlayerName']+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
+	elif flag=='MiguelHack_Played':
+		return event['PlayerName']+' helped Miguel escape the MJ12 facility under UNATCO HQ\n'
+	else:
+		info('Flag event, unknown flag name: '+flag)
+	return None
+
+
 mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'VanillaMadder' }
 flag_to_character_names = {
 	'TerroristCommander_Dead': 'Terrorist Commander',
@@ -158,55 +212,21 @@ def gen_event_msg(event,d,mod,version):
 		msg = gen_death_msg(False, event, event.get('location'))
 	
 	elif event["type"]=="BeatGame":
-		ending = int(event["ending"])
-		if   ending==1:
-			msg = event["PlayerName"]+" destroyed Area 51, beginning a new dark age\n"
-		elif ending==2:
-			msg = event["PlayerName"]+" merged with Helios to create a benevolent cybernetic dictatorship\n"
-		elif ending==3:
-			msg = event["PlayerName"]+" killed Bob Page and joined the Illuminati to rule the world unopposed\n"
-		elif ending==4:
-			msg = event["PlayerName"]+" decided this whole conspiracy thing was boring and decided to have a dance party instead\n"
-		else:
-			#unknown ending
-			err("Unknown ending value "+str(event["ending"]))
+		msg = BeatGameMsg(event)
+		if not msg:
 			return None
-		msg+= "\nTime: "+gametime_to_string(event["time"])
-		if 'loadout' in event and event['loadout'] != 'All Items Allowed':
-			msg+= '\nLoadout: '+event['loadout']
-		if 'deaths' in event:
-			msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
 
 	elif event['type']=='Trigger' and event['tag']=='MadeBasket':
 		msg = 'Sign '+event['instigator']+' up for the Knicks!!!! (Mission: ' + str(event['mission']).zfill(2) + ')\n'
 
-	elif event['type']=='Flag' and event['flag']=='BathroomBarks_Played':
-		msg = 'By the way, '+event['PlayerName']+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.\n'
-	elif event['type']=='Flag' and event['flag']=='ManBathroomBarks_Played':
-		msg = 'By the way, '+event['PlayerName']+', stay out of the men\'s restroom. That kind of activity embarasses the agency more than it does you.\n'
-	elif event['type']=='Flag' and event['flag']=='GotHelicopterInfo':
-		msg = '\"Oh my god! '+event['PlayerName']+'! A bomb!\"\nJock found and disarmed the bomb planted in his helicopter by the fake mechanic.\n'
-	elif event['type']=='Flag' and event['flag']=='JoshFed':
-		msg = event['PlayerName']+' gave some food to Josh the homeless kid in Battery Park in exchange for some info about the soda machine\n'
-	elif event['type']=='Flag' and event['flag']=='M02BillyDone':
-		msg = event['PlayerName']+' gave some food to Billy the homeless kid in Castle Clinton for some info about the NSF tunnels\n'
-	elif event['type']=='Flag' and event['flag']=='FordSchickRescued':
-		msg = event['PlayerName']+' successfully rescued Ford Schick from the MJ12 base in the New York sewers\n'
-	elif event['type']=='Flag' and event['flag']=='M10EnteredBakery':
-		msg = event['PlayerName']+' went looking for a nice baguette in the Paris bakery\n'
-	elif event['type']=='Flag' and event['flag']=='AlleyCopSeesPlayer_Played':
-		msg = event['PlayerName']+' got caught doing a bit of breaking and entering in Paris\n'
-	elif event['type']=='Flag' and event['flag']=='FreshWaterOpened':
-		msg = event['PlayerName']+' opened up a fresh water supply for the people living in Brooklyn Bridge Station\n'
-	elif event['type']=='Flag' and event['flag']=='assassinapartment':
-		msg = event['PlayerName']+' decided to pay a visit to the local assassin\n'
-	elif event['type']=='Flag' and event['flag']=='GaveRentonGun':
-		msg = event['PlayerName']+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
-	elif event['type']=='Flag' and event['flag']=='MiguelHack_Played':
-		msg = event['PlayerName']+' helped Miguel escape the MJ12 facility under UNATCO HQ\n'
 	elif event['type']=='Flag':
-		info('Flag event, unknown flag name: '+event['flag'])
-    
+		msg = FlagEventMsg(event)
+		if not msg:
+			return None
+	
+	elif event['type']=='SavedPaul':
+		msg = event['PlayerName']+' saved Paul\'s life during the raid!\n'
+
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
 		return None
