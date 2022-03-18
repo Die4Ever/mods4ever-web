@@ -136,6 +136,7 @@ def BeatGameMsg(event):
 		msg+= '\nLoadout: '+event['loadout']
 	if 'deaths' in event:
 		msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
+	return msg
 
 
 def FlagEventMsg(event):
