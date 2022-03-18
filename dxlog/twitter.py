@@ -93,6 +93,10 @@ def gen_death_msg(isPlayer, event, location):
 		msg += ' in '+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')'
 	else:
 		msg+=" in "+event['map']
+
+	if not isPlayer and 'PlayerName' in event:
+		safePlayerName = censor_name(event['PlayerName'])
+		msg += " under "+safePlayerName+"'s watch"
 	
 	if location:
 		msg+="\n\nPosition: " + location_to_string(location)
