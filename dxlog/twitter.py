@@ -7,6 +7,7 @@ from dxlog.base import *
 def load_profanity_filter():
 	profanity.load_censor_words(whitelist_words=['thug', 'hooker', 'junkie', 'god', 'hell'])
 
+#Add "prevent_tweet":true to the config.json to prevent actually sending tweets
 def tweet(config, playthrough_data, events, mod, version):
 	if len(events) == 0:
 		return
@@ -24,7 +25,10 @@ def tweet(config, playthrough_data, events, mod, version):
 	for event in events:
 		msg = gen_event_msg(event, playthrough_data, mod, version)
 		if msg!=None:
-			send_tweet(twitApi,msg)
+			if "prevent_tweet" in config and config["prevent_tweet"]==True:
+				info("Would have tweeted:\n"+msg)
+			else:
+				send_tweet(twitApi,msg)
 
 
 def damage_string(dmgtype):
@@ -163,10 +167,41 @@ def FlagEventMsg(event):
 		return event['PlayerName']+' decided to pay a visit to the local assassin\n'
 	elif flag=='GaveRentonGun':
 		return event['PlayerName']+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
-	elif flag=='MiguelHack_Played':
-		return event['PlayerName']+' helped Miguel escape the MJ12 facility under UNATCO HQ\n'
+	elif flag=='DXREvents_LeftOnBoat':
+		return event['PlayerName']+" was afraid of flying and took the boat back to UNATCO HQ\n"
+	elif flag=='AlleyBumRescued':
+		return event['PlayerName']+" rescued the bum who was being mugged on the basketball court\n"
+	elif flag=='FoundScientistBody':
+		return event['PlayerName']+" dove into the collapsed Canal road in search of treasure\n"
+	elif flag=='ClubMercedesConvo1_Done':
+		return event['PlayerName']+" kindly paid to get Mercedes and Tessa into the Lucky Money club\n"
+	elif flag=='M08WarnedSmuggler':
+		return event['PlayerName']+" warned Smuggler of the impending UNATCO raid\n"
+	elif flag=='ShipPowerCut':
+		return event['PlayerName']+" shut off the electricity on the lower decks of the Superfreighter\n"
+	elif flag=='CamilleConvosDone':
+		return event['PlayerName']+" decided to spend some time with Camille the cage dancer at La Porte De L\'Enfer\n"
+	elif flag=='MeetAI4_Played':
+		return event['PlayerName']+" spent some time listening to the musings of Morpheus, the Echelon prototype\n"
+	elif flag=='DL_Flooded_Played':
+		return event['PlayerName']+" visited the flooded southern wing of the ocean lab\n"
+	elif flag=='JockSecondStory':
+		return event['PlayerName']+" helped Jock get a nice buzz before he goes on duty\n"
 	else:
 		info('Flag event, unknown flag name: '+flag)
+	return None
+
+def TriggerEventMsg(event):
+	tag = event.get('tag')
+	
+	if tag=='MadeBasket':
+		return 'Sign '+event['instigator']+' up for the Knicks!!!! (Mission: ' + str(event['mission']).zfill(2) + ')\n'
+	elif tag=='nsfwander':
+		return event['PlayerName']+' helped Miguel escape the MJ12 facility under UNATCO HQ\n'
+	else:
+		info('Trigger event, unknown tag name: '+tag)
+		
+
 	return None
 
 
@@ -204,6 +239,7 @@ def gen_event_msg(event,d,mod,version):
 			msg = gen_death_msg(False, event, event['location'])
 		else:
 			info('PawnDeath unknown name: '+event['victimBindName'])
+			return None
 
 	# flag for character's death, we assume the player killed them, location is None or player's location?
 	elif event['type']=='Flag' and event['flag'] in flag_to_character_names:
@@ -217,8 +253,10 @@ def gen_event_msg(event,d,mod,version):
 		if not msg:
 			return None
 
-	elif event['type']=='Trigger' and event['tag']=='MadeBasket':
-		msg = 'Sign '+event['instigator']+' up for the Knicks!!!! (Mission: ' + str(event['mission']).zfill(2) + ')\n'
+	elif event['type']=='Trigger':
+		msg = TriggerEventMsg(event)
+		if not msg:
+			return None
 
 	elif event['type']=='Flag':
 		msg = FlagEventMsg(event)
