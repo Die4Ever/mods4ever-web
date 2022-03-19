@@ -41,11 +41,12 @@ def write_db(mod, version, ip, content, config):
 			+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s, playthrough_id=%s",
 			(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id') ))
 		log_id = cursor.lastrowid
-		info("inserted logs id "+str(log_id))
+		debug("inserted logs id "+str(log_id))
 		deaths = get_deaths(content)
 		events = get_events(content)
 		events.extend(deaths)
-		info("got events: "+repr(events))
+		if len(events) > 0:
+			info('log_id: '+str(log_id)+', got events: '+repr(events))
 		for event in events:
 			if event['type'] == 'DEATH':
 				log_death(cursor, log_id, event)

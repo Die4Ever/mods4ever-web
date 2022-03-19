@@ -57,6 +57,10 @@ def write_error_log(msg):
 			file.write(msg+"\n")
 
 
+def debug(msg):
+	#write_error_log("DEBUG: "+msg)
+	pass
+
 def info(msg):
 	write_error_log("INFO: "+msg)
 
