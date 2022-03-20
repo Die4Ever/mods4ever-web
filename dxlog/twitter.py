@@ -56,6 +56,8 @@ def damage_string(dmgtype):
 		return "was blown to bits"
 	elif dmgtype=="fell":
 		return "was splattered all over the floor"
+	elif dmgtype=='stomped':
+		return 'asked to be stepped on'
 	else:
 		if dmgtype:
 			err('unknown dmgtype: '+dmgtype)
@@ -100,7 +102,7 @@ def gen_death_msg(isPlayer, event, location):
 	else:
 		msg+=" in "+event['map']
 
-	if not isPlayer and 'PlayerName' in event:
+	if not isPlayer and 'PlayerName' in event and event['PlayerName'] != killer:
 		safePlayerName = censor_name(event['PlayerName'])
 		msg += " under "+safePlayerName+"'s watch"
 	
