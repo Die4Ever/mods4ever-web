@@ -5,7 +5,7 @@ from better_profanity import profanity
 from dxlog.base import *
 
 def load_profanity_filter():
-	profanity.load_censor_words(whitelist_words=['thug', 'hooker', 'junkie', 'god', 'hell'])
+	profanity.load_censor_words(whitelist_words=['thug', 'hooker', 'junkie', 'god', 'hell', 'urinal'])
 
 #Add "prevent_tweet":true to the config.json to prevent actually sending tweets
 def tweet(config, playthrough_data, events, mod, version):
@@ -193,6 +193,10 @@ def FlagEventMsg(event):
 		return event['PlayerName']+" visited the flooded southern wing of the ocean lab\n"
 	elif flag=='JockSecondStory':
 		return event['PlayerName']+" helped Jock get a nice buzz before he goes on duty\n"
+	elif flag=='M07ChenSecondGive_Played':
+		return event['PlayerName']+" had a nice night out with the boys at the Lucky Money\n"
+	elif flag=='DeBeersDead':
+		return event['PlayerName']+" decided to save a bit of electricity by deactivating Lucius DeBeers' life support\n"
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
@@ -209,6 +213,33 @@ def TriggerEventMsg(event):
 		
 
 	return None
+
+def ExtinguishFireMsg(event):
+	extinguisher = event.get('extinguisher')
+	msg = event['PlayerName']+" was on fire but "
+	if   extinguisher=='clean toilet':
+	    msg+="managed to splash water from a toilet to put it out\n"
+	elif extinguisher=='filthy toilet':
+	    msg+="managed to splash water from an absolutely filthy toilet to put it out\n"
+	elif extinguisher=='clean urinal':
+	    msg+="somehow managed to splash water from a urinal to put it out\n"
+	elif extinguisher=='filthy urinal':
+	    msg+="somehow managed to splash water from a disgusting urinal to put it out\n"
+	elif extinguisher=='shower':
+	    msg+="took a nice shower to put it out\n"
+	else:
+		return None
+		
+	#mapname should always be there, but just in case...
+	if 'mapname' in event:
+		msg += '\n\n'+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')'
+	else:
+		msg+="\n\nMap: "+event['map']
+
+	msg+="\nPosition: " + location_to_string(event['location'])
+	
+	return msg
+
 
 
 mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'VanillaMadder' }
@@ -273,7 +304,11 @@ def gen_event_msg(event,d,mod,version):
 		msg = event['PlayerName']+' saved Paul\'s life during the raid!\n'
 		if 'PaulHealth' in event:
 			msg += 'Paul had ' + str(int(event['PaulHealth'])) + '% health remaining\n'
-
+			
+	elif event['type']=='ExtinguishFire':
+		msg = ExtinguishFireMsg(event)
+		if not msg:
+			return None
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
 		return None
