@@ -58,6 +58,10 @@ def damage_string(dmgtype):
 		return "was splattered all over the floor"
 	elif dmgtype=='stomped':
 		return 'asked to be stepped on'
+	elif dmgtype=='stunned':
+		return 'was stunned'
+	elif dmgtype=='knockedout':
+		return 'was knocked out'
 	else:
 		if dmgtype:
 			err('unknown dmgtype: '+dmgtype)
