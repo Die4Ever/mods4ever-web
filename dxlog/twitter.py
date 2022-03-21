@@ -144,8 +144,10 @@ def BeatGameMsg(event):
 		err("Unknown ending value "+str(event["ending"]))
 		return None
 	msg+= "\nTime: "+gametime_to_string(event["time"])
-	if 'loadout' in event and event['loadout'] != 'All Items Allowed':
+	if event.get('loadout') and event['loadout'] != 'All Items Allowed':
 		msg+= '\nLoadout: '+event['loadout']
+	if event.get('GameMode') and event['GameMode'] != 'Original Story':
+		msg+= '\nGame Mode: '+event['GameMode']
 	if 'deaths' in event:
 		msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
 	return msg
