@@ -62,6 +62,8 @@ def damage_string(dmgtype):
 		return 'was stunned'
 	elif dmgtype=='knockedout':
 		return 'was knocked out'
+	elif dmgtype=='suicided':
+		return 'was killed'
 	else:
 		if dmgtype:
 			err('unknown dmgtype: '+dmgtype)
@@ -218,15 +220,15 @@ def ExtinguishFireMsg(event):
 	extinguisher = event.get('extinguisher')
 	msg = event['PlayerName']+" was on fire but "
 	if   extinguisher=='clean toilet':
-	    msg+="managed to splash water from a toilet to put it out\n"
+		msg+="managed to splash water from a toilet to put it out\n"
 	elif extinguisher=='filthy toilet':
-	    msg+="managed to splash water from an absolutely filthy toilet to put it out\n"
+		msg+="managed to splash water from an absolutely filthy toilet to put it out\n"
 	elif extinguisher=='clean urinal':
-	    msg+="somehow managed to splash water from a urinal to put it out\n"
+		msg+="somehow managed to splash water from a urinal to put it out\n"
 	elif extinguisher=='filthy urinal':
-	    msg+="somehow managed to splash water from a disgusting urinal to put it out\n"
+		msg+="somehow managed to splash water from a disgusting urinal to put it out\n"
 	elif extinguisher=='shower':
-	    msg+="took a nice shower to put it out\n"
+		msg+="took a nice shower to put it out\n"
 	else:
 		return None
 		
@@ -246,7 +248,21 @@ mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision
 flag_to_character_names = {
 	'TerroristCommander_Dead': 'Terrorist Commander',
 	'TiffanySavage_Dead': 'Tiffany Savage',
-	'PaulDenton_Dead': 'Paul Denton'
+	'PaulDenton_Dead': 'Paul Denton',
+	'JordanShea_Dead': 'Jordan Shea',
+	'SandraRenton_Dead': 'Sandra Renton',
+	'GilbertRenton_Dead': 'Gilbert Renton',
+	'JoJoFine_Dead': 'JoJo Fine',
+	'TobyAtanwe_Dead': 'Toby Atanwe',
+	'Antoine_Dead': 'Antoine',
+	'Chad_Dead': 'Chad',
+	'hostage_Dead': 'Juveau',
+	'hostage_female_Dead': 'Anna',
+	'Hela_Dead': 'Hela',
+	'Renault_Dead': 'Renault',
+	'Labrat_Bum_Dead': 'Labrat Bum',
+	'DXRNPCs1_Dead': 'The Merchant',
+	'lemerchant_Dead': 'Le Merchant'
 }
 
 def gen_event_msg(event,d,mod,version):
