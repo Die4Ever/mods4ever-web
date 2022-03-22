@@ -264,7 +264,12 @@ flag_to_character_names = {
 	'Renault_Dead': 'Renault',
 	'Labrat_Bum_Dead': 'Labrat Bum',
 	'DXRNPCs1_Dead': 'The Merchant',
-	'lemerchant_Dead': 'Le Merchant'
+	'lemerchant_Dead': 'Le Merchant',
+	'Harold_Dead': 'Harold',
+	'Josh_Dead': 'Josh',
+	'Billy_Dead': 'Billy',
+	'MarketKid_Dead': 'Louis Pan',
+	'aimee_Dead': 'Aimee'
 }
 
 def gen_event_msg(event,d,mod,version):
