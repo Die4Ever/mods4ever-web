@@ -6,7 +6,7 @@ def update_notification(mod, version):
 	detail = "and autosave bug fix"
 	assert len(desc) < 35
 	assert len(detail) < 35
-	if VersionStringToInt(version) < VersionToInt(1, 7, 5, 6):
+	if VersionStringToInt(version) < VersionToInt(1, 7, 5, 7):
 		response['notification'] = "New v1.7.5 available!"
 		response['message'] = desc
 		response['message'] += "|n" + detail
