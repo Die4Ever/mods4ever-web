@@ -131,14 +131,15 @@ def gametime_to_string(time):
 
 def BeatGameMsg(event):
 	ending = int(event["ending"])
+	player = censor_name(event['PlayerName'])
 	if   ending==1:
-		msg = event["PlayerName"]+" destroyed Area 51, beginning a new dark age\n"
+		msg = player+" destroyed Area 51, beginning a new dark age\n"
 	elif ending==2:
-		msg = event["PlayerName"]+" merged with Helios to create a benevolent cybernetic dictatorship\n"
+		msg = player+" merged with Helios to create a benevolent cybernetic dictatorship\n"
 	elif ending==3:
-		msg = event["PlayerName"]+" killed Bob Page and joined the Illuminati to rule the world unopposed\n"
+		msg = player+" killed Bob Page and joined the Illuminati to rule the world unopposed\n"
 	elif ending==4:
-		msg = event["PlayerName"]+" decided this whole conspiracy thing was boring and decided to have a dance party instead\n"
+		msg = player+" decided this whole conspiracy thing was boring and decided to have a dance party instead\n"
 	else:
 		#unknown ending
 		err("Unknown ending value "+str(event["ending"]))
@@ -155,54 +156,55 @@ def BeatGameMsg(event):
 
 def FlagEventMsg(event):
 	flag = event.get('flag')
+	player = censor_name(event['PlayerName'])
 	if flag=='BathroomBarks_Played':
-		return 'By the way, '+event['PlayerName']+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.\n'
+		return 'By the way, '+player+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.\n'
 	elif flag=='ManBathroomBarks_Played':
-		return 'By the way, '+event['PlayerName']+', stay out of the men\'s restroom. That kind of activity embarasses the agency more than it does you.\n'
+		return 'By the way, '+player+', stay out of the men\'s restroom. That kind of activity embarasses the agency more than it does you.\n'
 	elif flag=='GotHelicopterInfo':
-		return '\"Oh my god! '+event['PlayerName']+'! A bomb!\"\nJock found and disarmed the bomb planted in his helicopter by the fake mechanic.\n'
+		return '\"Oh my god! '+player+'! A bomb!\"\nJock found and disarmed the bomb planted in his helicopter by the fake mechanic.\n'
 	elif flag=='JoshFed':
-		return event['PlayerName']+' gave some food to Josh the homeless kid in Battery Park in exchange for some info about the soda machine\n'
+		return player+' gave some food to Josh the homeless kid in Battery Park in exchange for some info about the soda machine\n'
 	elif flag=='M02BillyDone':
-		return event['PlayerName']+' gave some food to Billy the homeless kid in Castle Clinton for some info about the NSF tunnels\n'
+		return player+' gave some food to Billy the homeless kid in Castle Clinton for some info about the NSF tunnels\n'
 	elif flag=='FordSchickRescued':
-		return event['PlayerName']+' successfully rescued Ford Schick from the MJ12 base in the New York sewers\n'
+		return player+' successfully rescued Ford Schick from the MJ12 base in the New York sewers\n'
 	elif flag=='NiceTerrorist_Dead':
-		return 'Jesus Christ, '+event['PlayerName']+'. Didn\'t you hear Paul? He ordered the militia to stand down.\n'
+		return 'Jesus Christ, '+player+'. Didn\'t you hear Paul? He ordered the militia to stand down.\n'
 	elif flag=='M10EnteredBakery':
-		return event['PlayerName']+' went looking for a nice baguette in the Paris bakery\n'
+		return player+' went looking for a nice baguette in the Paris bakery\n'
 	elif flag=='AlleyCopSeesPlayer_Played':
-		return event['PlayerName']+' got caught doing a bit of breaking and entering in Paris\n'
+		return player+' got caught doing a bit of breaking and entering in Paris\n'
 	elif flag=='FreshWaterOpened':
-		return event['PlayerName']+' opened up a fresh water supply for the people living in Brooklyn Bridge Station\n'
+		return player+' opened up a fresh water supply for the people living in Brooklyn Bridge Station\n'
 	elif flag=='assassinapartment':
-		return event['PlayerName']+' decided to pay a visit to the local assassin\n'
+		return player+' decided to pay a visit to the local assassin\n'
 	elif flag=='GaveRentonGun':
-		return event['PlayerName']+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
+		return player+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
 	elif flag=='DXREvents_LeftOnBoat':
-		return event['PlayerName']+" was afraid of flying and took the boat back to UNATCO HQ\n"
+		return player+" was afraid of flying and took the boat back to UNATCO HQ\n"
 	elif flag=='AlleyBumRescued':
-		return event['PlayerName']+" rescued the bum who was being mugged on the basketball court\n"
+		return player+" rescued the bum who was being mugged on the basketball court\n"
 	elif flag=='FoundScientistBody':
-		return event['PlayerName']+" dove into the collapsed Canal road in search of treasure\n"
+		return player+" dove into the collapsed Canal road in search of treasure\n"
 	elif flag=='ClubMercedesConvo1_Done':
-		return event['PlayerName']+" kindly paid to get Mercedes and Tessa into the Lucky Money club\n"
+		return player+" kindly paid to get Mercedes and Tessa into the Lucky Money club\n"
 	elif flag=='M08WarnedSmuggler':
-		return event['PlayerName']+" warned Smuggler of the impending UNATCO raid\n"
+		return player+" warned Smuggler of the impending UNATCO raid\n"
 	elif flag=='ShipPowerCut':
-		return event['PlayerName']+" shut off the electricity on the lower decks of the Superfreighter\n"
+		return player+" shut off the electricity on the lower decks of the Superfreighter\n"
 	elif flag=='CamilleConvosDone':
-		return event['PlayerName']+" decided to spend some time with Camille the cage dancer at La Porte De L\'Enfer\n"
+		return player+" decided to spend some time with Camille the cage dancer at La Porte De L\'Enfer\n"
 	elif flag=='MeetAI4_Played':
-		return event['PlayerName']+" spent some time listening to the musings of Morpheus, the Echelon prototype\n"
+		return player+" spent some time listening to the musings of Morpheus, the Echelon prototype\n"
 	elif flag=='DL_Flooded_Played':
-		return event['PlayerName']+" visited the flooded southern wing of the ocean lab\n"
+		return player+" visited the flooded southern wing of the ocean lab\n"
 	elif flag=='JockSecondStory':
-		return event['PlayerName']+" helped Jock get a nice buzz before he goes on duty\n"
+		return player+" helped Jock get a nice buzz before he goes on duty\n"
 	elif flag=='M07ChenSecondGive_Played':
-		return event['PlayerName']+" had a nice night out with the boys at the Lucky Money\n"
+		return player+" had a nice night out with the boys at the Lucky Money\n"
 	elif flag=='DeBeersDead':
-		return event['PlayerName']+" decided to save a bit of electricity by deactivating Lucius DeBeers' life support\n"
+		return player+" decided to save a bit of electricity by deactivating Lucius DeBeers' life support\n"
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
