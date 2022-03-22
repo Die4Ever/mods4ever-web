@@ -167,6 +167,8 @@ def FlagEventMsg(event):
 		return event['PlayerName']+' gave some food to Billy the homeless kid in Castle Clinton for some info about the NSF tunnels\n'
 	elif flag=='FordSchickRescued':
 		return event['PlayerName']+' successfully rescued Ford Schick from the MJ12 base in the New York sewers\n'
+	elif flag=='NiceTerrorist_Dead':
+		return 'Jesus Christ, '+event['PlayerName']+'. Didn\'t you hear Paul? He ordered the militia to stand down.\n'
 	elif flag=='M10EnteredBakery':
 		return event['PlayerName']+' went looking for a nice baguette in the Paris bakery\n'
 	elif flag=='AlleyCopSeesPlayer_Played':
