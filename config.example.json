@@ -3,7 +3,7 @@
     "password":"thepassword",
     "host":"localhost",
     "database":"dxrando",
-    "raise_on_warnings":true,
+    "raise_on_warnings":false,
     "twit_consumer_key":"",
     "twit_consumer_secret":"",
     "twit_access_token":"",
