@@ -7,9 +7,24 @@ import unittest
 
 class TestLog(unittest.TestCase):
 	def test_parse_content(self):
-		d = parse_content("DX.DXRando0: RandoEnter() firstTime: True, IsTravel: False, seed: 601088 DX\nINFO: DX.DXRando0: randomizing DX using seed 601088\nINFO: DX.DXRFlags0: PreFirstEntry DX DeusEx.DXRFlags - v1.7.3.5 Beta, seed: 601088, flagshash: 90622488, playthrough_id: 1686707255, flagsversion: 1070305, gamemode: 0, difficulty: 1.000000, loadout: 0, brightness: 15, newgameplus_loops: 0, autosave: 2, crowdcontrol: 0, codes_mode: 2\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale8: JC Denton was killed by JCDentonMale JC Denton with exploded damage in 01_NYC_UNATCOISLAND (748.419373,-433.573730,-123.300003)\nINFO: 01_NYC_UNATCOIsland.JCDentonMale8: Speed Enhancement deactivated")
+		d = parse_content("""DX.DXRando0: RandoEnter() firstTime: True, IsTravel: False, seed: 601088 DX
+INFO: DX.DXRando0: randomizing DX using seed 601088
+INFO: DX.DXRFlags0: PreFirstEntry DX DeusEx.DXRFlags - v1.7.3.5 Beta, seed: 601088, flagshash: 90622488, playthrough_id: 1686707255, flagsversion: 1070305, gamemode: 0, difficulty: 1.000000, loadout: 0, brightness: 15, newgameplus_loops: 0, autosave: 2, crowdcontrol: 0, codes_mode: 2
+DEATH: 01_NYC_UNATCOIsland.JCDentonMale8: JC Denton was killed by JCDentonMale JC Denton with exploded damage in 01_NYC_UNATCOISLAND (748.419373,-433.573730,-123.300003)
+INFO: 01_NYC_UNATCOIsland.JCDentonMale8: Speed Enhancement deactivated""")
 		print(d['firstword'])
 		self.assertEqual(d['firstword'], "PreFirstEntry")
+
+		d = parse_content("""INFO: 01_NYC_UNATCOIsland.DXRando14: RandoEnter() firstTime: False, IsTravel: False, seed: 828672 01_NYC_UNATCOISLAND
+INFO: 01_NYC_UNATCOIsland.DXRFlags14: AnyEntry 01_NYC_UNATCOISLAND GMDXRandomizer.DXRFlags - version: v1.8.0.1 Beta, flagshash: 1595221376, seed: 828672, autosave: 0, brightness: 15, crowdcontrol: 0, loadout: 0, codes_mode: 0, newgameplus_loops: 0, playthrough_id: 1920337562, gamemode: 0, difficulty: 0, minskill: 1, maxskill: 5, ammo: 90
+INFO: 01_NYC_UNATCOIsland.DXRFlags14: multitools: 90, lockpicks: 90, biocells: 90, speedlevel: 4, keys: 4, keys_containers: 0, doorspickable: 100, doorsdestructible: 100, deviceshackable: 100, passwordsrandomized: 100, medkits: 90, enemiesrandomized: 20, hiddenenemiesrandomized: 0, enemiesshuffled: 100, infodevices: 100, infodevices_containers: 0
+INFO: 01_NYC_UNATCOIsland.DXRFlags14: dancingpercent: 25, doorsmode: 513, enemyrespawn: 0, skills_disable_downgrades: 0, skills_reroll_missions: 1, skills_independent_levels: 0, startinglocations: 100, goals: 100, equipment: 5, medbots: 100, repairbots: 100, medbotuses: 0, repairbotuses: 0, medbotcooldowns: 1, repairbotcooldowns: 1, medbotamount: 1
+INFO: 01_NYC_UNATCOIsland.DXRFlags14: AnyEntry 01_NYC_UNATCOISLAND repairbotamount: 1, turrets_move: 100, turrets_add: 50, merchants: 100, banned_skills: 5, banned_skill_level: 5, enemies_nonhumans: 60, swapitems: 100, swapcontainers: 100, augcans: 100, aug_value_rando: 100, skill_value_rando: 100, min_weapon_dmg: 50, max_weapon_dmg: 150, min_weapon_shottime: 50, max_weapon_shottime: 150
+INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, HealthLegRight: 100, HealthTorso: 100, HealthHead: 100, HealthArmLeft: 100, HealthArmRight: 100
+""")
+		print(repr(d))
+		print(d['firstword'])
+		self.assertEqual(d['firstword'], "AnyEntry")
 
 	def test_twitter(self):
 		load_profanity_filter()

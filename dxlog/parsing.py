@@ -3,7 +3,7 @@ from dxlog.base import *
 
 def parse_content(content):
 	d = {}
-	r = re.compile(r'^(?P<level>\w+): (?P<map>[^\.]+)\.(?P<module>[^:]+)\d+: ((?P<firstword>\w+) )?(?P<remaining>.*)$', flags=re.MULTILINE)
+	r = re.compile(r'^(?P<level>\w+): (?P<map>[^\.]+)\.(?P<module>[^:]+?)\d+: ((?P<firstword>\w+) )?(?P<remaining>.*)$', flags=re.MULTILINE)
 	r2 = re.compile(r' (?P<key>\w+): (?P<value>[\w\d]+)')
 	for i in r.finditer(content):
 		try:
