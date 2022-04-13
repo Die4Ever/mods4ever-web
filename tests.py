@@ -3,6 +3,7 @@ from dxlog.db import *
 from dxlog.parsing import *
 from dxlog.twitter import *
 from dxlog.request import *
+from better_profanity import profanity
 import unittest
 
 class TestLog(unittest.TestCase):
@@ -25,6 +26,18 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		print(repr(d))
 		print(d['firstword'])
 		self.assertEqual(d['firstword'], "AnyEntry")
+
+	def test_profanity_numbers(self):
+		load_profanity_filter()
+		self.not_censored('.71, 7.8')
+		for i in range(1000):#range(100000):
+			self.not_censored(i/10)
+			self.not_censored(i/100)
+			self.not_censored(i/1000)
+	
+
+	def not_censored(self, val):
+		self.assertNotIn('*', profanity.censor(str(val)), str(val))
 
 	def test_twitter(self):
 		load_profanity_filter()
