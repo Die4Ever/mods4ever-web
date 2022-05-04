@@ -220,7 +220,7 @@ def FlagEventMsg(event):
 	elif flag=='GaveDowdAmbrosia':
 		return player+' brought Dowd something for that cough.\n'
 	elif flag=='JockBlewUp':
-		return "I don't believe it!  "+player+"!  We lost Jock!\n"
+		return "I don't believe it! "+player+"! We lost Jock!\n"
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
