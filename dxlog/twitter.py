@@ -161,7 +161,11 @@ def BeatGameMsg(event):
 def FlagEventMsg(event):
 	flag = event.get('flag')
 	player = censor_name(event['PlayerName'])
-	if flag=='BathroomBarks_Played':
+	if flag=='GuntherFreed':
+		return player+' broke Gunther out of jail. Glad you\'re not hurt, Agent.\n'
+	elif flag=='GuntherRespectsPlayer':
+		return 'Gunther has gained respect for '+player+'. Gunther will not forget a favor.\n'
+	elif flag=='BathroomBarks_Played':
 		return 'By the way, '+player+', stay out of the ladies restroom. That kind of activity embarasses the agency more than it does you.\n'
 	elif flag=='ManBathroomBarks_Played':
 		return 'By the way, '+player+', stay out of the men\'s restroom. That kind of activity embarasses the agency more than it does you.\n'
@@ -209,6 +213,12 @@ def FlagEventMsg(event):
 		return player+" had a nice night out with the boys at the Lucky Money\n"
 	elif flag=='DeBeersDead':
 		return player+" decided to save a bit of electricity by deactivating Lucius DeBeers' life support\n"
+	elif flag=='StantonAmbushDefeated':
+		return player+' defended Dowd from the ambush. Thank goodness.\n'
+	elif flag=='GaveDowdAmbrosia':
+		return player+' brought Dowd something for that cough.\n'
+	elif flag=='JockBlewUp':
+		return "I don't believe it!  "+player+"!  We lost Jock!\n"
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
