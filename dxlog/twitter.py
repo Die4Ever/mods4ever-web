@@ -215,6 +215,8 @@ def FlagEventMsg(event):
 		return player+" decided to save a bit of electricity by deactivating Lucius DeBeers' life support\n"
 	elif flag=='StantonAmbushDefeated':
 		return player+' defended Dowd from the ambush. Thank goodness.\n'
+	elif flag=='SmugglerDied':
+		return 'You won\'t believe this, '+player+'. There was a raid on Smuggler\'s. I don\'t think Smuggler got out in time.\n'
 	elif flag=='GaveDowdAmbrosia':
 		return player+' brought Dowd something for that cough.\n'
 	elif flag=='JockBlewUp':
