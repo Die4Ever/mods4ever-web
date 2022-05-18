@@ -141,7 +141,7 @@ def select_deaths(cursor, mod, map):
 	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
 	modcondition = ""
 	if mod == "RevRandomizer":
-		modcondition = " AND modname == \"RevRandomizer\" "
+		modcondition = " AND modname = \"RevRandomizer\" "
 	else:
 		modcondition = " AND NOT modname <=> \"RevRandomizer\" "
 
