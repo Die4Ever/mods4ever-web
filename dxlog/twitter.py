@@ -94,11 +94,15 @@ def gen_death_msg(isPlayer, event, location):
 	victim = ''
 	if 'victim' in event:
 		victim = event['victim']
+		if event.get('victimRandomizedName'):
+			victim = event['victimRandomizedName'] + ' (' + victim + ')'
 	else:# player is deprecated
 		victim = event.get('player')
 
 	safeVictimName = censor_name(victim)
 	killer = event.get('killer')
+	if event.get('killerRandomizedName'):
+		killer = event['killerRandomizedName'] + ' (' + killer + ')'
 	dmgtype = event.get('dmgtype')
 	msg = safeVictimName+" "+damage_string(dmgtype.lower())
 	
