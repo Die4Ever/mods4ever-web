@@ -153,12 +153,31 @@ def BeatGameMsg(event):
 		err("Unknown ending value "+str(event["ending"]))
 		return None
 	msg+= "\nTime: "+gametime_to_string(event["time"])
+	if 'NumberOfBingos' in event:
+		msg+= '\nBingo lines: ' + event['NumberOfBingos']
 	if event.get('loadout') and event['loadout'] != 'All Items Allowed':
 		msg+= '\nLoadout: '+event['loadout']
 	if event.get('GameMode') and event['GameMode'] != 'Original Story':
 		msg+= '\nGame Mode: '+event['GameMode']
 	if 'deaths' in event:
 		msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
+	return msg
+
+
+def BingoMsg(event):
+	player = censor_name(event['PlayerName'])
+	msg = player+" got a bingo!"
+	if int(event['NumberOfBingos']) > 1:
+		msg+= " Now at " + event['NumberOfBingos'] + " lines.\n"
+	else:
+		msg+= " Now at " + event['NumberOfBingos'] + " line.\n"
+	
+	if event.get('time'):
+		msg+= "\nTime: "+gametime_to_string(event["time"])
+	if event.get('loadout') and event['loadout'] != 'All Items Allowed':
+		msg+= '\nLoadout: '+event['loadout']
+	if event.get('GameMode') and event['GameMode'] != 'Original Story':
+		msg+= '\nGame Mode: '+event['GameMode']
 	return msg
 
 
@@ -340,6 +359,11 @@ def gen_event_msg(event,d,mod,version):
 		msg = BeatGameMsg(event)
 		if not msg:
 			return None
+	
+	elif event['type']=='Bingo':
+		msg = BingoMsg(event)
+		if not msg:
+			return None
 
 	elif event['type']=='Trigger':
 		msg = TriggerEventMsg(event)
@@ -360,6 +384,7 @@ def gen_event_msg(event,d,mod,version):
 		msg = ExtinguishFireMsg(event)
 		if not msg:
 			return None
+
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
 		return None
