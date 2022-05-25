@@ -316,7 +316,8 @@ flag_to_character_names = {
 	'MarketKid_Dead': 'Louis Pan',
 	'aimee_Dead': 'Aimee',
 	'WaltonSimons_Dead': 'Walton Simons',
-	'JoeGreene_Dead': 'Joe Greene'
+	'JoeGreene_Dead': 'Joe Greene',
+	'Miguel_Dead': 'Miguel'
 }
 
 def gen_event_msg(event,d,mod,version):
