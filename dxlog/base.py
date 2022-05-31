@@ -78,13 +78,24 @@ def logex(e):
 def VersionToInt(major, minor, patch, build):
 	return int(major)*1000000+int(minor)*10000+int(patch)*100+int(build)
 
-def VersionStringToInt(version):
+
+def SplitVersionString(version):
 	try:
-		m = re.search(r'v(\d+)\.(\d+)\.(\d+)(\.(\d+))?', version)
+		m = re.search(r'v(\d+)\.(\d+)\.(\d+)(\.(\d+))?( (\w+))?', version)
 		group5 = m.group(5)
 		if group5 is None:
 			group5 = "0"
-		return VersionToInt(m.group(1), m.group(2), m.group(3), group5)
+		return (m.group(1), m.group(2), m.group(3), group5, m.group(7))
+	except Exception as e:
+		print("SplitVersionString error parsing "+version)
+		logex(e)
+	return None
+
+
+def VersionStringToInt(version):
+	try:
+		m = SplitVersionString(version)
+		return VersionToInt(m[0], m[1], m[2], m[3])
 	except Exception as e:
 		print("VersionStringToInt error parsing "+version)
 		logex(e)

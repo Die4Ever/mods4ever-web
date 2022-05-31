@@ -64,6 +64,10 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		self.assertEqual(censor_name('Junkie'), 'Junkie')
 		self.assertEqual(censor_name('Smuggler'), 'Smuggler')
 
+	def test_version_strings(self):
+		self.assertEqual( twitter_version_to_string('v1.9.1.10'), 'v1.9.1' )
+		self.assertEqual( twitter_version_to_string('v1.9.1.10 Beta'), 'v1.9.1.10 Beta' )
+
 
 class MockFailCursor:
 	def execute(self, q):

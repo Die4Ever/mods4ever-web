@@ -340,7 +340,7 @@ def gen_event_msg(event,d,mod,version):
 	seed = twitter_sanitize(d.get('seed'))
 	flagshash = twitter_sanitize(d.get('flagshash'))
 	mod = twitter_sanitize(mod)
-	version = twitter_sanitize(version)
+	version = twitter_version_to_string(version)
 	
 	# player died
 	if event['type']=='DEATH':
@@ -423,3 +423,12 @@ def send_tweet(api,msg):
 	except Exception as e:
 		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
 
+
+def twitter_version_to_string(version):
+	m = SplitVersionString(version)
+	if not m:
+		return None
+	s = 'v' + m[0] + '.' + m[1] + '.' + m[2]
+	if m[4]:
+		s += '.' + m[3] + ' ' + m[4]
+	return twitter_sanitize(s)
