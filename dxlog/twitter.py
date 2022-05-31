@@ -248,6 +248,8 @@ def FlagEventMsg(event):
 		return player+' saved the hostages in the subway. Good work.\n'
 	elif flag=='HotelHostagesSaved':
 		return player+' saved the hostages in the hotel. Guess we didn\'t need that specialist after all.\n'
+	elif flag=='SilhouetteHostagesAllRescued':
+		return player+' saved the Silhouette hostages in the catacombs. Merci! Merci!\n'
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
