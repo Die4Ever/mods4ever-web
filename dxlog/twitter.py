@@ -244,6 +244,10 @@ def FlagEventMsg(event):
 		return player+' brought Dowd something for that cough.\n'
 	elif flag=='JockBlewUp':
 		return "I don't believe it! "+player+"! We lost Jock!\n"
+	elif flag=='SubwayHostagesSaved':
+		return player+' saved the hostages in the subway. Good work.\n'
+	elif flag=='HotelHostagesSaved':
+		return player+' saved the hostages in the hotel. Guess we didn\'t need that specialist after all.\n'
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
