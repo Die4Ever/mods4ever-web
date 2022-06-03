@@ -209,7 +209,7 @@ def FlagEventMsg(event):
 	elif flag=='FreshWaterOpened':
 		return player+' opened up a fresh water supply for the people living in Brooklyn Bridge Station\n'
 	elif flag=='assassinapartment':
-		return player+' decided to pay a visit to the local assassin\n'
+		return player+' decided to pay a visit to the arms smuggler\'s apartment in Paris\n'
 	elif flag=='GaveRentonGun':
 		return player+' gave a weapon to Gilbert Renton so he could defend his hotel\n'
 	elif flag=='DXREvents_LeftOnBoat':
