@@ -101,7 +101,7 @@ def gen_death_msg(isPlayer, event, location):
 
 	safeVictimName = censor_name(victim)
 	killer = event.get('killer')
-	if event.get('killerRandomizedName'):
+	if event.get('killerRandomizedName') and event.get('killerRandomizedName') != killer:
 		killer = event['killerRandomizedName'] + ' (' + killer + ')'
 	dmgtype = event.get('dmgtype')
 	msg = safeVictimName+" "+damage_string(dmgtype.lower())
@@ -323,7 +323,9 @@ flag_to_character_names = {
 	'aimee_Dead': 'Aimee',
 	'WaltonSimons_Dead': 'Walton Simons',
 	'JoeGreene_Dead': 'Joe Greene',
-	'Miguel_Dead': 'Miguel'
+	'Miguel_Dead': 'Miguel',
+	'JosephManderley_Dead': 'Joseph Manderley',
+	'PrivateLloyd_Dead': 'Private Lloyd'
 }
 
 def gen_event_msg(event,d,mod,version):
