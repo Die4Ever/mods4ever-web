@@ -147,7 +147,7 @@ def select_deaths(cursor, mod, map):
 
 	# select more than we want, because filter_deaths will remove the excess
 	cursor.execute("SELECT "
-		+ "deaths.id as deathid, modname, ip, name, killer, killerclass, damagetype, x, y, z, TIME_TO_SEC(TIMEDIFF(now(), created)) as age "
+		+ "deaths.id as deathid, modname, ip, name, killer, killerclass, damagetype, x, y, z, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age "
 		+ "FROM deaths JOIN logs on(deaths.log_id=logs.id) "
 		+ "WHERE map=%s "
 		+ modcondition
