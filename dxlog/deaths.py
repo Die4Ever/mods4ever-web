@@ -1,8 +1,8 @@
 from dxlog.base import *
 
-# for k in [0: 'num', 1: 'name', 2: 'killer', 3: 'damagetype', 4: 'age', 5: 'x', 6: 'y', 7: 'z', 8: 'killerclass']:
 def compare_deaths(a, b):
-	# name
+    # return True if the deaths should be combined
+	# check the name
 	if a[1] != b[1]:
 		return False
 
@@ -22,7 +22,7 @@ def filter_deaths(deaths):
 		return deaths
 
 	load_profanity_filter()
-	
+	# [0: 'num', 1: 'name', 2: 'killer', 3: 'damagetype', 4: 'age', 5: 'x', 6: 'y', 7: 'z', 8: 'killerclass']
 	for d in deaths.values():
 		d[0] = int(d[0])
 		d[1] = profanity.censor(d[1])
