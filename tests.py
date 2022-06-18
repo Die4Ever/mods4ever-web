@@ -3,6 +3,7 @@ from dxlog.db import *
 from dxlog.parsing import *
 from dxlog.twitter import *
 from dxlog.request import *
+from dxlog.deaths import *
 from better_profanity import profanity
 import unittest
 
