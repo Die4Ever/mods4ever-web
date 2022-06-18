@@ -18,6 +18,20 @@ import json
 import cgitb
 import time
 import datetime
+from better_profanity import profanity
+
+profanity_loaded = False
+def load_profanity_filter():
+	global profanity_loaded
+	if profanity_loaded:
+		return
+	profanity_loaded = True
+	profanity.load_censor_words(whitelist_words=[
+		'thug', 'hooker', 'junkie', 'god', 'hell', 'urinal', 'ass', 'asses',
+		'717', 'tit', 't1t', 'titi', 'titis', 'tits', 'titt', 'titts', 'teat', 'teats', 'teets', 'toots',
+		'teste', 'testee', 'testes'
+	])
+
 
 path = os.path.dirname(os.path.realpath(dirname(__file__)))
 logdir = path + "/dxrando_logs/"

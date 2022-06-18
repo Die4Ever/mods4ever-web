@@ -100,7 +100,7 @@ def run_tests():
 	info(unrealscript_sanitize("this is a test, Die4Ever; ok: another test {      } \\  bye "))
 
 	# for k in ['name', 'killer', 'damagetype', 'age', 'x', 'y', 'z', 'killerclass']:
-	d = [1, 'Die4Ever', '', '', 3600, 0, 0, 0]
+	d = [1, 'Die4Ever', '', '', 3600, 0, 0, 0, 'killerclass']
 	d2 = d.copy()
 	d2[1] = 'TheAstropath'
 	d3 = d.copy()
@@ -108,9 +108,12 @@ def run_tests():
 	d3[5] = '10'
 	d4 = d.copy()
 	d4[5] = 16*150 # 150 feet
-	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d.copy(), 'e':d4, 'f':d.copy(), 'g':d3.copy(), 'h':d.copy()})
+	d5 = d.copy()
+	d5[1] = 'FUCK'
+	deaths = filter_deaths({'a':d, 'b':d2, 'c':d3, 'd':d.copy(), 'e':d4, 'f':d.copy(), 'g':d3.copy(), 'h':d.copy(), 'i':d5})
 	info("filter_deaths down to "+repr(deaths))
-	assert len(deaths) == 6
+	assert len(deaths) == 7
+	assert 'FUCK' not in json.dumps(deaths)
 
 	info(repr(get_events('EVENT: {"location":"12.3, 4.56, 7.89"}')))
 	

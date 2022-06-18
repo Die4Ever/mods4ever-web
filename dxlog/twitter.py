@@ -1,15 +1,8 @@
 import requests
 import tweepy
 import time
-from better_profanity import profanity
 from dxlog.base import *
 
-def load_profanity_filter():
-	profanity.load_censor_words(whitelist_words=[
-		'thug', 'hooker', 'junkie', 'god', 'hell', 'urinal', 'ass', 'asses',
-		'717', 'tit', 't1t', 'titi', 'titis', 'tits', 'titt', 'titts', 'teat', 'teats', 'teets', 'toots',
-		'teste', 'testee', 'testes'
-	])
 
 #Add "prevent_tweet":true to the config.json to prevent actually sending tweets
 def tweet(config, playthrough_data, events, mod, version):

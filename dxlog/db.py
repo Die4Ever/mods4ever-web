@@ -102,13 +102,19 @@ def compare_deaths(a, b):
 def filter_deaths(deaths):
 	if not deaths:
 		return deaths
+
+	load_profanity_filter()
 	
 	for d in deaths.values():
 		d[0] = int(d[0])
+		d[1] = profanity.censor(d[1])
+		d[2] = profanity.censor(d[2])
+		d[3] = profanity.censor(d[3])
 		d[4] = int(d[4])
 		d[5] = float(d[5])
 		d[6] = float(d[6])
 		d[7] = float(d[7])
+		d[8] = profanity.censor(d[8])
 	
 	keys = sorted(deaths.keys(), key=lambda d: deaths[d][4])
 	end = len(keys)
