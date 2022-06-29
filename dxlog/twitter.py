@@ -214,9 +214,9 @@ def FlagEventMsg(event,mod):
 	elif flag=='ClubMercedesConvo1_Done':
 		return player+" kindly paid to get Mercedes and Tessa into the Lucky Money club\n"
 	elif flag=='LDDPRussPaid':
-                if mod and mod=="RevRandomizer":
-        		return player+" let Noah foot the club entry fee\n""
-                else:
+		if mod and mod=="RevRandomizer":
+			return player+" let Noah foot the club entry fee\n"
+		else:
 			return player+" let Russ foot the club entry fee\n"
 	elif flag=='M08WarnedSmuggler':
 		return player+" warned Smuggler of the impending UNATCO raid\n"
