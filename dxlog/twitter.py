@@ -174,7 +174,7 @@ def BingoMsg(event):
 	return msg
 
 
-def FlagEventMsg(event):
+def FlagEventMsg(event,mod):
 	flag = event.get('flag')
 	player = censor_name(event['PlayerName'])
 	if flag=='GuntherFreed':
@@ -213,6 +213,11 @@ def FlagEventMsg(event):
 		return player+" dove into the collapsed Canal road in search of treasure\n"
 	elif flag=='ClubMercedesConvo1_Done':
 		return player+" kindly paid to get Mercedes and Tessa into the Lucky Money club\n"
+	elif flag=='LDDPRussPaid':
+                if mod and mod=="RevRandomizer":
+        		return player+" let Noah foot the club entry fee\n""
+                else:
+			return player+" let Russ foot the club entry fee\n"
 	elif flag=='M08WarnedSmuggler':
 		return player+" warned Smuggler of the impending UNATCO raid\n"
 	elif flag=='ShipPowerCut':
@@ -374,7 +379,7 @@ def gen_event_msg(event,d,mod,version):
 			return None
 
 	elif event['type']=='Flag':
-		msg = FlagEventMsg(event)
+		msg = FlagEventMsg(event,mod)
 		if not msg:
 			return None
 	
