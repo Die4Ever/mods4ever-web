@@ -13,6 +13,7 @@ jobs:
       - run: cd ${{ github.workspace }}
       - run: mkdir dxrando_logs
       - run: cp config.example.json config.json
+      - run: python -m compileall -q .
       - run: python3 tests.py
       - run: python3 log.py
       - run: echo "🍏 This job's status is ${{ job.status }}."
