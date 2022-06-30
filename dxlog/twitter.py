@@ -1,8 +1,11 @@
 import requests
 import tweepy
 import time
+from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
 from dxlog.base import *
 
+DEFAULT_FONT_NAME="FreeSans.ttf"
 
 #Add "prevent_tweet":true to the config.json to prevent actually sending tweets
 def tweet(config, playthrough_data, events, mod, version):
@@ -11,22 +14,39 @@ def tweet(config, playthrough_data, events, mod, version):
 	if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
 		return
 	
-	twitApi = tweepy.Client( bearer_token=config["twit_bearer_token"], 
+	twitApiV2 = tweepy.Client( bearer_token=config["twit_bearer_token"], 
 								consumer_key=config["twit_consumer_key"], 
 								consumer_secret=config["twit_consumer_secret"], 
 								access_token=config["twit_access_token"], 
 								access_token_secret=config["twit_access_token_secret"], 
 								return_type = requests.Response,
 								wait_on_rate_limit=True)
+
+	#Needed for media uploads... sigh.	Coming soon to API v2 hopefully?
+	twitApiV1 = tweepy.API(tweepy.OAuth1UserHandler(config["twit_consumer_key"],config["twit_consumer_secret"],config["twit_access_token"],config["twit_access_token_secret"]))
+
 	load_profanity_filter()
 	for event in events:
+		info("Generating event message for "+str(event))
 		msg = gen_event_msg(event, playthrough_data, mod, version)
+		bingoBoard = None
+		if "bingo-0-0" in event:
+			bingoBoard = generateBingoBoardAttachment(event,config["prevent_tweet"])
 		if msg!=None:
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
 			else:
-				send_tweet(twitApi,msg)
+				send_tweet(twitApiV1,twitApiV2,msg,bingoBoard)
 
+def generateBingoBoardAttachment(event,saveImg):
+	boardImg = None
+	board = BingoBoardDrawer(event,DEFAULT_DIMENSION,DEFAULT_FONT_SIZE)
+	if board.isBoardFilled():
+		board.generateBoard()
+		boardImg=board.getImageInMemory()
+		if saveImg:
+			board.saveBoard()
+	return boardImg
 
 def damage_string(dmgtype):
 	if dmgtype=="shot":
@@ -337,7 +357,8 @@ def gen_event_msg(event,d,mod,version):
 		return None
 
 	for k in event:
-		event[k] = twitter_sanitize(event[k])
+		if not k.startswith("bingo-"): #Don't sanitize bingo info, that will be processed first
+			event[k] = twitter_sanitize(event[k])
 	seed = twitter_sanitize(d.get('seed'))
 	flagshash = twitter_sanitize(d.get('flagshash'))
 	mod = twitter_sanitize(mod)
@@ -412,15 +433,23 @@ def gen_event_msg(event,d,mod,version):
 		
 	return msg
 
-def send_tweet(api,msg):
+def send_tweet(apiV1,api,msg,bingo_image):
 	info("Tweeting '"+msg+"'")
 	tweet = msg
+	bingoMedia = None
+
+	if bingo_image:
+		try:
+			ret = apiV1.media_upload(filename="dummy",file=bingo_image)
+			bingoMedia = [ret.media_id_string]
+		except Exception as e:
+			err("Encountered an issue while attempting to upload image: "+str(e)+" "+str(e.args))
 
 	if len(tweet)>280:
 		diff = len(tweet)-280
 		tweet = msg[:-diff-3]+"..."
 	try:
-		response = api.create_tweet(text=tweet)
+		response = api.create_tweet(text=tweet,media_ids=bingoMedia)
 	except Exception as e:
 		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
 
@@ -433,3 +462,129 @@ def twitter_version_to_string(version):
 	if m[4]:
 		s += '.' + m[3] + ' ' + m[4]
 	return twitter_sanitize(s)
+
+
+MAGIC_GREEN="#1e641e"
+DEFAULT_DIMENSION = 800
+DEFAULT_FONT_SIZE = 18
+
+
+class BingoBoardDrawer:
+	def __init__(self,eventJson,dimension,fontsize):
+		self.board = [[None]*5 for i in range(5)]
+		self.dimension = dimension
+		self.font = ImageFont.truetype(DEFAULT_FONT_NAME,fontsize)
+		self.img = Image.new("RGB",(dimension,dimension))
+		self.loadBingoEvents(eventJson)
+
+
+	def loadBingoEvents(self,eventJson):
+		for x in range(0,5):
+			for y in range(0,5):
+				bingoTag = "bingo-"+str(x)+"-"+str(y)
+				if bingoTag in eventJson:
+					self.board[x][y]=eventJson[bingoTag]
+
+
+
+	def isBoardFilled(self):
+		for x in range(0,5):
+			for y in range(0,5):
+				if self.board[x][y]==None:
+					return False
+		return True
+
+	def getSquareCoords(self,x,y):
+		squareSize = self.dimension/5
+
+		lowerCorner = (x*squareSize,y*squareSize)
+		upperCorner = ((x+1)*squareSize-1,(y+1)*squareSize-1)
+
+		return [lowerCorner,upperCorner]
+
+	def getTextBoxValue(self,x,y):
+		coords = self.getSquareCoords(x,y)
+		squareSize = self.dimension/5
+
+		boxVal = (coords[0][0],coords[0][1],squareSize,squareSize)
+
+		return boxVal
+
+	def getSquareColour(self,x,y):
+		square = self.board[x][y]
+		if square["progress"]>=square["max"]:
+			return MAGIC_GREEN
+		else:
+			return "black"
+
+	def drawBingoText(self,boardX,boardY,image_draw, **kwargs):
+		square=self.board[boardX][boardY]
+		coords = self.getSquareCoords(boardX,boardY)
+		text = square["desc"]
+
+		if square["max"]>1:
+			text = text + "\n("+str(square["progress"])+"/"+str(square["max"])+")"
+		info("Trying to draw text for "+str(boardX)+","+str(boardY)+": "+text);
+		x = coords[0][0]
+		y = coords[0][1]
+		squareSize = self.dimension/5
+
+		lines = text.split('\n')
+		true_lines = []
+		for line in lines:
+			if self.font.getsize(line)[0] <= squareSize:
+				true_lines.append(line)
+			else:
+				current_line = ''
+				for word in line.split(' '):
+					if self.font.getsize(current_line + word)[0] <= squareSize:
+						current_line += ' ' + word
+					else:
+						true_lines.append(current_line)
+						current_line = word
+				true_lines.append(current_line)
+
+		x_offset = y_offset = 0
+		lineheight = self.font.getsize(true_lines[0])[1] * 1.2 # Give a margin of 0.2x the font height
+		y = int(y + squareSize / 2)
+		y_offset = - (len(true_lines) * lineheight) / 2
+
+		for line in true_lines:
+			info("true_line: "+line)
+			linewidth = self.font.getsize(line)[0]
+			x_offset = (squareSize - linewidth) / 2
+			image_draw.text(
+				(int(x + x_offset), int(y + y_offset)),
+				line,
+				font=self.font,
+				**kwargs
+				)
+			y_offset += lineheight
+
+
+
+	def generateBoard(self):
+		#print("Generating board")
+		draw = ImageDraw.Draw(self.img)
+		for x in range(0,5):
+			for y in range(0,5):
+				draw.rectangle(self.getSquareCoords(x,y),fill=self.getSquareColour(x,y),outline="grey")
+				self.drawBingoText(x,y,draw)
+
+	#For testing purposes
+	def saveBoard(self):
+		self.img.save("bingo.png")
+
+	#For testing purposes
+	def showBoard(self):
+		self.img.show()
+
+	#For upload to twitter without saving to disk
+	def getImageInMemory(self):
+		b = BytesIO()
+		self.img.save(b,"PNG")
+		b.seek(0)  #This is apparently needed, otherwise twitter will reject it
+
+		return b
+
+
