@@ -9,4 +9,5 @@
     "twit_access_token":"",
     "twit_access_token_secret":"",
     "twit_bearer_token":""
+    "prevent_tweet":false
 }

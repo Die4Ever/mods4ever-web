@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from dxlog.base import *
 
-DEFAULT_FONT_NAME="FreeSans.ttf"
+DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
 
 #Add "prevent_tweet":true to the config.json to prevent actually sending tweets
 def tweet(config, playthrough_data, events, mod, version):
@@ -31,7 +31,10 @@ def tweet(config, playthrough_data, events, mod, version):
 		msg = gen_event_msg(event, playthrough_data, mod, version)
 		bingoBoard = None
 		if "bingo-0-0" in event:
-			bingoBoard = generateBingoBoardAttachment(event,config["prevent_tweet"])
+			saveImg = False
+			if "prevent_tweet" in config:
+				saveImg = config["prevent_tweet"]
+			bingoBoard = generateBingoBoardAttachment(event,saveImg)
 		if msg!=None:
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
@@ -40,12 +43,15 @@ def tweet(config, playthrough_data, events, mod, version):
 
 def generateBingoBoardAttachment(event,saveImg):
 	boardImg = None
-	board = BingoBoardDrawer(event,DEFAULT_DIMENSION,DEFAULT_FONT_SIZE)
-	if board.isBoardFilled():
-		board.generateBoard()
-		boardImg=board.getImageInMemory()
-		if saveImg:
-			board.saveBoard()
+	try:
+		board = BingoBoardDrawer(event,DEFAULT_DIMENSION,DEFAULT_FONT_SIZE)
+		if board.isBoardFilled():
+			board.generateBoard()
+			boardImg=board.getImageInMemory()
+			if saveImg:
+				board.saveBoard()
+	except Exception as e:
+		err("Failed to generate bingo board image: "+str(e)+" "+str(e.args))
 	return boardImg
 
 def damage_string(dmgtype):
@@ -526,7 +532,7 @@ class BingoBoardDrawer:
 			text = text + "\n("+str(square["progress"])+"/"+str(square["max"])+")"
 		x = coords[0][0]
 		y = coords[0][1]
-		squareSize = self.dimension/5
+		squareSize = self.dimension/5 
 
 		lines = text.split('\n')
 		true_lines = []
@@ -536,7 +542,7 @@ class BingoBoardDrawer:
 			else:
 				current_line = ''
 				for word in line.split(' '):
-					if self.font.getsize(current_line + word)[0] <= squareSize:
+					if self.font.getsize(current_line + word)[0] <= (squareSize-DEFAULT_FONT_SIZE):
 						current_line += ' ' + word
 					else:
 						true_lines.append(current_line)
