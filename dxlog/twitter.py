@@ -524,7 +524,6 @@ class BingoBoardDrawer:
 
 		if square["max"]>1:
 			text = text + "\n("+str(square["progress"])+"/"+str(square["max"])+")"
-		info("Trying to draw text for "+str(boardX)+","+str(boardY)+": "+text);
 		x = coords[0][0]
 		y = coords[0][1]
 		squareSize = self.dimension/5
@@ -550,7 +549,6 @@ class BingoBoardDrawer:
 		y_offset = - (len(true_lines) * lineheight) / 2
 
 		for line in true_lines:
-			info("true_line: "+line)
 			linewidth = self.font.getsize(line)[0]
 			x_offset = (squareSize - linewidth) / 2
 			image_draw.text(
