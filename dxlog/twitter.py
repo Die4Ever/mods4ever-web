@@ -473,7 +473,7 @@ def twitter_version_to_string(version):
 MAGIC_GREEN="#1e641e"
 DEFAULT_DIMENSION = 800
 DEFAULT_FONT_SIZE = 18
-
+DEFAULT_BORDER_SIZE = 10
 
 class BingoBoardDrawer:
 	def __init__(self,eventJson,dimension,fontsize):
@@ -523,16 +523,15 @@ class BingoBoardDrawer:
 		else:
 			return "black"
 
-	def drawBingoText(self,boardX,boardY,image_draw, **kwargs):
+	def drawBingoText(self,boardX,boardY,border,image_draw, **kwargs):
 		square=self.board[boardX][boardY]
 		coords = self.getSquareCoords(boardX,boardY)
 		text = square["desc"]
-
 		if square["max"]>1:
 			text = text + "\n("+str(square["progress"])+"/"+str(square["max"])+")"
-		x = coords[0][0]
-		y = coords[0][1]
-		squareSize = self.dimension/5 
+		x = coords[0][0]+border
+		y = coords[0][1]+border
+		squareSize = self.dimension/5 - (2*border) 
 
 		lines = text.split('\n')
 		true_lines = []
@@ -542,8 +541,10 @@ class BingoBoardDrawer:
 			else:
 				current_line = ''
 				for word in line.split(' '):
-					if self.font.getsize(current_line + word)[0] <= (squareSize-DEFAULT_FONT_SIZE):
-						current_line += ' ' + word
+					if self.font.getsize(current_line + word)[0] <= squareSize:
+						if current_line!='':
+							current_line+=' '
+						current_line += word
 					else:
 						true_lines.append(current_line)
 						current_line = word
@@ -573,7 +574,7 @@ class BingoBoardDrawer:
 		for x in range(0,5):
 			for y in range(0,5):
 				draw.rectangle(self.getSquareCoords(x,y),fill=self.getSquareColour(x,y),outline="grey")
-				self.drawBingoText(x,y,draw)
+				self.drawBingoText(x,y,DEFAULT_BORDER_SIZE,draw)
 
 	#For testing purposes
 	def saveBoard(self):
