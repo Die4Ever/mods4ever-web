@@ -37,6 +37,7 @@ def write_db(mod, version, ip, content, config):
 		cursor = db.cursor(dictionary=True)
 		d = parse_content(content)
 		d = get_playthrough(cursor, mod, ip, d)
+		info('inserting db values: ', d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		cursor.execute(
 			"INSERT INTO logs SET created=NOW(), "
 			+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s, playthrough_id=%s",
