@@ -286,13 +286,13 @@ def TriggerEventMsg(event):
 	elif tag=='nsfwander':
 		return event['PlayerName']+' helped Miguel escape the MJ12 facility under UNATCO HQ\n'
 	elif tag=='Area51FanShaft':
-		return event['PlayerName']+' jumped.  They could make it\n'
+		return event['PlayerName']+' jumped. They could make it\n'
 	elif tag=='JocksToilet':
 		return event['PlayerName']+" took a pit stop in the bathroom of Jock's apartment\n"
 	elif tag=='support1':
-		return event['PlayerName']+' pulled a Michael Bay and blew up the Vandenberg gas station'
+		return event['PlayerName']+' pulled a Michael Bay and blew up the Vandenberg gas station\n'
 	elif tag=='TongsHotTub':
-		return event['PlayerName']+" took a dip in Tracer Tong's hot tub"
+		return event['PlayerName']+" took a dip in Tracer Tong's hot tub\n"
 	elif tag=='VandenbergToilet':
 		return event['PlayerName']+" stopped in to use the facilities at Vandenberg.  Somehow there's only one toilet!\n"
 	else:
