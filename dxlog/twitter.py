@@ -533,6 +533,15 @@ class BingoBoardDrawer:
 		else:
 			return "black"
 
+	def getLineSize(self,line):
+		bbox=self.font.getbbox(line)
+		#width = bbox[2]-bbox[0]
+		#height = bbox[3]-bbox[1]
+		width=bbox[2]
+		height=bbox[3]
+		#info("Line '"+line+"' is "+str(width)+" by "+str(height))
+		return (width,height)
+
 	def drawBingoText(self,boardX,boardY,border,image_draw, **kwargs):
 		square=self.board[boardX][boardY]
 		coords = self.getSquareCoords(boardX,boardY)
@@ -546,12 +555,12 @@ class BingoBoardDrawer:
 		lines = text.split('\n')
 		true_lines = []
 		for line in lines:
-			if self.font.getsize(line)[0] <= squareSize:
+			if self.getLineSize(line)[0] <= squareSize:
 				true_lines.append(line)
 			else:
 				current_line = ''
 				for word in line.split(' '):
-					if self.font.getsize(current_line + word)[0] <= squareSize:
+					if self.getLineSize(current_line + word)[0] <= squareSize:
 						if current_line!='':
 							current_line+=' '
 						current_line += word
@@ -561,12 +570,12 @@ class BingoBoardDrawer:
 				true_lines.append(current_line)
 
 		x_offset = y_offset = 0
-		lineheight = self.font.getsize(true_lines[0])[1] * 1.2 # Give a margin of 0.2x the font height
+		lineheight = self.getLineSize(true_lines[0])[1] * 1.3 # Give a margin of 0.3x the font height
 		y = int(y + squareSize / 2)
 		y_offset = - (len(true_lines) * lineheight) / 2
 
 		for line in true_lines:
-			linewidth = self.font.getsize(line)[0]
+			linewidth = self.getLineSize(line)[0]
 			x_offset = (squareSize - linewidth) / 2
 			image_draw.text(
 				(int(x + x_offset), int(y + y_offset)),
