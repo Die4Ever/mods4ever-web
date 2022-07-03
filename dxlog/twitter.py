@@ -191,6 +191,8 @@ def BingoMsg(event):
 	else:
 		msg+= " Now at " + event['NumberOfBingos'] + " line.\n"
 	
+	if 'mapname' in event and 'mission' in event:
+		msg +='\n'+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')'
 	if event.get('time'):
 		msg+= "\nTime: "+gametime_to_string(event["time"])
 	if event.get('loadout') and event['loadout'] != 'All Items Allowed':
