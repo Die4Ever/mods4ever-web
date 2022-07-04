@@ -87,6 +87,8 @@ def damage_string(dmgtype):
 		return 'was knocked out'
 	elif dmgtype=='suicided':
 		return 'was killed'
+	elif dmgtype=='crowdcontrol':
+		return 'had their killswitch flipped'
 	else:
 		if dmgtype:
 			err('unknown dmgtype: '+dmgtype)
