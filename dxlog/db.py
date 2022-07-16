@@ -35,7 +35,11 @@ def write_db(mod, version, ip, content, config):
 	try:
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
-		content = content.encode('utf8', 'xmlcharrefreplace').decode('ansi')
+		try:
+			content = content.encode('utf8', 'xmlcharrefreplace').decode('ascii')
+		except Exception as e:
+			logex(e)
+			content = content.encode('utf8', 'xmlcharrefreplace').decode('utf8')
 		d = parse_content(content)
 		d = get_playthrough(cursor, mod, ip, d)
 		cursor.execute(
