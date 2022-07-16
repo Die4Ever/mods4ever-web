@@ -65,7 +65,7 @@ def unrealscript_sanitize(s):
 
 
 error_log = logdir + "error_log"
-def write_error_log(msg, *args):
+def write_error_log(msg:str, *args):
 	print(msg, file=sys.stderr)
 	with open(error_log, "a") as file:
 			print(msg, *args, file=file)
