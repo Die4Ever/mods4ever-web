@@ -65,27 +65,27 @@ def unrealscript_sanitize(s):
 
 
 error_log = logdir + "error_log"
-def write_error_log(msg):
+def write_error_log(msg, *args):
 	print(msg, file=sys.stderr)
 	with open(error_log, "a") as file:
-			file.write(msg+"\n")
+			print(msg, *args, file=file)
 
 
-def debug(msg):
+def debug(msg, *args):
 	#write_error_log("DEBUG: "+msg)
 	pass
 
-def info(msg):
-	write_error_log("INFO: "+msg)
+def info(msg, *args):
+	write_error_log("INFO: "+msg, *args)
 
-def warn(msg):
-	write_error_log("WARNING: "+msg)
+def warn(msg, *args):
+	write_error_log("WARNING: "+msg, *args)
 
-def err(msg):
-	write_error_log("ERROR: "+msg)
+def err(msg, *args):
+	write_error_log("ERROR: "+msg, *args)
 
 def logex(e):
-	write_error_log("ERROR: "+traceback.format_exc())
+	write_error_log("ERROR: "+traceback.format_exc(100))
 
 
 # copied from DXRando
