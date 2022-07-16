@@ -37,9 +37,12 @@ def write_db(mod, version, ip, content, config):
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
 		try:
-			content = content.encode('utf8', 'xmlcharrefreplace').decode('ascii')
+			bcontent = b''
+			bcontent = content.encode('utf8', 'xmlcharrefreplace')
+			content = bcontent.decode('iso_8859_1')
 		except Exception as e:
 			logex(e)
+			err(bcontent)
 			content = content.encode('utf8', 'xmlcharrefreplace').decode('utf8')
 		d = parse_content(content)
 		d = get_playthrough(cursor, mod, ip, d)
@@ -66,6 +69,7 @@ def write_db(mod, version, ip, content, config):
 		print("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		err("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		logex(e)
+		err(bcontent)
 	
 	db.commit()
 	cursor.close()
