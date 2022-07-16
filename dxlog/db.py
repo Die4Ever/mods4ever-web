@@ -33,6 +33,7 @@ def write_db(mod, version, ip, content, config):
 		return ret
 	
 	try:
+		d={}
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
 		try:
