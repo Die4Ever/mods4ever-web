@@ -14,6 +14,8 @@ def db_connect(config):
 	dbconfig["host"]=config["host"]
 	dbconfig["database"]=config["database"]
 	dbconfig["raise_on_warnings"]=config["raise_on_warnings"]
+	dbconfig["charset"]='utf8'
+	dbconfig["use_unicode"]=True
 	
 	try:
 		db = mysql.connector.connect(**dbconfig)
