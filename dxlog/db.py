@@ -67,12 +67,19 @@ def write_db(mod, version, ip, content:str, config):
 		content = try_encodings(content, [('iso_8859_1',),('iso_8859_1', 'replace'),('utf-8',),('ascii',),('utf-8', 'replace'),('utf-8', 'xmlcharrefreplace'),('utf-8', 'ignore')])
 		d = parse_content(content)
 		d = get_playthrough(cursor, mod, ip, d)
-		cursor.execute(
-			"INSERT INTO logs SET created=NOW(), "
-			+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s, playthrough_id=%s",
-			(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id') ))
-		log_id = cursor.lastrowid
-		debug("inserted logs id "+str(log_id))
+		log_id = 0
+		try:
+			cursor.execute(
+				"INSERT INTO logs SET created=NOW(), "
+				+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s, playthrough_id=%s",
+				(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id') ))
+			log_id = cursor.lastrowid
+			debug("inserted logs id "+str(log_id))
+		except Exception as e:
+			print("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
+			err("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
+			logex(e)
+			err(content)
 		deaths = get_deaths(content)
 		events = get_events(content)
 		events.extend(deaths)
