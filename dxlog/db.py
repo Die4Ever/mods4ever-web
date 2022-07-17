@@ -23,8 +23,27 @@ def db_connect(config):
 		logex(e)
 	return db
 
+def try_encodings(content:str, encodings:list):
+	bcontent = b''
+	for e in encodings:
+		try:
+			bcontent = b''
+			if len(e) > 1:
+				bcontent = content.encode(e[0], e[1])
+			else:
+				bcontent = content.encode(e[0])
+			if len(e) > 1:
+				return bcontent.decode(e[0], e[1])
+			else:
+				return bcontent.decode(e[0])
+		except Exception as e:
+			logex(e)
+			err(bcontent)
 
-def write_db(mod, version, ip, content, config):
+	return 'encoding error'
+
+
+def write_db(mod, version, ip, content:str, config):
 	ret = {}
 	db = db_connect(config)
 	cursor = None
@@ -36,14 +55,7 @@ def write_db(mod, version, ip, content, config):
 		d={}
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
-		try:
-			bcontent = b''
-			bcontent = content.encode('utf8', 'xmlcharrefreplace')
-			content = bcontent.decode('iso_8859_1')
-		except Exception as e:
-			logex(e)
-			err(bcontent)
-			content = content.encode('utf8', 'xmlcharrefreplace').decode('utf8')
+		content = try_encodings(content, [('utf-8',),('utf-8', 'replace'),('utf-8', 'xmlcharrefreplace'),('utf-8', 'ignore'),('iso_8859_1', 'replace')])
 		d = parse_content(content)
 		d = get_playthrough(cursor, mod, ip, d)
 		cursor.execute(
