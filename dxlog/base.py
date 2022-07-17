@@ -82,9 +82,13 @@ def write_error_log(prefix:str, msg:str, *args):
 			pass
 
 def read_binary_content(data:bytes) -> str:
-	with open(logdir + 'binlog', 'ab') as file:
-		file.write(data)
-		file.write(b'\n\n')
+	try:
+		with open(logdir + 'binlog', 'ab') as file:
+			file.write(data)
+			file.write(b'\n\n')
+	except Exception as e:
+		logex(e)
+	
 	try:
 		return data.decode('utf-8', 'replace')
 	except Exception as e:
