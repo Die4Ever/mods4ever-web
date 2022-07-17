@@ -62,7 +62,7 @@ def write_db(mod, version, ip, content:str, config):
 		d={}
 		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
-		content = try_encodings(content, [('utf-8',),('ascii',),('utf-8', 'replace'),('utf-8', 'xmlcharrefreplace'),('utf-8', 'ignore'),('iso_8859_1', 'replace')])
+		content = try_encodings(content, [('iso_8859_1',),('iso_8859_1', 'replace'),('utf-8',),('ascii',),('utf-8', 'replace'),('utf-8', 'xmlcharrefreplace'),('utf-8', 'ignore')])
 		d = parse_content(content)
 		d = get_playthrough(cursor, mod, ip, d)
 		cursor.execute(
