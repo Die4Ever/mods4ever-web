@@ -39,9 +39,13 @@ def try_encodings(content:str, encodings:list):
 				c = bcontent.decode(e[0])
 			if not ret and c:
 				ret = c
-		except Exception as e:
-			logex(e)
-			err(bcontent, e)
+		except Exception as ex:
+			try:
+				logex(ex)
+				err(bcontent, e)
+			except Exception as e2:
+				logex(e2)
+				err(e)
 
 	return ret
 
