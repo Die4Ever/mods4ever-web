@@ -25,6 +25,7 @@ def db_connect(config):
 
 def try_encodings(content:str, encodings:list):
 	bcontent = b''
+	ret = ''
 	for e in encodings:
 		try:
 			bcontent = b''
@@ -33,14 +34,16 @@ def try_encodings(content:str, encodings:list):
 			else:
 				bcontent = content.encode(e[0])
 			if len(e) > 1:
-				return bcontent.decode(e[0], e[1])
+				c = bcontent.decode(e[0], e[1])
 			else:
-				return bcontent.decode(e[0])
+				c = bcontent.decode(e[0])
+			if not ret and c:
+				ret = c
 		except Exception as e:
 			logex(e)
 			err(bcontent, e)
 
-	return 'encoding error'
+	return ret
 
 
 def write_db(mod, version, ip, content:str, config):
