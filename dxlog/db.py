@@ -38,7 +38,7 @@ def try_encodings(content:str, encodings:list):
 				return bcontent.decode(e[0])
 		except Exception as e:
 			logex(e)
-			err(bcontent)
+			err(bcontent, e)
 
 	return 'encoding error'
 
@@ -81,7 +81,7 @@ def write_db(mod, version, ip, content:str, config):
 		print("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		err("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		logex(e)
-		err(bcontent)
+		err(content)
 	
 	db.commit()
 	cursor.close()
