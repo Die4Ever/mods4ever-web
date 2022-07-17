@@ -52,6 +52,7 @@ def generateBingoBoardAttachment(event,saveImg):
 				board.saveBoard()
 	except Exception as e:
 		err("Failed to generate bingo board image: "+str(e)+" "+str(e.args))
+		err('You might need to symlink CourierPrimeCode.ttf for apache to be able to find it')
 		logex(e)
 	return boardImg
 

@@ -4,3 +4,6 @@
   AddHandler cgi-script .py
 </IfModule>
 
+<FilesMatch "^config.json">
+  Require all denied
+</FilesMatch>
