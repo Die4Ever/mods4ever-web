@@ -81,6 +81,16 @@ def write_error_log(prefix:str, msg:str, *args):
 		except:
 			pass
 
+def read_binary_content(data:bytes) -> str:
+	with open(logdir + 'binlog', 'ab') as file:
+		file.write(data)
+		file.write(b'\n\n')
+	try:
+		return data.decode('utf-8', 'replace')
+	except Exception as e:
+		logex(e)
+		return data.decode('iso_8859_1', 'replace')
+	return data.decode()
 
 def debug(msg, *args):
 	#write_error_log("DEBUG:", msg)

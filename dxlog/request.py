@@ -34,12 +34,14 @@ def get_request():
 		s_content_length = str(s_content_length)
 
 	content_length = int(s_content_length)
-	content = ""
+	content:str = ""
+	data:bytes = b''
 
 	try:
 		#while len(args) < content_length AND (datetime.datetime.now() - now).total_seconds() < 10:
 		if content_length > 0:
-			content = content + sys.stdin.read()
+			data:bytes = sys.stdin.buffer.read()
+			content = read_binary_content(data)
 			content = content.replace('\x00','').replace('\r','')
 	except Exception as e:
 		logex(e)
