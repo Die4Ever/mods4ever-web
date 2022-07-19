@@ -280,6 +280,8 @@ def FlagEventMsg(event,mod):
 		return player+' saved the hostages in the hotel. Guess we didn\'t need that specialist after all.\n'
 	elif flag=='SilhouetteHostagesAllRescued':
 		return player+' saved the Silhouette hostages in the catacombs. Merci! Merci!\n'
+	elif flag=='m00meetpage_Played':
+		return player+' has completed the training. The real test comes next: active duty.\n'
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
