@@ -4,6 +4,7 @@ import time
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from dxlog.base import *
+from dxlog.AugScreenDraw import *
 
 DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
 
@@ -30,16 +31,27 @@ def tweet(config, playthrough_data, events, mod, version):
 		info("Generating event message for "+str(event))
 		msg = gen_event_msg(event, playthrough_data, mod, version)
 		bingoBoard = None
+		augScreen = None
+		attachments = []
 		if "bingo-0-0" in event:
 			saveImg = False
 			if "prevent_tweet" in config:
 				saveImg = config["prevent_tweet"]
 			bingoBoard = generateBingoBoardAttachment(event,saveImg)
+			if bingoBoard:
+				attachments.append(bingoBoard)
+		if "Aug-12" in event: #Aug-12 should always be the light
+			augDrawer = AugScreenDrawer(event,config.get("aug_image_location","AugDrawImages/"),event["PlayerIsFemale"])
+			augScreen = augDrawer.getImageInMemory()
+			if config.get("prevent_tweet",False):
+				augDrawer.saveImage()
+			if augScreen:
+				attachments.append(augScreen)
 		if msg!=None:
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
 			else:
-				send_tweet(twitApiV1,twitApiV2,msg,bingoBoard)
+				send_tweet(twitApiV1,twitApiV2,msg,attachments)
 
 def generateBingoBoardAttachment(event,saveImg):
 	boardImg = None
@@ -381,7 +393,7 @@ def gen_event_msg(event,d,mod,version):
 		return None
 
 	for k in event:
-		if not k.startswith("bingo-"): #Don't sanitize bingo info, that will be processed first
+		if not k.startswith("bingo-") and not k.startswith("Aug-"): #Don't sanitize bingo or aug info, that will be processed first
 			event[k] = twitter_sanitize(event[k])
 	seed = twitter_sanitize(d.get('seed'))
 	flagshash = twitter_sanitize(d.get('flagshash'))
@@ -457,23 +469,24 @@ def gen_event_msg(event,d,mod,version):
 		
 	return msg
 
-def send_tweet(apiV1,api,msg,bingo_image):
+def send_tweet(apiV1,api,msg,attachments):
 	info("Tweeting '"+msg+"'")
 	tweet = msg
 	bingoMedia = None
-
-	if bingo_image:
-		try:
-			ret = apiV1.media_upload(filename="dummy",file=bingo_image)
-			bingoMedia = [ret.media_id_string]
-		except Exception as e:
-			err("Encountered an issue while attempting to upload image: "+str(e)+" "+str(e.args))
+	mediaAttach = []
+	if attachments:
+		for attachment in attachments:
+			try:
+				ret = apiV1.media_upload(filename="dummy",file=attachment)
+				mediaAttach.append(ret.media_id_string)
+			except Exception as e:
+				err("Encountered an issue while attempting to upload image: "+str(e)+" "+str(e.args))
 
 	if len(tweet)>280:
 		diff = len(tweet)-280
 		tweet = msg[:-diff-3]+"..."
 	try:
-		response = api.create_tweet(text=tweet,media_ids=bingoMedia)
+		response = api.create_tweet(text=tweet,media_ids=mediaAttach)
 	except Exception as e:
 		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
 
