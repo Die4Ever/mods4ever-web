@@ -30,6 +30,10 @@ class AugScreenDrawer:
         return (base[0]+(SkillSpacing*level),base[1])
 
     def getAugImage(self,augName):
+        if augName=="AugSkullGun":
+            augName = "AugDatalink"
+        elif augName=="AugTracking":
+            augName = "AugTarget"
         imageLoc = self.ImageFolder+augName+".png"
         if not os.path.exists(imageLoc):
             return None
