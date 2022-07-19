@@ -491,7 +491,7 @@ def twitter_version_to_string(version):
 MAGIC_GREEN="#1e641e"
 DEFAULT_DIMENSION = 800
 DEFAULT_FONT_SIZE = 18
-DEFAULT_BORDER_SIZE = 10
+DEFAULT_BORDER_SIZE = 12
 
 class BingoBoardDrawer:
 	def __init__(self,eventJson,dimension,fontsize):
