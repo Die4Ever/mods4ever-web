@@ -25,6 +25,9 @@ SubdermalSkillLevel=[(255,1040),(255,1275)]
 TorsoSkillLevel=[(1172,728),(1172,965),(1172,1200)]
 DefaultSkillLevel=[(256,1612),(470,1612),(685,1612)]
 
+DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
+DEFAULT_FONT_SIZE = 28
+
 class AugScreenDrawer:
     def getSkillPoint(self, base,level):
         return (base[0]+(SkillSpacing*level),base[1])
@@ -111,9 +114,11 @@ class AugScreenDrawer:
             self.image.paste(augImage,coord,augImage)
         else:
             #If we don't have the image, write the aug name for easy debug
-            font = ImageFont.load_default()
+            font = ImageFont.truetype(DEFAULT_FONT_NAME, DEFAULT_FONT_SIZE)
             draw = ImageDraw.Draw(self.image)
-            draw.text(self.getAugCoord(location,index),augName,font=font)
+            coords = self.getAugCoord(location, index)
+            coords = (coords[0] + 5, coords[1] + 90)
+            draw.text(coords, augName, font=font)
             
             
         self.setSkillLevel(location,skillLevel+1,index)
