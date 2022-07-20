@@ -486,6 +486,9 @@ def send_tweet(apiV1,api,msg,attachments):
 			except Exception as e:
 				err("Encountered an issue while attempting to upload image: "+str(e)+" "+str(e.args))
 
+	if not mediaAttach:
+		mediaAttach = None
+	
 	if len(tweet)>280:
 		diff = len(tweet)-280
 		tweet = msg[:-diff-3]+"..."
