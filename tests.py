@@ -6,6 +6,7 @@ from dxlog.request import *
 from dxlog.deaths import *
 from better_profanity import profanity
 import unittest
+import datetime
 
 class TestLog(unittest.TestCase):
 	def test_parse_content(self):
@@ -83,6 +84,28 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		augDrawer = AugScreenDrawer(d,"AugDrawImages/",d["PlayerIsFemale"])
 		augScreen = augDrawer.getImageInMemory()
 		assert augScreen != None
+
+	def test_maggie_bday(self):
+		testStr = '{"type":"Flag","flag":"06_Datacube05","immediate":"False","location":"-731.622498,-1130.981323,73.800011","extra":" June 18 ","PlayerName":"Die4Ever","map":"06_HONGKONG_WANCHAI_STREET","mapname":"Hong Kong - Tonnochi Road","mission":"6","TrueNorth":"0","PlayerIsFemale":"False","GameMode":"Normal Randomizer","newgameplus_loops":"0","loadout":"All Items Allowed"}'
+		d = json.loads(testStr)
+		d2 = {'seed': '123', 'flagshash': '456'}
+		HKtimezone = datetime.timezone(datetime.timedelta(hours=8))
+		currentDate = datetime.datetime.now(tz=HKtimezone).date()
+
+		d['extra'] = currentDate.strftime('%B %d')
+		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
+		self.assertIn('Happy birthday', msg)
+
+		date = currentDate.replace(day=currentDate.day+3)
+		d['extra'] = date.strftime('%B %d')
+		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
+		self.assertNotIn('Happy birthday', msg)
+
+		date = currentDate.replace(month=currentDate.month+1)
+		d['extra'] = date.strftime('%B %d')
+		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
+		self.assertNotIn('Happy birthday', msg)
+
 
 class MockFailCursor:
 	def execute(self, q):

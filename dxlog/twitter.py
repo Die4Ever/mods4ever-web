@@ -1,6 +1,7 @@
 import requests
 import tweepy
 import time
+import datetime
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from dxlog.base import *
@@ -298,6 +299,17 @@ def FlagEventMsg(event,mod):
 		return player+' saved the Silhouette hostages in the catacombs. Merci! Merci!\n'
 	elif flag=='m00meetpage_Played':
 		return player+' has completed the training. The real test comes next: active duty.\n'
+	elif flag=='09_NYC_DOCKYARD--796967769':
+		return player+' got Jenny\'s number: ' + event['extra'].strip() + '\n'
+	elif flag=='06_Datacube05':
+		d = event['extra'].strip()
+		ret = 'Hello Maggie! I swear I will never forget your birthday again! ' + d + ' is marked on my calendar forever! -- ' + player + '\n'
+		HKtimezone = datetime.timezone(datetime.timedelta(hours=8))
+		currentDate = datetime.datetime.now(tz=HKtimezone).date()
+		date = datetime.datetime.strptime(d+' '+str(currentDate.year), '%B %d %Y').date()
+		if date == currentDate:
+			ret += 'Happy birthday Maggie!\n'
+		return ret
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
