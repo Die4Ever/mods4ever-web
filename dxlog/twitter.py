@@ -193,6 +193,8 @@ def BeatGameMsg(event):
 		err("Unknown ending value "+str(event["ending"]))
 		return None
 	msg+= "\nTime: "+gametime_to_string(event["time"])
+	if 'realtime' in event:
+		msg += ', Real Time: '+gametime_to_string(event["realtime"])
 	if 'NumberOfBingos' in event:
 		msg+= '\nBingo lines: ' + event['NumberOfBingos']
 	if event.get('loadout') and event['loadout'] != 'All Items Allowed':
@@ -216,6 +218,8 @@ def BingoMsg(event):
 		msg +='\n'+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')'
 	if event.get('time'):
 		msg+= "\nTime: "+gametime_to_string(event["time"])
+		if event.get('realtime'):
+			msg += ', Real Time: '+gametime_to_string(event["realtime"])
 	if event.get('loadout') and event['loadout'] != 'All Items Allowed':
 		msg+= '\nLoadout: '+event['loadout']
 	if event.get('GameMode') and event['GameMode'] != 'Original Story':
