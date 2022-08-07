@@ -2,12 +2,12 @@ from dxlog.base import *
 
 def update_notification(mod, version):
 	response = {}
-	notification = "New v2.1 available!"
-	desc = "Way more goal"
-	detail = "location randomization!"
+	notification = "New v2.1.1 available!"
+	desc = "Jaime randomization"
+	detail = "and fixes!"
 	assert len(desc) < 35
 	assert len(detail) < 35
-	if VersionStringToInt(version) < VersionToInt(2, 1, 0, 4):
+	if VersionStringToInt(version) < VersionToInt(2, 1, 1, 1):
 		response['notification'] = notification
 		response['message'] = desc
 		response['message'] += "|n" + detail
