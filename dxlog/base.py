@@ -32,6 +32,12 @@ def load_profanity_filter():
 		'teste', 'testee', 'testes'
 	])
 
+	custom_badwords = []
+	for i in range(ord('a'), ord('z')+1):
+		c = chr(i)
+		custom_badwords.append( c + 'igger' )
+	profanity.add_censor_words(custom_badwords)
+
 
 path = os.path.dirname(os.path.realpath(dirname(__file__)))
 logdir = path + "/dxrando_logs/"
