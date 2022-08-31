@@ -31,11 +31,8 @@ def load_profanity_filter():
 		'717', 'tit', 't1t', 'titi', 'titis', 'tits', 'titt', 'titts', 'teat', 'teats', 'teets', 'toots',
 		'teste', 'testee', 'testes'
 	])
-
-	custom_badwords = []
-	for i in range(ord('a'), ord('z')+1):
-		c = chr(i)
-		custom_badwords.append( c + 'igger' )
+	
+	custom_badwords = get_config()['custom_badwords']
 	profanity.add_censor_words(custom_badwords)
 
 
@@ -43,9 +40,14 @@ path = os.path.dirname(os.path.realpath(dirname(__file__)))
 logdir = path + "/dxrando_logs/"
 location_split = re.compile('\s*,\s*')
 
+_config = None
 def get_config():
+	global _config
+	if _config:
+		return _config
 	with open(path+'/config.json', 'r') as f:
-		return json.load(f)
+		_config = json.load(f)
+		return _config
 	err("failed to load config")
 	return {}
 

@@ -65,8 +65,7 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		self.assertEqual(censor_name('Terrorist'), 'Terrorist')
 		self.assertEqual(censor_name('Junkie'), 'Junkie')
 		self.assertEqual(censor_name('Smuggler'), 'Smuggler')
-		self.assertNotEqual(censor_name('Nate Higger'), 'Nate Higger')
-		self.assertNotIn('igger', censor_name('jigger'))
+		self.assertNotIn('igger', censor_name('Higger'))
 
 	def test_version_strings(self):
 		self.assertEqual( twitter_version_to_string('v1.9.1.10'), 'v1.9.1' )

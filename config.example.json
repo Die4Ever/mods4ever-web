@@ -10,5 +10,6 @@
     "twit_access_token_secret":"",
     "twit_bearer_token":"",
     "prevent_tweet":false,
-    "aug_image_location":"AugDrawImages/"
+    "aug_image_location":"AugDrawImages/",
+    "custom_badwords": ["higger"]
 }
