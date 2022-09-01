@@ -11,5 +11,6 @@
     "twit_bearer_token":"",
     "prevent_tweet":false,
     "aug_image_location":"AugDrawImages/",
-    "custom_badwords": ["higger"]
+    "custom_badwords": ["higger"],
+    "banned_ips": []
 }
