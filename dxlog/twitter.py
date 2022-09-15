@@ -492,7 +492,6 @@ def gen_event_msg(event,d,mod,version):
 def send_tweet(apiV1,api,msg,attachments):
 	info("Tweeting '"+msg+"'")
 	tweet = msg
-	bingoMedia = None
 	mediaAttach = []
 	if attachments:
 		for attachment in attachments:
@@ -505,9 +504,9 @@ def send_tweet(apiV1,api,msg,attachments):
 	if not mediaAttach:
 		mediaAttach = None
 	
-	if len(tweet)>280:
-		diff = len(tweet)-280
-		tweet = msg[:-diff-3]+"..."
+	maxLen = 280
+	if len(tweet)>maxLen:
+		tweet = msg[:maxLen-3]+"..."
 	try:
 		response = api.create_tweet(text=tweet,media_ids=mediaAttach)
 	except Exception as e:
