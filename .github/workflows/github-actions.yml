@@ -8,7 +8,7 @@ jobs:
         # Must be explicit for proper pipefail support
         shell: bash
     steps:
-      - run: pip3 install mysql.connector tweepy better_profanity Pillow
+      - run: pip3 install mysql.connector tweepy better_profanity Pillow Mastodon.py
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v2
