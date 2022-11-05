@@ -12,5 +12,9 @@
     "prevent_tweet":false,
     "aug_image_location":"AugDrawImages/",
     "custom_badwords": ["higger"],
-    "banned_ips": []
+    "banned_ips": [],
+    "masto_client_key":"",
+    "masto_client_secret":"",
+    "masto_access_token":"",
+    "masto_base_url":""
 }

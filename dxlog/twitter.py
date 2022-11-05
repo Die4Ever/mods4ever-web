@@ -6,17 +6,25 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from dxlog.base import *
 from dxlog.AugScreenDraw import *
+from mastodon import Mastodon
 
 DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
 
 #Add "prevent_tweet":true to the config.json to prevent actually sending tweets
 def tweet(config, playthrough_data, events, mod, version):
+	twitActive=True
+	mastoActive=True
+
 	if len(events) == 0:
 		return
 	if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
-		return
+		twitActive=False
 	
-	twitApiV2 = tweepy.Client( bearer_token=config["twit_bearer_token"], 
+	if config["masto_client_key"]=="" or config["masto_client_secret"]=="" or config["masto_access_token"]=="" or config["masto_base_url"]=="":
+		mastoActive=False
+
+	if twitActive:
+		twitApiV2 = tweepy.Client( bearer_token=config["twit_bearer_token"], 
 								consumer_key=config["twit_consumer_key"], 
 								consumer_secret=config["twit_consumer_secret"], 
 								access_token=config["twit_access_token"], 
@@ -24,8 +32,14 @@ def tweet(config, playthrough_data, events, mod, version):
 								return_type = requests.Response,
 								wait_on_rate_limit=True)
 
-	#Needed for media uploads... sigh.	Coming soon to API v2 hopefully?
-	twitApiV1 = tweepy.API(tweepy.OAuth1UserHandler(config["twit_consumer_key"],config["twit_consumer_secret"],config["twit_access_token"],config["twit_access_token_secret"]))
+		#Needed for media uploads... sigh.	Coming soon to API v2 hopefully?
+		twitApiV1 = tweepy.API(tweepy.OAuth1UserHandler(config["twit_consumer_key"],config["twit_consumer_secret"],config["twit_access_token"],config["twit_access_token_secret"]))
+	
+	if mastoActive:
+		mastodon=Mastodon(client_id=config["masto_client_key"],
+						client_secret=config["masto_client_secret"],
+						access_token=config["masto_access_token"],
+						api_base_url=config["masto_base_url"])
 
 	load_profanity_filter()
 	for event in events:
@@ -56,7 +70,10 @@ def tweet(config, playthrough_data, events, mod, version):
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
 			else:
-				send_tweet(twitApiV1,twitApiV2,msg,attachments)
+				if twitActive:
+					send_tweet(twitApiV1,twitApiV2,msg,attachments)
+				if mastoActive:
+					send_masto_toot(mastodon,msg,attachments)
 
 def generateBingoBoardAttachment(event,saveImg):
 	boardImg = None
@@ -496,10 +513,11 @@ def send_tweet(apiV1,api,msg,attachments):
 	if attachments:
 		for attachment in attachments:
 			try:
+				attachment.seek(0) #Need to make sure image is seeked to 0
 				ret = apiV1.media_upload(filename="dummy",file=attachment)
 				mediaAttach.append(ret.media_id_string)
 			except Exception as e:
-				err("Encountered an issue while attempting to upload image: "+str(e)+" "+str(e.args))
+				err("Encountered an issue while attempting to upload image to Twitter: "+str(e)+" "+str(e.args))
 
 	if not mediaAttach:
 		mediaAttach = None
@@ -512,6 +530,30 @@ def send_tweet(apiV1,api,msg,attachments):
 	except Exception as e:
 		err("Encountered an issue when attempting to tweet: "+str(e)+" "+str(e.args))
 
+def send_masto_toot(mastoApi,msg,attachments):
+	info("Tooting '"+msg+"'")
+	toot = msg
+	mediaAttach=[]
+	if attachments:
+		for attachment in attachments:
+			try:
+				attachment.seek(0) #Need to make sure image is seeked to 0
+				media = mastoApi.media_post(attachment,mime_type="image/png")
+				mediaAttach.append(media)
+			except Exception as e:
+				err("Encountered an issue while attempting to upload image to Mastodon: "+str(e)+" "+str(e.args))
+	
+	if not mediaAttach:
+		mediaAttach=None
+
+	maxLen = 500 #Mastodon supports longer messages than Twitter!
+	if len(toot)>maxLen:
+		toot = msg[:maxLen-3]+"..."
+	
+	try:
+		response = mastoApi.status_post(toot,media_ids=mediaAttach)
+	except Exception as e:
+		err("Encountered an issue when attempting to toot: "+str(e)+" "+str(e.args))
 
 def twitter_version_to_string(version):
 	m = SplitVersionString(version)

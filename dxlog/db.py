@@ -81,7 +81,7 @@ def write_db(mod, version, ip, content:str, config):
 			logex(e)
 			err(content)
 		
-		if ip not in config['banned_ips']:
+		if ip not in config.get('banned_ips',[]):
 			deaths = get_deaths(content)
 			events = get_events(content)
 			events.extend(deaths)

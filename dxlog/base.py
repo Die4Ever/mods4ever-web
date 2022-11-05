@@ -32,7 +32,7 @@ def load_profanity_filter():
 		'teste', 'testee', 'testes'
 	])
 	
-	custom_badwords = get_config()['custom_badwords']
+	custom_badwords = get_config().get('custom_badwords',[])
 	profanity.add_censor_words(custom_badwords)
 
 
