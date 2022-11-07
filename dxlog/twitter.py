@@ -549,9 +549,11 @@ def send_masto_toot(mastoApi,msg,attachments):
 	maxLen = 500 #Mastodon supports longer messages than Twitter!
 	if len(toot)>maxLen:
 		toot = msg[:maxLen-3]+"..."
-	
+
+	content_warning="Live video game activity (May include violence)"
+
 	try:
-		response = mastoApi.status_post(toot,media_ids=mediaAttach)
+		response = mastoApi.status_post(toot,media_ids=mediaAttach,spoiler_text=content_warning)
 	except Exception as e:
 		err("Encountered an issue when attempting to toot: "+str(e)+" "+str(e.args))
 
