@@ -200,7 +200,7 @@ class AugScreenDrawer:
         augs["AugSkullGun"]="Skull Gun"
         augs["AugTracking"]="Tracking"
 
-        if className not in augs.keys():
+        if className not in augs:
             return className
         else:
             return augs[className]
