@@ -47,6 +47,7 @@ def tweet(config, playthrough_data, events, mod, version):
 		msg = gen_event_msg(event, playthrough_data, mod, version)
 		bingoBoard = None
 		augScreen = None
+		altText=""
 		attachments = []
 		if "bingo-0-0" in event:
 			saveImg = False
@@ -65,7 +66,8 @@ def tweet(config, playthrough_data, events, mod, version):
 			if config.get("prevent_tweet",False):
 				augDrawer.saveImage()
 			if augScreen:
-				attachments.append(augScreen)
+				altText=augDrawer.getAugScreenAltText()
+				attachments.append([augScreen,altText])
 		if msg!=None:
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
@@ -77,6 +79,7 @@ def tweet(config, playthrough_data, events, mod, version):
 
 def generateBingoBoardAttachment(event,saveImg):
 	boardImg = None
+	altText = "It's a bingo board" #TODO: Generate real alt-text for the bingo board!
 	try:
 		board = BingoBoardDrawer(event,DEFAULT_DIMENSION,DEFAULT_FONT_SIZE)
 		if board.isBoardFilled():
@@ -88,7 +91,8 @@ def generateBingoBoardAttachment(event,saveImg):
 		err("Failed to generate bingo board image: "+str(e)+" "+str(e.args))
 		err('You might need to symlink CourierPrimeCode.ttf for apache to be able to find it')
 		logex(e)
-	return boardImg
+		return None
+	return [boardImg,altText]
 
 def damage_string(dmgtype):
 	if dmgtype=="shot":
@@ -513,8 +517,9 @@ def send_tweet(apiV1,api,msg,attachments):
 	if attachments:
 		for attachment in attachments:
 			try:
-				attachment.seek(0) #Need to make sure image is seeked to 0
-				ret = apiV1.media_upload(filename="dummy",file=attachment)
+				attachment[0].seek(0) #Need to make sure image is seeked to 0
+				ret = apiV1.media_upload(filename="dummy",file=attachment[0])
+				apiV1.create_media_metadata(ret.media_id_string,attachment[1])
 				mediaAttach.append(ret.media_id_string)
 			except Exception as e:
 				err("Encountered an issue while attempting to upload image to Twitter: "+str(e)+" "+str(e.args))
@@ -537,8 +542,8 @@ def send_masto_toot(mastoApi,msg,attachments):
 	if attachments:
 		for attachment in attachments:
 			try:
-				attachment.seek(0) #Need to make sure image is seeked to 0
-				media = mastoApi.media_post(attachment,mime_type="image/png")
+				attachment[0].seek(0) #Need to make sure image is seeked to 0
+				media = mastoApi.media_post(attachment[0],description=attachment[1],mime_type="image/png")
 				mediaAttach.append(media)
 			except Exception as e:
 				err("Encountered an issue while attempting to upload image to Mastodon: "+str(e)+" "+str(e.args))

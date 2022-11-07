@@ -173,6 +173,44 @@ class AugScreenDrawer:
             locIndex = self.getLocationAndIndexFromHotkey(hotKey)
             self.drawAug(self.augs[hotKey]["name"],locIndex[0],self.augs[hotKey]["level"],locIndex[1])
 
+    def getAugName(self,className):
+        augs=dict()
+        augs["AugAqualung"]="Aqualung"
+        augs["AugBallistic"]="Ballistic Protection"
+        augs["AugCloak"]="Cloak"
+        augs["AugCombat"]="Combat Strength"
+        augs["AugDatalink"]="Infolink"
+        augs["AugDefense"]="Aggressive Defense System"
+        augs["AugDrone"]="Spy Drone"
+        augs["AugEnviro"]="Environmental Resistance"
+        augs["AugEMP"]="EMP Shield"
+        augs["AugHealing"]="Regeneration"
+        augs["AugHeartLung"]="Synthetic Heart"
+        augs["AugIFF"]="IFF"
+        augs["AugLight"]="Light"
+        augs["AugMuscle"]="Microfibral Muscle"
+        augs["AugPower"]="Power Recirculator"
+        augs["AugRadarTrans"]="Radar Transparency"
+        augs["AugShield"]="Energy Shield"
+        augs["AugSpeed"]="Speed Enhancement"
+        augs["AugStealth"]="Run Silent"
+        augs["AugTarget"]="Targeting"
+        augs["AugVision"]="Vision Enhancement"
+        augs["AugNinja"]="Ninja"
+        augs["AugSkullGun"]="Skull Gun"
+        augs["AugTracking"]="Tracking"
+
+        if className not in augs.keys():
+            return className
+        else:
+            return augs[className]
+
+    def getAugScreenAltText(self):
+        alt=""
+        for hotkey in self.augs.keys():
+            if(hotkey<=12):
+                alt+="F"+str(hotkey)+" - "+self.getAugName(self.augs[hotkey]["name"])+" (Level "+str(self.augs[hotkey]["level"]+1)+")\n"
+        return alt
         
 
     def __init__(self,jsonIn,imageDir,isFemale):
