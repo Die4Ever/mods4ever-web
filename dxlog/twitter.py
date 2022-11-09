@@ -87,6 +87,7 @@ def generateBingoBoardAttachment(event,saveImg):
 			boardImg=board.getImageInMemory()
 			if saveImg:
 				board.saveBoard()
+			altText = board.generateAltText()
 	except Exception as e:
 		err("Failed to generate bingo board image: "+str(e)+" "+str(e.args))
 		err('You might need to symlink CourierPrimeCode.ttf for apache to be able to find it')
@@ -625,6 +626,9 @@ class BingoBoardDrawer:
 		else:
 			return "black"
 
+	def isSquareDone(self,x,y):
+		return self.board[x][y]["progress"]>=self.board[x][y]["max"]
+
 	def getLineSize(self,line):
 		bbox=self.font.getbbox(line)
 		#width = bbox[2]-bbox[0]
@@ -703,4 +707,51 @@ class BingoBoardDrawer:
 
 		return b
 
+	def checkBingo(self,sx,sy,x,y):
+		numHits=0
+		for i in range(0,5):
+			if self.isSquareDone(x,y):
+				numHits+=1
+			x+=sx
+			y+=sy
 
+		return numHits>=5
+
+	def getBingoLines(self):
+		lines=dict()
+		lines["rows"]=[]
+		lines["columns"]=[]
+		lines["diags"]=[]
+
+		for i in range(0,5):
+			if self.checkBingo(1,0,0,i):
+				lines["rows"].append(str(i+1))
+			if self.checkBingo(0,1,i,0):
+				lines["columns"].append(str(i+1))
+
+		if self.checkBingo(1,1,0,0):
+			lines["diags"].append("1")
+		if self.checkBingo(-1,1,4,0):
+			lines["diags"].append("2")
+
+		return lines
+
+	def generateAltText(self):
+		lines = self.getBingoLines()
+
+		text = "Completed Bingo Lines:\n"
+		if lines["rows"]:
+			text+= "Rows: "+", ".join(lines["rows"])+"\n"
+		
+		if lines["columns"]:
+			text+= "Columns: "+", ".join(lines["columns"])+"\n"
+        
+		if lines["diags"]:
+			diags=[]
+			if "1" in lines["diags"]:
+				diags.append("Top Left Down")
+			if "2" in lines["diags"]:
+				diags.append("Bottom Left Up")
+			text+= "Diagonals: "+", ".join(diags)+"\n"
+
+		return text
