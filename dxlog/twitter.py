@@ -738,20 +738,27 @@ class BingoBoardDrawer:
 
 	def generateAltText(self):
 		lines = self.getBingoLines()
+		numLines = len(lines["rows"])+len(lines["columns"])+len(lines["diags"])
+		text=""
 
-		text = "Completed Bingo Lines:\n"
-		if lines["rows"]:
-			text+= "Rows: "+", ".join(lines["rows"])+"\n"
+		if numLines==0:
+			text="A bingo board with no finished lines..."
+		elif numLines<12:
+			text = "Completed Bingo Lines:\n"
+			if lines["rows"]:
+				text+= "Rows: "+", ".join(lines["rows"])+"\n"
 		
-		if lines["columns"]:
-			text+= "Columns: "+", ".join(lines["columns"])+"\n"
+			if lines["columns"]:
+				text+= "Columns: "+", ".join(lines["columns"])+"\n"
         
-		if lines["diags"]:
-			diags=[]
-			if "1" in lines["diags"]:
-				diags.append("Top Left Down")
-			if "2" in lines["diags"]:
-				diags.append("Bottom Left Up")
-			text+= "Diagonals: "+", ".join(diags)+"\n"
+			if lines["diags"]:
+				diags=[]
+				if "1" in lines["diags"]:
+					diags.append("Top Left Down")
+				if "2" in lines["diags"]:
+					diags.append("Bottom Left Up")
+				text+= "Diagonals: "+", ".join(diags)+"\n"
+		else:
+			text="A completely filled bingo board!"
 
 		return text
