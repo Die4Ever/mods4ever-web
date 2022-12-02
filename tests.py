@@ -102,7 +102,7 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
 
-		date = currentDate.replace(month=currentDate.month+1)
+		date = currentDate.replace(month=(currentDate.month+1)%12)
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
