@@ -694,7 +694,8 @@ class BingoBoardDrawer:
 
 	#For testing purposes
 	def saveBoard(self):
-		self.img.save("bingo.png")
+		self.img=self.img.convert('RGB')
+		self.img.save("bingo.jpg")
 
 	#For testing purposes
 	def showBoard(self):
@@ -703,7 +704,8 @@ class BingoBoardDrawer:
 	#For upload to twitter without saving to disk
 	def getImageInMemory(self):
 		b = BytesIO()
-		self.img.save(b,"PNG")
+		self.img=self.img.convert('RGB')
+		self.img.save(b,"JPEG")
 		b.seek(0)  #This is apparently needed, otherwise twitter will reject it
 
 		return b

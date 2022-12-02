@@ -124,11 +124,13 @@ class AugScreenDrawer:
         self.setSkillLevel(location,skillLevel+1,index)
 
     def saveImage(self):
-        self.image.save("AugScreenTest.png")
+        self.image=self.image.convert('RGB')
+        self.image.save("AugScreenTest.jpg")
         
     def getImageInMemory(self):
         b = BytesIO()
-        self.image.save(b,"PNG")
+        self.image=self.image.convert('RGB')
+        self.image.save(b,"JPEG")
         b.seek(0)  #This is apparently needed, otherwise twitter will reject it
 
         return b
