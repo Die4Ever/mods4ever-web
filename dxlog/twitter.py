@@ -301,6 +301,8 @@ def FlagEventMsg(event,mod):
 		return player+" shut off the electricity on the lower decks of the Superfreighter\n"
 	elif flag=='CamilleConvosDone':
 		return player+" decided to spend some time with Camille the cage dancer at La Porte De L\'Enfer\n"
+	elif flag=='LDDPAchilleDone':
+		return player+" let Achille tell them about the people at La Porte De L\'Enfer\n"
 	elif flag=='MeetAI4_Played':
 		return player+" spent some time listening to the musings of Morpheus, the Echelon prototype\n"
 	elif flag=='DL_Flooded_Played':
@@ -338,6 +340,15 @@ def FlagEventMsg(event,mod):
 		if date == currentDate:
 			ret += 'Happy birthday Maggie!\n'
 		return ret
+	elif flag=='LeoToTheBar':
+		if "_NYC_BAR" in event['map']: 
+		    return player+" brought Leo Gold to the Underworld Tavern to relax (Mission "+str(event['mission']).zfill(2)+")\n"
+		elif event['map']=="06_HONGKONG_WANCHAI_UNDERWORLD":
+		    return player+" brought Leo Gold to the Lucky Money Club in Hong Kong!\n"
+		elif event['map']=="10_PARIS_CLUB":
+		    return player+" brought Leo Gold to La Porte De L'Enfer to spend time with other revolutionaries\n"
+		else:
+		    info('Leo Gold got brought to some other bar that I do not know about: '+event['map'])
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
