@@ -205,13 +205,13 @@ def BeatGameMsg(event):
 	ending = int(event["ending"])
 	player = censor_name(event['PlayerName'])
 	if   ending==1:
-		msg = player+" destroyed Area 51, beginning a new dark age\n"
+		msg = player+" destroyed Area 51, beginning a new dark age.\n"
 	elif ending==2:
-		msg = player+" merged with Helios to create a benevolent cybernetic dictatorship\n"
+		msg = player+" merged with Helios to create a benevolent cybernetic dictatorship.\n"
 	elif ending==3:
-		msg = player+" killed Bob Page and joined the Illuminati to rule the world unopposed\n"
+		msg = player+" killed Bob Page and joined the Illuminati to rule the world unopposed.\n"
 	elif ending==4:
-		msg = player+" decided this whole conspiracy thing was boring and decided to have a dance party instead\n"
+		msg = player+" decided this whole conspiracy thing was boring and decided to have a dance party instead.\n"
 	else:
 		#unknown ending
 		err("Unknown ending value "+str(event["ending"]))
@@ -347,11 +347,13 @@ def FlagEventMsg(event,mod):
 		return ret
 	elif flag=='LeoToTheBar':
 		if "_NYC_BAR" in event['map']: 
-		    return player+" brought Leo Gold to the Underworld Tavern to relax (Mission "+str(event['mission']).zfill(2)+")\n"
+			return player+" brought Leo Gold to the Underworld Tavern to relax (Mission "+str(event['mission']).zfill(2)+")\n"
 		elif event['map']=="06_HONGKONG_WANCHAI_UNDERWORLD":
-		    return player+" brought Leo Gold to the Lucky Money Club in Hong Kong!\n"
+			return player+" brought Leo Gold to the Lucky Money Club in Hong Kong!\n"
 		elif event['map']=="10_PARIS_CLUB":
-		    return player+" brought Leo Gold to La Porte De L'Enfer to spend time with other revolutionaries\n"
+			return player+" brought Leo Gold to La Porte De L'Enfer to spend time with other revolutionaries\n"
+		elif event['map']=="14_OCEANLAB_UC":
+			return player+" brought Leo Gold to the bottom of the OceanLab, which has to withstand unbelievable pressure\n"
 		else:
 		    info('Leo Gold got brought to some other bar that I do not know about: '+event['map'])
 	else:
