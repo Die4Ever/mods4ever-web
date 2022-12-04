@@ -216,6 +216,11 @@ def BeatGameMsg(event):
 		#unknown ending
 		err("Unknown ending value "+str(event["ending"]))
 		return None
+	
+	if "carriedItem" in event:
+		if event["carriedItem"]=="DeusEx.TerroristCommanderCarcass":
+			msg+="Leo Gold was there too.\n"
+	
 	msg+= "\nTime: "+gametime_to_string(event["time"])
 	if 'realtime' in event:
 		msg += ', Real Time: '+gametime_to_string(event["realtime"])
