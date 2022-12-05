@@ -8,11 +8,11 @@ jobs:
         # Must be explicit for proper pipefail support
         shell: bash
     steps:
-      - run: pip3 install -r requirements.txt
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: cd ${{ github.workspace }}
+      - run: pip3 install -r requirements.txt
       - run: mkdir dxrando_logs
       - run: cp config.example.json config.json
       - run: python -m compileall -q .
