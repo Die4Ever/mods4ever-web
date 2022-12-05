@@ -16,7 +16,7 @@ def check_requirement(r):
             # we don't want to install from inside the try block
             need_install = True
     except Exception as e:
-        print(r, 'failed to find_spec, need to install,', e)
+        print(r, 'failed to find_spec, need to install,', e, file=sys.stderr)
         need_install = True
     
     if need_install:
@@ -28,7 +28,7 @@ def check_requirement(r):
 
 
 def install(r):
-    print('need to install:', r)
+    print('need to install:', r, file=sys.stderr)
     subprocess.run(["pip3", "install", '--user', r], check=True, capture_output=True)
 
 
