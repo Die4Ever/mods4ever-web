@@ -1,3 +1,4 @@
+import autoinstaller
 from dxlog.base import *
 from dxlog.db import *
 from dxlog.parsing import *

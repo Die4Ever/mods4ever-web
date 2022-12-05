@@ -12,7 +12,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: cd ${{ github.workspace }}
-      - run: pip3 install -r requirements.txt
       - run: mkdir dxrando_logs
       - run: cp config.example.json config.json
       - run: python -m compileall -q .
