@@ -3,3 +3,4 @@ tweepy
 better_profanity
 Pillow
 Mastodon.py
+typeguard

@@ -8,6 +8,8 @@ import sys
 import_names = { 'Mastodon.py': 'mastodon', 'Pillow': 'PIL' }
 
 def check_requirement(r):
+    if not r:
+        return
     m = import_names.get(r, r)
     need_install = False
     

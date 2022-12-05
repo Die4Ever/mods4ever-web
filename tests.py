@@ -1,4 +1,6 @@
 import autoinstaller
+from typeguard import typechecked, importhook
+importhook.install_import_hook('dxlog')
 from dxlog.base import *
 from dxlog.db import *
 from dxlog.parsing import *
@@ -9,6 +11,7 @@ from better_profanity import profanity
 import unittest
 import datetime
 
+@typechecked
 class TestLog(unittest.TestCase):
 	def test_parse_content(self):
 		d = parse_content("""DX.DXRando0: RandoEnter() firstTime: True, IsTravel: False, seed: 601088 DX
@@ -109,10 +112,12 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		self.assertNotIn('Happy birthday', msg)
 
 
+@typechecked
 class MockFailCursor:
 	def execute(self, q):
 		raise Exception("MockFailCursor: "+q)
 
+@typechecked
 def run_tests():
 	#increase_loglevel(DebugLevels.DEBUG)
 	info("running tests...")
