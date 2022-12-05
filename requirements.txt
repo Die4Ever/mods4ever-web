@@ -1,0 +1,5 @@
+mysql.connector
+tweepy
+better_profanity
+Pillow
+Mastodon.py
