@@ -377,6 +377,8 @@ def TriggerEventMsg(event):
 		return event['PlayerName']+" took a dip in Tracer Tong's hot tub\n"
 	elif tag=='VandenbergToilet':
 		return event['PlayerName']+" stopped in to use the facilities at Vandenberg.  Somehow there's only one toilet!\n"
+	elif tag=='purge':
+		return event['PlayerName']+' let out a mean one in the Hong Kong MJ12 Helibase!\n'
 	else:
 		info('Trigger event, unknown tag name: '+tag)
 		
