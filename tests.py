@@ -69,6 +69,7 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		self.assertEqual(censor_name('Terrorist'), 'Terrorist')
 		self.assertEqual(censor_name('Junkie'), 'Junkie')
 		self.assertEqual(censor_name('Smuggler'), 'Smuggler')
+		self.assertEqual(censor_name('10 in'), '10 in')
 		self.assertNotIn('igger', censor_name('Higger'))
 
 	def test_version_strings(self):
