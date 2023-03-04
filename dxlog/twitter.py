@@ -355,7 +355,7 @@ def FlagEventMsg(event,mod):
 		elif event['map']=="14_OCEANLAB_UC":
 			return player+" brought Leo Gold to the bottom of the OceanLab, which has to withstand unbelievable pressure\n"
 		else:
-		    info('Leo Gold got brought to some other bar that I do not know about: '+event['map'])
+			info('Leo Gold got brought to some other bar that I do not know about: '+event['map'])
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
@@ -579,10 +579,10 @@ def send_masto_toot(mastoApi,msg,attachments):
 	if len(toot)>maxLen:
 		toot = msg[:maxLen-3]+"..."
 
-	content_warning="Live video game activity (May include violence)"
+	#content_warning="Live video game activity (May include violence)"
 
 	try:
-		response = mastoApi.status_post(toot,media_ids=mediaAttach,spoiler_text=content_warning)
+		response = mastoApi.status_post(toot,media_ids=mediaAttach)#,spoiler_text=content_warning)
 	except Exception as e:
 		err("Encountered an issue when attempting to toot: "+str(e)+" "+str(e.args))
 
