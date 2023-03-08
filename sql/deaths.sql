@@ -19,7 +19,9 @@
 -- Table structure for table `deaths`
 --
 
-DROP TABLE IF EXISTS `deaths`;
+DROP TABLE IF EXISTS `old_deaths`;
+RENAME TABLE IF EXISTS `deaths` TO `old_deaths`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `deaths` (

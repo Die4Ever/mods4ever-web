@@ -19,7 +19,9 @@
 -- Table structure for table `logs`
 --
 
-DROP TABLE IF EXISTS `logs`;
+DROP TABLE IF EXISTS `old_logs`;
+RENAME TABLE IF EXISTS `logs` TO `old_logs`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `logs` (
