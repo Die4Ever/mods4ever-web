@@ -62,7 +62,6 @@ def write_db(mod, version, ip, content:str, config):
 	
 	try:
 		d={}
-		#create_tables(db)
 		cursor = db.cursor(dictionary=True)
 		#content = try_encodings(content, [('utf-8', 'replace')])
 		d = parse_content(content)
@@ -140,28 +139,3 @@ def try_exec(cursor, query):
 		logex(e)
 		return ()
 	return cursor
-
-
-def create_table(db, name, desc):
-	cursor = db.cursor()
-	desc = "CREATE TABLE " + name + " (" + desc + ")"
-	curr_desc = ""
-
-	results = try_exec(cursor, "SHOW CREATE TABLE "+name)
-	for (table, tdesc) in results:
-		curr_desc = tdesc
-	
-	if curr_desc.count(',') != desc.count(','):
-		info("old table: "+curr_desc)
-		try_exec(cursor, "DROP TABLE old_"+name)
-		try_exec(cursor, "RENAME TABLE "+name+" TO old_"+name)
-		info("create_table: "+desc)
-		try_exec(cursor, desc)
-	cursor.close()
-
-
-def create_tables(db):
-	base = ", id int unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)"
-	create_table(db, "deaths", "log_id int unsigned, name varchar(255), killer varchar(255), killerclass varchar(255), damagetype varchar(255), x float, y float, z float" + base)
-	create_table(db, "logs", "map varchar(255), created datetime, version varchar(255), ip varchar(100), message varchar(30000), seed int unsigned, flagshash int unsigned, modname varchar(255), firstword varchar(255), playthrough_id int unsigned, INDEX(modname, seed, playthrough_id, created), INDEX(modname, created), INDEX(firstword, created), INDEX(map, created), INDEX(playthrough_id,map,created)" + base)
-
