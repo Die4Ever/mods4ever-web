@@ -28,15 +28,20 @@ def main():
 	if VersionStringToInt(version) <= VersionToInt(1, 1, 0, 0):
 		warn('unknown version '+version)
 	mod = qps.get('mod')
-
-	response.update(update_notification(mod, version))
-	
-	config = get_config()
-
-	#write_log(mod, version, ip, content, response)
 	
 	try:
-		db_data = write_db(mod, version, ip, content,config)
+		#content = try_encodings(content, [('utf-8', 'replace')])
+		data = parse_content(content)
+		response.update(update_notification(mod, version, data))
+		config = get_config()
+		#write_log(mod, version, ip, content, response)
+	except Exception as e:
+		print("failed to parse content")
+		err("failed to parse content")
+		logex(e)
+
+	try:
+		db_data = write_db(mod, version, ip, content, config, data)
 		response.update(db_data)
 	except Exception as e:
 		print("failed to write to db")

@@ -1,7 +1,6 @@
 import mysql.connector
 import mysql.connector.errorcode
 from dxlog.base import *
-from dxlog.parsing import parse_content, get_deaths, get_events
 from dxlog.twitter import tweet
 from dxlog.deaths import *
 
@@ -52,7 +51,7 @@ def try_encodings(content:str, encodings:list):
 	return ret
 
 
-def write_db(mod, version, ip, content:str, config):
+def write_db(mod, version, ip, content:str, config, data):
 	ret = {}
 	db = db_connect(config)
 	cursor = None
@@ -61,10 +60,8 @@ def write_db(mod, version, ip, content:str, config):
 		return ret
 	
 	try:
-		d={}
+		d=data
 		cursor = db.cursor(dictionary=True)
-		#content = try_encodings(content, [('utf-8', 'replace')])
-		d = parse_content(content)
 		d = get_playthrough(cursor, mod, ip, d)
 		log_id = 0
 		try:
@@ -81,9 +78,7 @@ def write_db(mod, version, ip, content:str, config):
 			err(content)
 		
 		if ip not in config.get('banned_ips',[]):
-			deaths = get_deaths(content)
-			events = get_events(content)
-			events.extend(deaths)
+			events = d.get('events', [])
 			if len(events) > 0:
 				info('log_id: '+str(log_id)+', got events: '+repr(events))
 			for event in events:

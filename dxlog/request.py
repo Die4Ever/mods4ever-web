@@ -1,17 +1,43 @@
 from dxlog.base import *
 
-def update_notification(mod, version):
+def update_notification(mod, version, data):
 	response = {}
 	notification = "New v2.2.6 available!"
 	desc = "Buffed chairs"
 	detail = "and much more!"
+
+	longmsg = "v2.2.6 Buffed chairs and many other fixes!\n\n"
+	longmsg += """Buffed chairs by lowering their collision so you can use them for stacking and climbing
+Fixed missions mask for kill Jojo bingo event, so the bingo square correctly highlights
+Fixes for datacubes in non-vanilla mods
+Entrance Rando fixes for Vandenberg
+Fixes for music bugs when changing maps during a music transition
+Improved weapon descriptions, showing damage and number of projectiles separately
+Crowd Control fixes for fire weapon, trigger alarms, and next HUD theme
+Fixed bingo event for learning Gunther's killphrase
+Randomize weapon damage for LAMs, LAWs, Greasel Spit, Gray Spit, and MJ12 Commando rockets
+Fixed limited loadouts trying to give the player banned items at the start of the game, which spammed your logs
+Fixed VMD 14_Oceanlab_Lab double buttons
+Death Markers now have a collision size of 12 instead of 16, so they don't get in the way as often
+More possible locations for 02_NYC_Warehouse datacubes
+Toned down the memes in the cutscenes
+Fixed keypads that are supposed to be hidden in non-vanilla mods
+Fixed 03_NYC_747 out of bounds datacube
+Improved mission 8 sewer goal location so it's visible from above"""
+	longmsg = longmsg.replace('\n', '|n')
+
+	url = "Would you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
 	assert len(desc) < 35
 	assert len(detail) < 35
+	if data.get('map', '') not in ('DX', 'DXONLY'):
+		return response
+	
 	if VersionStringToInt(version) < VersionToInt(2, 2, 6, 5):
 		response['notification'] = notification
 		response['message'] = desc
 		response['message'] += "|n" + detail
-		response['message'] += "|nWould you like to visit https://github.com/Die4Ever/deus-ex-randomizer/releases now?"
+		response['message'] += "|n" + url
+		response['longmsg'] = longmsg + "|n|n" + url
 	return response
 
 

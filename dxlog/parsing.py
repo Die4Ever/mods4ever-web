@@ -21,6 +21,10 @@ def parse_content(content):
 			logex(e)
 	if 'map' not in d:
 		warn("parse_content didn't find map in: "+content)
+
+	events = get_events(content)
+	events.extend(get_deaths(content))
+	d['events'] = events
 	return d
 
 def get_deaths(content):
