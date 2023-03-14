@@ -123,7 +123,7 @@ def run_tests():
 	#increase_loglevel(DebugLevels.DEBUG)
 	info("running tests...")
 
-	info(repr(update_notification("vanilla", "v1.3.0")))
+	info(repr(update_notification("vanilla", "v1.3.0", {'map':'DX'})))
 
 	# ensure proper error handling
 	results = try_exec(MockFailCursor(), "expected failure")
