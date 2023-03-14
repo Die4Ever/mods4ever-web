@@ -6,8 +6,8 @@ def update_notification(mod, version, data):
 	desc = "Buffed chairs"
 	detail = "and much more!"
 
-	longmsg = "v2.2.6 Buffed chairs and many other fixes!\n\n"
-	longmsg += """Buffed chairs by lowering their collision so you can use them for stacking and climbing
+	header = "v2.2.6 Buffed chairs and many other fixes!"
+	longmsg = """Buffed chairs by lowering their collision so you can use them for stacking and climbing
 Fixed missions mask for kill Jojo bingo event, so the bingo square correctly highlights
 Fixes for datacubes in non-vanilla mods
 Entrance Rando fixes for Vandenberg
@@ -38,6 +38,7 @@ Improved mission 8 sewer goal location so it's visible from above"""
 		response['message'] = desc
 		response['message'] += "|n" + detail
 		response['message'] += "|n" + visit
+		response['header'] = header
 		response['longmsg'] = longmsg + "|n|n" + visit
 		response['url'] = url
 	return response
