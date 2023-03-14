@@ -1,11 +1,11 @@
 from dxlog.base import *
 
+parse_content_r1 = re.compile(r'^(?P<loglevel>\w+): (?P<map>[^\.]+)\.(?P<module>[^:]+?)\d+: ((?P<firstword>\w+) )?(?P<remaining>.*)$', flags=re.MULTILINE)
+parse_content_r2 = re.compile(r' (?P<key>\w+): (?P<value>[\w\d]+)')
 
 def parse_content(content):
 	d = {}
-	r = re.compile(r'^(?P<level>\w+): (?P<map>[^\.]+)\.(?P<module>[^:]+?)\d+: ((?P<firstword>\w+) )?(?P<remaining>.*)$', flags=re.MULTILINE)
-	r2 = re.compile(r' (?P<key>\w+): (?P<value>[\w\d]+)')
-	for i in r.finditer(content):
+	for i in parse_content_r1.finditer(content):
 		try:
 			t = i.groupdict()
 			firstword = t.pop('firstword', None)
@@ -14,7 +14,7 @@ def parse_content(content):
 			# order is semi-important because we want to keep the first value found for each key
 			d = {**d, **t}
 			if d.get('remaining') is not None:
-				for j in r2.finditer(d['remaining']):
+				for j in parse_content_r2.finditer(d['remaining']):
 					d[j.group('key')] = j.group('value')
 			d.pop('remaining', None)
 		except Exception as e:
@@ -27,13 +27,15 @@ def parse_content(content):
 	d['events'] = events
 	return d
 
+
+deaths_regex = re.compile(
+		r'^DEATH: [^:]+: (?P<player>.*) was killed( by (?P<killerclass>.*?) (?P<killer>.*?))?( with (?P<dmgtype>.*?) damage)? in (?P<map>.*?) \((?P<x>.*?),(?P<y>.*?),(?P<z>.*?)\)'
+		, flags=re.MULTILINE)
+
 def get_deaths(content):
 	# deprecated
 	deaths = []
-	r = re.compile(
-		r'^DEATH: [^:]+: (?P<player>.*) was killed( by (?P<killerclass>.*?) (?P<killer>.*?))?( with (?P<dmgtype>.*?) damage)? in (?P<map>.*?) \((?P<x>.*?),(?P<y>.*?),(?P<z>.*?)\)'
-		, flags=re.MULTILINE)
-	for i in r.finditer(content):
+	for i in deaths_regex.finditer(content):
 		d = i.groupdict()
 		d['type'] = 'DEATH'
 		d['location'] = d['x'] + ', ' + d['y'] + ', ' + d['z']
