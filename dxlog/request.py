@@ -24,12 +24,13 @@ Toned down the memes in the cutscenes
 Fixed keypads that are supposed to be hidden in non-vanilla mods
 Fixed 03_NYC_747 out of bounds datacube
 Improved mission 8 sewer goal location so it's visible from above"""
-	longmsg = longmsg.replace('\n', '|n')
+	longmsg = longmsg.replace('\n', '|n|n')# double space, makes word wrapping look better
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases"
 	visit = "Would you like to visit "+url+" now?"
 	assert len(desc) < 35
 	assert len(detail) < 35
+	assert len(header) < 75
 	if data.get('map', '') not in ('DX', 'DXONLY'):
 		return response
 	
