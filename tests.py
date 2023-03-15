@@ -1,6 +1,6 @@
 import autoinstaller
-from typeguard import typechecked, importhook
-importhook.install_import_hook('dxlog')
+from typeguard import typechecked, install_import_hook
+install_import_hook('dxlog')
 from dxlog.base import *
 from dxlog.db import *
 from dxlog.parsing import *
@@ -129,9 +129,6 @@ def run_tests():
 	results = try_exec(MockFailCursor(), "expected failure")
 	for t in (results):
 		err("we shouldn't hit this")
-	
-	for d in get_deaths("\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale2: JC Denton was killed by SecurityBot3 UJ-31 with shot damage in 01_NYC_UNATCOISLAND (-502.167694,40.753559,-119.199997)\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale2: Die4Ever was killed in 01_NYC_UNATCOISLAND (-502.167694,40.753559,-119.199997)\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale2: JC Denton was killed with shot damage in 01_NYC_UNATCOISLAND (-502.167694,40.753559,-119.199997)\nDEATH: 01_NYC_UNATCOIsland.JCDentonMale2: JC Denton was killed with  damage in 01_NYC_UNATCOISLAND (-502.167694,40.753559,-119.199997)"):
-		info(repr(d))
 
 	d = parse_query_string("version=v1.2.3 Alpha&mod=DeusEx&another=param")
 	assert d['version'] == "v1.2.3 Alpha"
