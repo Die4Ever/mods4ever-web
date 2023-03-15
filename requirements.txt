@@ -1,4 +1,4 @@
-mysql-connector
+mysql-connector-python
 tweepy
 better_profanity
 Pillow
