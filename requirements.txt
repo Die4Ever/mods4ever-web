@@ -1,6 +1,6 @@
-mysql.connector
+mysql-connector-python
 tweepy
 better_profanity
 Pillow
 Mastodon.py
-typeguard
+typeguard>=3.0.0
