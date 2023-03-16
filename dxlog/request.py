@@ -11,7 +11,7 @@ def update_notification(mod, version, data):
 	msgs = []
 
 	dates.append('2023-03-16')
-	headers.append("v2.2.7 various fixes")
+	headers.append("v2.2.7 Various fixes")
 	msgs.append(
 """Removed Vinny's fears in mission 8, which is helpful if he spawns in the sewers
 Fixed mission 5 inventory placement when the player loses their items
