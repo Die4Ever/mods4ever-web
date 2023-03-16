@@ -96,8 +96,6 @@ Don't reduce ammo that enemies can use, only reduce what they drop""")
 	
 	if data.get('map', '').upper() not in ('DX', 'DXONLY'):
 		return response
-	if data.get('firstword') != 'PreFirstEntry':
-		return response
 	
 	if VersionStringToInt(version) < VersionToInt(2, 2, 6, 5):
 		response['notification'] = notification
