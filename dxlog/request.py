@@ -2,13 +2,21 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	notification = "New v2.2.6 available!"
-	desc = "Buffed chairs"
-	detail = "and much more!"
+	notification = "New v2.2.7 available!"
+	desc = "Various fixes"
+	detail = ""
 
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-03-16')
+	headers.append("v2.2.7 various fixes")
+	msgs.append(
+"""Removed Vinny's fears in mission 8, which is helpful if he spawns in the sewers
+Fixed mission 5 inventory placement when the player loses their items
+Fixed rounding issues with text saying how many lockpicks/multitools are required
+Better update notifications and news on the main menu""")
 
 	dates.append('2023-03-10')
 	headers.append("v2.2.6 Buffed chairs and many other fixes")
