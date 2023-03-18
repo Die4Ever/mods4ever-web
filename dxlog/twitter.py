@@ -12,16 +12,11 @@ DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
 
 #Add "prevent_tweet":true to the config.json to prevent actually sending tweets
 def tweet(config, playthrough_data, events, mod, version):
-	twitActive=True
-	mastoActive=True
-
 	if len(events) == 0:
 		return
-	if config["twit_bearer_token"]=="" or config["twit_consumer_key"]=="" or config["twit_consumer_secret"]=="" or config["twit_access_token"]=="" or config["twit_access_token_secret"]=="":
-		twitActive=False
 	
-	if config["masto_client_key"]=="" or config["masto_client_secret"]=="" or config["masto_access_token"]=="" or config["masto_base_url"]=="":
-		mastoActive=False
+	twitActive = all((config["twit_bearer_token"], config["twit_consumer_key"], config["twit_consumer_secret"], config["twit_access_token"], config["twit_access_token_secret"]))
+	mastoActive = all((config["masto_client_key"], config["masto_client_secret"], config["masto_access_token"], config["masto_base_url"]))
 
 	if twitActive:
 		twitApiV2 = tweepy.Client( bearer_token=config["twit_bearer_token"], 
@@ -353,7 +348,7 @@ def FlagEventMsg(event,mod):
 		elif event['map']=="10_PARIS_CLUB":
 			return player+" brought Leo Gold to La Porte De L'Enfer to spend time with other revolutionaries\n"
 		elif event['map']=="14_OCEANLAB_UC":
-			return player+" brought Leo Gold to the bottom of the OceanLab, which has to withstand unbelievable pressure\n"
+			return player+" brought Leo Gold to the bottom of the OceanLab, which has to withstand unbelievable bars of pressure\n"
 		else:
 			info('Leo Gold got brought to some other bar that I do not know about: '+event['map'])
 	else:
@@ -530,8 +525,9 @@ def gen_event_msg(event,d,mod,version):
 		msg += ' #' + mod_names.get(mod)
 	if version:
 		msg += ' ' + version
+	msg += ' #DXRando' + ('Death' if event['type']=='DEATH' else event['type'])
 	msg = profanity.censor(msg)
-		
+	
 	return msg
 
 def send_tweet(apiV1,api,msg,attachments):
