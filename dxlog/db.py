@@ -84,6 +84,8 @@ def write_db(mod, version, ip, content:str, config, data):
 			for event in events:
 				if event['type'] == 'DEATH':
 					log_death(cursor, log_id, event)
+				if event["type"] == "BeatGame":
+					log_beatgame(cursor, log_id, event, d)
 			tweet(config, d, events, mod, version)
 		else:
 			warn("IP " + ip + " is banned!")
@@ -120,6 +122,15 @@ def get_playthrough(cursor, mod, ip, d):
 			d['flagshash'] = r['flagshash']
 	return d
 
+
+def log_beatgame(cursor, log_id, event, data):
+	try:
+		#cursor.execute("INSERT INTO deaths SET log_id=%s, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
+		#	(log_id, ))
+		pass
+	except Exception as e:
+		err('log_beatgame failed', log_id, event)
+		logex(e)
 
 def try_exec(cursor, query):
 	try:

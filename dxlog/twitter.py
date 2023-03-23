@@ -525,7 +525,8 @@ def gen_event_msg(event,d,mod,version):
 		msg += ' #' + mod_names.get(mod)
 	if version:
 		msg += ' ' + version
-	typename = {'DEATH': 'Death'}.get(event['type'], event['type'])
+	typename = event['type']
+	typename = {'DEATH': 'Death'}.get(typename, typename)
 	msg += ' #DXRando' + typename
 	msg = profanity.censor(msg)
 	

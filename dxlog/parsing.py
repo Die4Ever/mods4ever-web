@@ -22,25 +22,9 @@ def parse_content(content):
 	if 'map' not in d:
 		warn("parse_content didn't find map in: "+content)
 
-	events = get_events(content)
-	events.extend(get_deaths(content))
-	d['events'] = events
+	d['events'] = get_events(content)
 	return d
 
-
-deaths_regex = re.compile(
-		r'^DEATH: [^:]+: (?P<player>.*) was killed( by (?P<killerclass>.*?) (?P<killer>.*?))?( with (?P<dmgtype>.*?) damage)? in (?P<map>.*?) \((?P<x>.*?),(?P<y>.*?),(?P<z>.*?)\)'
-		, flags=re.MULTILINE)
-
-def get_deaths(content):
-	# deprecated
-	deaths = []
-	for i in deaths_regex.finditer(content):
-		d = i.groupdict()
-		d['type'] = 'DEATH'
-		d['location'] = d['x'] + ', ' + d['y'] + ', ' + d['z']
-		deaths.append(d)
-	return deaths
 
 def get_json_from_event_msg(eventmsg):
 	jsonstr = ""
