@@ -147,3 +147,12 @@ def VersionStringToInt(version):
 		print("VersionStringToInt error parsing "+version)
 		logex(e)
 	return 0
+
+def VersionStringIsStable(version):
+	try:
+		m = SplitVersionString(version)
+		return not m[4]
+	except Exception as e:
+		print("VersionStringIsStable error parsing "+version)
+		logex(e)
+	return False

@@ -75,6 +75,8 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 	def test_version_strings(self):
 		self.assertEqual( twitter_version_to_string('v1.9.1.10'), 'v1.9.1' )
 		self.assertEqual( twitter_version_to_string('v1.9.1.10 Beta'), 'v1.9.1.10 Beta' )
+		self.assertFalse( VersionStringIsStable('v2.3.0.1 Beta') )
+		self.assertTrue( VersionStringIsStable('v2.3.0.2') )
 
 	def test_bingo_board_generation(self):
 		print('\n\ntesting bingo board\n')

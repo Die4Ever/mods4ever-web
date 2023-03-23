@@ -29,7 +29,6 @@ CREATE TABLE `logs` (
   `created` datetime DEFAULT NULL,
   `version` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `ip` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `message` varchar(30000) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `seed` int(10) unsigned DEFAULT NULL,
   `flagshash` int(10) unsigned DEFAULT NULL,
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

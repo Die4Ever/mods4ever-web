@@ -96,7 +96,7 @@ def write_db(mod, version, ip, content:str, config, data):
 				if event['type'] == 'DEATH':
 					log_death(cursor, log_id, event)
 				if event["type"] == "BeatGame":
-					log_beatgame(cursor, log_id, event, d)
+					log_beatgame(cursor, log_id, mod, version, event, d)
 			tweet(config, d, events, mod, version)
 		else:
 			warn("IP " + ip + " is banned!")
@@ -134,16 +134,26 @@ def get_playthrough(cursor, mod, ip, d):
 	return d
 
 
-def log_beatgame(cursor, log_id, event, data):
+def log_beatgame(cursor, log_id, mod, version, e, d):
+	if VersionStringToInt(version) < VersionToInt(2, 3, 0, 1):
+		return
 	try:
-		#cursor.execute(
-		#	"INSERT INTO leaderboard SET log_id=%s, name=%s",
-		#	(log_id, event.get('name'))
-		#)
-		pass
-	except Exception as e:
-		err('log_beatgame failed', log_id, event)
-		logex(e)
+		bingo_spots = 0
+		for x in range(0,5):
+			for y in range(0,5):
+				bingoTag = "bingo-"+str(x)+"-"+str(y)
+				square = e.get(bingoTag)
+				if square and square['progress'] >= square['max']:
+					bingo_spots += 1
+		
+		cursor.execute(
+			'INSERT INTO leaderboard SET '
+			+ 'log_id=%s, name=%s,   totaltime=%s,  gametime=%s,           score=%s,   flagshash=%s,       setseed=%s,          stable_version=%s,              rando_difficulty=%s,   combat_difficulty=%s,   deaths=%s,   loads=%s,       saves=%s,       bingos=%s,           bingo_spots=%s, ending=%s,   newgameplus_loops=%s,   initial_version=%s',
+			(  log_id,    e['name'], e['realtime'], e['timewithoutmenus'], e['score'], d.get('flagshash'), bool(e['bSetSeed']), VersionStringIsStable(version), e['rando_difficulty'], e['combat_difficulty'], e['deaths'], e['LoadCount'], e['SaveCount'], e['NumberOfBingos'], bingo_spots,    e['ending'], e['newgameplus_loops'], e['initial_version'])
+		)
+	except Exception as ex:
+		err('log_beatgame failed', log_id, e)
+		logex(ex)
 
 def try_exec(cursor, query):
 	try:
