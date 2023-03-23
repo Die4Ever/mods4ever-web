@@ -143,7 +143,7 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 			for y in range(0,5):
 				bingoTag = "bingo-"+str(x)+"-"+str(y)
 				square = e.get(bingoTag)
-				if square and square['progress'] >= square['max']:
+				if square and square['progress'] >= square['max'] and square['event'] != "Free Space":
 					bingo_spots += 1
 		
 		cursor.execute(
