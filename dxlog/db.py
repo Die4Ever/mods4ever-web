@@ -67,13 +67,24 @@ def write_db(mod, version, ip, content:str, config, data):
 		try:
 			cursor.execute(
 				"INSERT INTO logs SET created=NOW(), "
-				+ "firstword=%s, modname=%s, version=%s, ip=%s, message=%s, map=%s, seed=%s, flagshash=%s, playthrough_id=%s",
-				(d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id') ))
+				+ "firstword=%s, modname=%s, version=%s, ip=%s, map=%s, seed=%s, flagshash=%s, playthrough_id=%s",
+				(d.get('firstword'), mod, version, ip, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id') ))
 			log_id = cursor.lastrowid
 			debug("inserted logs id "+str(log_id))
 		except Exception as e:
-			print("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
-			err("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
+			print("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
+			err("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
+			logex(e)
+			err(content)
+			return
+		
+		try:
+			cursor.execute(
+				'INSERT INTO logs_messages SET id=%s, message=%s',
+				(log_id, content)
+			)
+		except Exception as e:
+			err("failed to write to db logs_messages, db values: ", d.get('firstword'), mod, version, ip, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 			logex(e)
 			err(content)
 		
@@ -125,8 +136,10 @@ def get_playthrough(cursor, mod, ip, d):
 
 def log_beatgame(cursor, log_id, event, data):
 	try:
-		#cursor.execute("INSERT INTO deaths SET log_id=%s, name=%s, killer=%s, killerclass=%s, damagetype=%s, x=%s, y=%s, z=%s",
-		#	(log_id, ))
+		#cursor.execute(
+		#	"INSERT INTO leaderboard SET log_id=%s, name=%s",
+		#	(log_id, event.get('name'))
+		#)
 		pass
 	except Exception as e:
 		err('log_beatgame failed', log_id, event)
