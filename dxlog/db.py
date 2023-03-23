@@ -148,8 +148,8 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		
 		cursor.execute(
 			'INSERT INTO leaderboard SET '
-			+ 'log_id=%s, name=%s,   totaltime=%s,  gametime=%s,           score=%s,   flagshash=%s,       setseed=%s,          stable_version=%s,              rando_difficulty=%s,   combat_difficulty=%s,   deaths=%s,   loads=%s,       saves=%s,       bingos=%s,           bingo_spots=%s, ending=%s,   newgameplus_loops=%s,   initial_version=%s',
-			(  log_id,    e['name'], e['realtime'], e['timewithoutmenus'], e['score'], d.get('flagshash'), bool(e['bSetSeed']), VersionStringIsStable(version), e['rando_difficulty'], e['combat_difficulty'], e['deaths'], e['LoadCount'], e['SaveCount'], e['NumberOfBingos'], bingo_spots,    e['ending'], e['newgameplus_loops'], e['initial_version'])
+			+ 'log_id=%s, name=%s,         totaltime=%s,  gametime=%s,           score=%s,   flagshash=%s,       setseed=%s,          stable_version=%s,              rando_difficulty=%s,   combat_difficulty=%s,   deaths=%s,   loads=%s,       saves=%s,       bingos=%s,           bingo_spots=%s, ending=%s,   newgameplus_loops=%s,   initial_version=%s',
+			(  log_id,    e['PlayerName'], e['realtime'], e['timewithoutmenus'], e['score'], d.get('flagshash'), bool(e['bSetSeed']), VersionStringIsStable(version), e['rando_difficulty'], e['combat_difficulty'], e['deaths'], e['LoadCount'], e['SaveCount'], e['NumberOfBingos'], bingo_spots,    e['ending'], e['newgameplus_loops'], e['initial_version'])
 		)
 	except Exception as ex:
 		err('log_beatgame failed', log_id, e)
