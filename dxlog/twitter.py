@@ -511,7 +511,7 @@ def gen_event_msg(event,d,mod,version):
 			return None
 		
 	elif event['type']=='QueryLeaderboard':
-		pass
+		return None
 
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
