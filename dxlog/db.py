@@ -87,6 +87,8 @@ def write_db(mod, version, ip, content:str, config, data):
 			err("failed to write to db logs_messages, db values: ", d.get('firstword'), mod, version, ip, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 			logex(e)
 			err(content)
+
+		ret = {}
 		
 		if ip not in config.get('banned_ips',[]):
 			events = d.get('events', [])
@@ -97,14 +99,15 @@ def write_db(mod, version, ip, content:str, config, data):
 					log_death(cursor, log_id, event)
 				if event["type"] == "BeatGame":
 					log_beatgame(cursor, log_id, mod, version, event, d)
+				if event['type'] == 'QueryLeaderboard':
+					ret.update(QueryLeaderboard(cursor))
 			tweet(config, d, events, mod, version)
 		else:
 			warn("IP " + ip + " is banned!")
 		
 		db.commit()
-		ret = {}
 		if d.get('firstword'):
-			ret = select_deaths(cursor, mod, d.get('map'))
+			ret.update(select_deaths(cursor, mod, d.get('map')))
 	except Exception as e:
 		print("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		err("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
@@ -154,6 +157,28 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 	except Exception as ex:
 		err('log_beatgame failed', log_id, e)
 		logex(ex)
+
+
+def QueryLeaderboard(cursor):
+	cursor.execute("SELECT "
+		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age "
+		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
+		+ " ORDER BY score DESC")
+	i = 0
+	users = set()
+	ret = {}
+	for (d) in cursor:
+		name = unrealscript_sanitize(d['name'])
+		if name in users:
+			continue
+		users.add(name)
+		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'] ]
+		ret['leaderboard-'+str(i)] = arr
+		i += 1
+		if i >= 20:
+			break
+	return ret
+
 
 def try_exec(cursor, query):
 	try:

@@ -509,6 +509,9 @@ def gen_event_msg(event,d,mod,version):
 		msg = ExtinguishFireMsg(event)
 		if not msg:
 			return None
+		
+	elif event['type']=='QueryLeaderboard':
+		pass
 
 	else:
 		err("Unrecognized event type: "+str(event["type"]))
