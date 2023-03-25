@@ -460,14 +460,15 @@ def gen_event_msg(event,d,mod,version):
 	flagshash = twitter_sanitize(d.get('flagshash'))
 	mod = twitter_sanitize(mod)
 	version = twitter_version_to_string(version)
+	typename = event['type']
 	
 	# player died
-	if event['type']=='DEATH':
+	if typename=='DEATH':
 		msg = gen_death_msg(True, event, event['location'])
 	
 	# important character died, only works for vanilla with injects/shims
 	# Check against the character list to see if they deserve a tweet
-	elif event['type']=='PawnDeath':
+	elif typename=='PawnDeath':
 		if event['victimBindName']+"_Dead" in flag_to_character_names:
 			msg = gen_death_msg(False, event, event['location'])
 		else:
@@ -475,47 +476,48 @@ def gen_event_msg(event,d,mod,version):
 			return None
 
 	# flag for character's death, we assume the player killed them, location is None or player's location?
-	elif event['type']=='Flag' and event['flag'] in flag_to_character_names:
+	elif typename=='Flag' and event['flag'] in flag_to_character_names:
 		event['victim'] = flag_to_character_names[event['flag']]
 		event['killer'] = event['PlayerName']
 		#immediate = event['immediate'] # we might need this, maybe to ignore the location?
 		msg = gen_death_msg(False, event, event.get('location'))
+		typename = 'PawnDeath'# fix the hashtag for these
 	
-	elif event["type"]=="BeatGame":
+	elif typename=="BeatGame":
 		msg = BeatGameMsg(event)
 		if not msg:
 			return None
 	
-	elif event['type']=='Bingo':
+	elif typename=='Bingo':
 		msg = BingoMsg(event)
 		if not msg:
 			return None
 
-	elif event['type']=='Trigger':
+	elif typename=='Trigger':
 		msg = TriggerEventMsg(event)
 		if not msg:
 			return None
 
-	elif event['type']=='Flag':
+	elif typename=='Flag':
 		msg = FlagEventMsg(event,mod)
 		if not msg:
 			return None
 	
-	elif event['type']=='SavedPaul':
+	elif typename=='SavedPaul':
 		msg = event['PlayerName']+' saved Paul\'s life during the raid!\n'
 		if 'PaulHealth' in event:
 			msg += 'Paul had ' + str(int(event['PaulHealth'])) + '% health remaining\n'
 			
-	elif event['type']=='ExtinguishFire':
+	elif typename=='ExtinguishFire':
 		msg = ExtinguishFireMsg(event)
 		if not msg:
 			return None
 		
-	elif event['type']=='QueryLeaderboard':
+	elif typename=='QueryLeaderboard':
 		return None
 
 	else:
-		err("Unrecognized event type: "+str(event["type"]))
+		err("Unrecognized event type: "+str(typename))
 		return None
 		
 	
@@ -529,9 +531,9 @@ def gen_event_msg(event,d,mod,version):
 		msg += ' #' + mod_names.get(mod)
 	if version:
 		msg += ' ' + version
-	typename = event['type']
+	
 	# we don't need a whitelist here because we would've already returned None above if it was an unknown typename
-	typename = {'DEATH': 'Death'}.get(typename, typename)
+	typename = {'DEATH': 'Death', 'Trigger':'Event', 'Flag':'Event'}.get(typename, typename)
 	msg += ' #DXRando' + typename
 	try:
 		# int playthrough_id to make sure the player doesn't sneak anything into the hashtag
