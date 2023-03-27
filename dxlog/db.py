@@ -100,7 +100,7 @@ def write_db(mod, version, ip, content:str, config, data):
 				if event["type"] == "BeatGame":
 					log_beatgame(cursor, log_id, mod, version, event, d)
 				if event['type'] == 'QueryLeaderboard':
-					ret.update(QueryLeaderboard(cursor))
+					ret.update(QueryLeaderboard(cursor, event, d.get('playthrough_id')))
 			tweet(config, d, events, mod, version)
 		else:
 			warn("IP " + ip + " is banned!")
@@ -148,35 +148,48 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 				square = e.get(bingoTag)
 				if square and square['progress'] >= square['max'] and square['event'] != "Free Space":
 					bingo_spots += 1
+
+		name = unrealscript_sanitize(e['PlayerName'])
 		
 		cursor.execute(
 			'INSERT INTO leaderboard SET '
-			+ 'log_id=%s, name=%s,         totaltime=%s,  gametime=%s,           score=%s,   flagshash=%s,       setseed=%s,          stable_version=%s,              rando_difficulty=%s,   combat_difficulty=%s,   deaths=%s,   loads=%s,       saves=%s,       bingos=%s,           bingo_spots=%s, ending=%s,   newgameplus_loops=%s,   initial_version=%s',
-			(  log_id,    e['PlayerName'], e['realtime'], e['timewithoutmenus'], e['score'], d.get('flagshash'), e['bSetSeed'], VersionStringIsStable(version), e['rando_difficulty'], e['combat_difficulty'], e['deaths'], e['LoadCount'], e['SaveCount'], e['NumberOfBingos'], bingo_spots,    e['ending'], e['newgameplus_loops'], e['initial_version'])
+			+ 'log_id=%s, name=%s,  totaltime=%s,  gametime=%s,           score=%s,   flagshash=%s,       setseed=%s,      stable_version=%s,              rando_difficulty=%s,   combat_difficulty=%s,   deaths=%s,   loads=%s,       saves=%s,       bingos=%s,           bingo_spots=%s, ending=%s,   newgameplus_loops=%s,   initial_version=%s',
+			(  log_id,    name,     e['realtime'], e['timewithoutmenus'], e['score'], d.get('flagshash'), e['bSetSeed'],   VersionStringIsStable(version), e['rando_difficulty'], e['combat_difficulty'], e['deaths'], e['LoadCount'], e['SaveCount'], e['NumberOfBingos'], bingo_spots,    e['ending'], e['newgameplus_loops'], e['initial_version'])
 		)
 	except Exception as ex:
 		err('log_beatgame failed', log_id, e)
 		logex(ex)
 
 
-def QueryLeaderboard(cursor):
+def QueryLeaderboard(cursor, event, playthrough_id):
 	cursor.execute("SELECT "
-		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age "
+		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ " ORDER BY score DESC")
-	i = 0
+
+	placement = 1
 	users = set()
-	ret = {}
+	leaderboard = []
+	newplacement = 0
 	for (d) in cursor:
 		name = unrealscript_sanitize(d['name'])
-		if name in users:
+		if event.get('PlayerName') == name and playthrough_id == d['playthrough_id']:
+			newplacement = len(leaderboard)
+		elif name in users:
 			continue
+		place = placement
+		if name in users:
+			place = '--'
+		else:
+			placement += 1
+		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'], place, d['playthrough_id'] ]
+		leaderboard.append(arr)
 		users.add(name)
-		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'] ]
-		ret['leaderboard-'+str(i)] = arr
-		i += 1
-		if i >= 20:
-			break
+	
+	# TODO: split the leaderboard to show your position
+	ret = {}
+	for i in range(min(15,len(leaderboard))):
+		ret['leaderboard-'+str(i)] = leaderboard[i]
 	return ret
 
 
