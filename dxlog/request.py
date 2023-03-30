@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	notification = "New v2.3!"
+	notification = "New v2.3!"# don't forget to update below if VersionStringToInt(version) < VersionToInt(x, x, x, x):
 	desc = "Anna overhaul"
 	detail = "and MUCH more!"
 
@@ -21,7 +21,6 @@ def update_notification(mod, version, data):
     Tweaked doors rules and hackable devices for more variety
     Bingo red highlighting for missed goals
     Score and leaderboard in the credits
-    
 And much more! Read the Github for more details.""")
 
 	dates.append('2023-03-16')
