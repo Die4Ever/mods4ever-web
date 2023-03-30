@@ -2,13 +2,27 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	notification = "New v2.2.7 available!"
-	desc = "Various fixes"
-	detail = ""
+	notification = "New v2.3!"
+	desc = "Anna overhaul"
+	detail = "and MUCH more!"
 
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-03-29')
+	headers.append("v2.3 Anna overhaul, balance changes, and much more!")
+	msgs.append(
+"""Way too many changes to list here! Including:
+    Anna Navarre overhaul
+    Many improvements to goal randomization
+    Buffs to grenades, plasma rifle, and Private Lloyd
+    Weapon animation speeds now scale with your skill
+    Tweaked doors rules and hackable devices for more variety
+    Bingo red highlighting for missed goals
+    Score and leaderboard in the credits
+    
+And much more! Read the Github for more details.""")
 
 	dates.append('2023-03-16')
 	headers.append("v2.2.7 Various fixes")

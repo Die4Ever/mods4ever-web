@@ -104,12 +104,12 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertIn('Happy birthday', msg)
 
-		date = currentDate.replace(day=currentDate.day+3)
+		date = currentDate.replace(day=(currentDate.day+3)%28)# a different day that isn't today
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
 
-		date = currentDate.replace(month=(currentDate.month+1)%12)
+		date = currentDate.replace(month=(currentDate.month+1)%12)# a different month that isn't the current month, but same day
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
