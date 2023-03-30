@@ -121,7 +121,7 @@ Don't reduce ammo that enemies can use, only reduce what they drop""")
 	if data.get('firstword') != 'PreFirstEntry':
 		return response
 	
-	if VersionStringToInt(version) < VersionToInt(2, 2, 6, 5):
+	if VersionStringToInt(version) < VersionToInt(2, 3, 0, 6):
 		response['notification'] = notification
 		response['message'] = desc
 		response['message'] += "|n" + detail
