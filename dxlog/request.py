@@ -10,6 +10,27 @@ def update_notification(mod, version, data):
 	headers = []
 	msgs = []
 
+	dates.append('2023-04-10')
+	headers.append("v2.3.1 Support for Vanilla? Madder. 1.75, and more!")
+	msgs.append(
+"""Vanilla? Madder. 1.75 was just released today!
+    Many new mechanics and features that synergize really well with the Randomizer.
+    Definitely try this out, this combination is possibly the most in depth Deus Ex experience ever!
+Goal Locations Randomization improvements:
+    Mission 2 Email Computer now tells you where the Generator is and the Generator's Computer
+    Slightly updated locations for Dragon's Tooth Sword so they're a little more visible
+        Jock's Bed instead of his couch
+        Sniper's Nest is now slightly sticking out over the ledge so you can see from below
+    Mission 14 move datalink with UC computer
+    Mission 14 Email Computer now tells you where the UC Computer is
+Other changes:
+    Option for menus not pausing the game
+    Balance tweaks to shotguns, throwing knives, and security computers
+    Improved physics for gibbing enemies
+    Added DiscordBot for a Discord version of Crowd Control
+    Slightly reduced weapon animation speed scaling with high skills compared to v2.3
+And more! Read the Github for more details.""")
+	
 	dates.append('2023-03-29')
 	headers.append("v2.3 Anna overhaul, balance changes, and much more!")
 	msgs.append(
@@ -81,28 +102,6 @@ EMP grenades now disable enemy shields (MJ12 Commandos, Gunther, etc), this allo
 MJ12 Commandos now take bonus damage from Sabot rounds (although you might wanna save it for spiderbots instead!)
 Grays now take a tenth damage from fire and plasma, instead of being completely immune
 Vision Enhancement aug will now show goals through walls, but to compensate it has less view distance at max level than it did previously""")
-	
-	dates.append('2023-02-01')
-	headers.append("v2.2.4 Continuous music and many fixes")
-	msgs.append(
-"""Continuous Music! Music now smoothly continues across maps and even when loading saves!
-    This can be disabled in the Rando settings menu just in case it causes issues, let us know!
-    Also fixed vanilla music bug of reentering level with combat music being stuck in ambient music
-Update goal locations for Walton Simons in the Oceanlab crew module, and Vandenberg Silo Jock water location
-Fixed Jock names on Vandenberg Silo to reduce confusion, highlight him to see which one is which
-Fixed HUD highlight text for how many shots/hits to break a door with the current weapon
-Fixes for projectile damage randomization
-Adjusted plasma rifle damage (slightly stronger for vanilla, slightly weaker for some other mods, plasma rifle has complicated damage calculations)
-Apply more map fixes to Vanilla? Madder.
-Fixed bingo highlighting for some goals
-Fixed merchant flags expiration, so he remembers he already sold you things
-Remove debug messages about keypads
-Make the ship ramp unbreakable
-Give credit to medbots and repairbots for their explosion kills https://twitter.com/DxRandoActivity/status/1618477613088899072
-Reduce health on ship weld points so they always only take 1 GEP rocket
-Brightness boost now also fixes saturation so colors don't get messed up
-Improved look of bingo screen in credits
-Don't reduce ammo that enemies can use, only reduce what they drop""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases"
 	visit = "Would you like to visit "+url+" now?"
