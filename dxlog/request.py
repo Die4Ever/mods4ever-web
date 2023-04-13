@@ -10,6 +10,15 @@ def update_notification(mod, version, data):
 	headers = []
 	msgs = []
 
+	dates.append('2023-04-13')
+	headers.append("v2.3.2 IMPORTANT HOTFIX")
+	msgs.append(
+"""IMPORTANT HOTFIX FOR MISSION 8
+    Fixed issue where Harley Filben might not appear
+Map teleporters now have better names
+Improved Entrance Rando spoiler logs
+Leaderboard improvements (look in the credits)""")
+	
 	dates.append('2023-04-10')
 	headers.append("v2.3.1 Support for Vanilla? Madder. 1.75, and more!")
 	msgs.append(
@@ -73,36 +82,6 @@ Fixed keypads that are supposed to be hidden in non-vanilla mods
 Fixed 03_NYC_747 out of bounds datacube
 Improved mission 8 sewer goal location so it's visible from above""")
 	
-	dates.append('2023-02-16')
-	headers.append("v2.2.5 Randomly swapped music, and much more")
-	msgs.append(
-"""Randomly swapped music: each song will be replaced with a different song.
-Spoiler-free Goal Locations lists in the Notes screen (for people too lazy to open the Wiki)
-Moved "Confirm Note Deletion" to Rando settings menu
-More goal locations for mission 5 Paul and mission 10 Jaime (see the Wiki)
-Mission 5 guaranteed weapon now has a slightly randomized location
-Greatly increased knock backs (like in Blood!)
-Improved aug descriptions for AugVision, AugLight, AugHealing
-Increased Button1 collision size
-Smaller collision for helicopters, so you can walk around Jock at the Chateau!
-Credits time table improvements
-Stats in credits for set seed vs random seed, saves, autosaves, and loads
-Fix keypad bugs for non-vanilla mods
-Fixed Vandenberg Command override keypads for VMD
-Fixed wonky front door in 09_NYC_SHIP, when you talk to Vinny now the door will be unlocked
-Fixed Paris Metro Hostel manager talking to you while flying away softlock
-Some more death screen hints
-Small tweak to Gunther chapel location
-Upgrading swimming skill while in water will now properly update your stats immediately
-Howard Stronger: now he has ballistic armor (in VMD he will actually use the armor, otherwise I gave him extra health to pretend he's using the armor), and more randomized weapons. I've also removed his fears.
-Plasma Rifle buffs: from 9 to 14 damage (used to be 8 previously), removed robot's damage resistance, reduced blast radius, increased ammo
-PS40 tweaks: 200 damage instead of 400 and reduced blast radius, but removed robot's damage resistance
-Plasma rifle now slightly more common for enemies (5% to 7%), PS40 slightly less common (5% to 3%)
-EMP grenades now disable enemy shields (MJ12 Commandos, Gunther, etc), this allows you to EMP them and then things like plasma, fire, the prod, and tranquilizier darts will be more effective against them. Maybe now you'll have a chance in Stick With the Prod Plus mode?
-MJ12 Commandos now take bonus damage from Sabot rounds (although you might wanna save it for spiderbots instead!)
-Grays now take a tenth damage from fire and plasma, instead of being completely immune
-Vision Enhancement aug will now show goals through walls, but to compensate it has less view distance at max level than it did previously""")
-
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases"
 	visit = "Would you like to visit "+url+" now?"
 
