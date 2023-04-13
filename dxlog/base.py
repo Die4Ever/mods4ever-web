@@ -160,7 +160,7 @@ def VersionStringIsStable(version):
 def PlaythroughIdToHex(playthrough_id):
 	# int playthrough_id to make sure the player doesn't sneak anything into the hashtag
 	try:
-		playthrough_id = int(d['playthrough_id'])
+		playthrough_id = int(playthrough_id)
 		playthrough_id = ctypes.c_uint32(playthrough_id).value# force unsigned
 		return hex(playthrough_id)[2:]# hex to make it shorter?
 	except:
