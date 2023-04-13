@@ -167,7 +167,7 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ "WHERE initial_version >= %s AND age < 31622400 "# max age of 366 days
 		+ " ORDER BY score DESC",
-		(VersionToInt(2,3,0,0)),)
+		(VersionToInt(2,3,0,0),))
 
 	placement = 1
 	users = set()
