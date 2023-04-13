@@ -165,7 +165,7 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 	cursor.execute("SELECT "
 		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
-		+ "WHERE initial_version >= %s AND age < 31622400 "# max age of 366 days
+		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL 1 YEAR "
 		+ " ORDER BY score DESC",
 		(VersionToInt(2,3,0,0),))
 
