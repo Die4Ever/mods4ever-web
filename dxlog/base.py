@@ -14,10 +14,10 @@ import traceback
 import math
 import json
 #from csv import excel_tab
-#from ctypes import sizeof
 import cgitb
 import time
 import datetime
+import ctypes
 from better_profanity import profanity
 
 profanity_loaded = False
@@ -156,3 +156,12 @@ def VersionStringIsStable(version):
 		print("VersionStringIsStable error parsing "+version)
 		logex(e)
 	return False
+
+def PlaythroughIdToHex(playthrough_id):
+	# int playthrough_id to make sure the player doesn't sneak anything into the hashtag
+	try:
+		playthrough_id = int(d['playthrough_id'])
+		playthrough_id = ctypes.c_uint32(playthrough_id).value# force unsigned
+		return hex(playthrough_id)[2:]# hex to make it shorter?
+	except:
+		return ''

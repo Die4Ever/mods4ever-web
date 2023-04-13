@@ -2,7 +2,6 @@ import requests
 import tweepy
 import time
 import datetime
-import ctypes
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from dxlog.base import *
@@ -536,10 +535,7 @@ def gen_event_msg(event,d,mod,version):
 	typename = {'DEATH': 'Death', 'Trigger':'Event', 'Flag':'Event'}.get(typename, typename)
 	msg += ' #DXRando' + typename
 	try:
-		# int playthrough_id to make sure the player doesn't sneak anything into the hashtag
-		playthrough_id = int(d['playthrough_id'])
-		playthrough_id = ctypes.c_uint32(playthrough_id).value# force unsigned
-		msg += ' #DXRando' + hex(playthrough_id)[2:]# hex to make it shorter?
+		msg += ' #DXRando' + PlaythroughIdToHex(d['playthrough_id'])# hex to make it shorter?
 	except:
 		pass
 	msg = profanity.censor(msg)

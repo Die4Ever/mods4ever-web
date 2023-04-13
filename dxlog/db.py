@@ -165,7 +165,9 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 	cursor.execute("SELECT "
 		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
-		+ " ORDER BY score DESC")
+		+ "WHERE initial_version >= %s AND age < 31622400 "# max age of 366 days
+		+ " ORDER BY score DESC",
+		(VersionToInt(2,3,0,0)),)
 
 	placement = 1
 	users = set()
@@ -182,7 +184,7 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 			place = '--'
 		else:
 			placement += 1
-		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'], place, d['playthrough_id'] ]
+		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'], place, PlaythroughIdToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
 	
