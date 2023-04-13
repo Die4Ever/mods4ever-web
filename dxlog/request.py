@@ -14,7 +14,7 @@ def update_notification(mod, version, data):
 	headers.append("v2.3.2 IMPORTANT HOTFIX")
 	msgs.append(
 """IMPORTANT HOTFIX FOR MISSION 8
-    Fixed issue where Harley Filben might not appear
+    -Fixed issue where Harley Filben might not appear
 Map teleporters now have better names
 Improved Entrance Rando spoiler logs
 Leaderboard improvements (look in the credits)""")
@@ -23,21 +23,21 @@ Leaderboard improvements (look in the credits)""")
 	headers.append("v2.3.1 Support for Vanilla? Madder. 1.75, and more!")
 	msgs.append(
 """Vanilla? Madder. 1.75 was just released today!
-    Many new mechanics and features that synergize really well with the Randomizer.
-    Definitely try this out, this combination is possibly the most in depth Deus Ex experience ever!
+    -Many new mechanics and features that synergize really well with the Randomizer.
+    -Definitely try this out, this combination is possibly the most in depth Deus Ex experience ever!
 Goal Locations Randomization improvements:
-    Mission 2 Email Computer now tells you where the Generator is and the Generator's Computer
-    Slightly updated locations for Dragon's Tooth Sword so they're a little more visible
-        Jock's Bed instead of his couch
-        Sniper's Nest is now slightly sticking out over the ledge so you can see from below
-    Mission 14 move datalink with UC computer
-    Mission 14 Email Computer now tells you where the UC Computer is
+    -Mission 2 Email Computer now tells you where the Generator is and the Generator's Computer
+    -Slightly updated locations for Dragon's Tooth Sword so they're a little more visible
+        -Jock's Bed instead of his couch
+        -Sniper's Nest is now slightly sticking out over the ledge so you can see from below
+    -Mission 14 move datalink with UC computer
+    -Mission 14 Email Computer now tells you where the UC Computer is
 Other changes:
-    Option for menus not pausing the game
-    Balance tweaks to shotguns, throwing knives, and security computers
-    Improved physics for gibbing enemies
-    Added DiscordBot for a Discord version of Crowd Control
-    Slightly reduced weapon animation speed scaling with high skills compared to v2.3
+    -Option for menus not pausing the game
+    -Balance tweaks to shotguns, throwing knives, and security computers
+    -Improved physics for gibbing enemies
+    -Added DiscordBot for a Discord version of Crowd Control
+    -Slightly reduced weapon animation speed scaling with high skills compared to v2.3
 And more! Read the Github for more details.""")
 	
 	dates.append('2023-03-29')
