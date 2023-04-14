@@ -2,9 +2,9 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	notification = "New v2.3!"# don't forget to update below if VersionStringToInt(version) < VersionToInt(x, x, x, x):
-	desc = "Anna overhaul"
-	detail = "and MUCH more!"
+	notification = "New v2.3.3!"# don't forget to update below if VersionStringToInt(version) < VersionToInt(x, x, x, x):
+	desc = "Important Hotfix!"
+	detail = ""
 
 	dates = []
 	headers = []
@@ -86,7 +86,7 @@ Better update notifications and news on the main menu""")
 	if data.get('firstword') != 'PreFirstEntry':
 		return response
 	
-	if VersionStringToInt(version) < VersionToInt(2, 3, 0, 6):
+	if VersionStringToInt(version) < VersionToInt(2, 3, 3, 2):
 		response['notification'] = notification
 		response['message'] = desc
 		response['message'] += "|n" + detail
