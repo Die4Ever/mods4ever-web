@@ -139,7 +139,7 @@ def SplitVersionString(version):
 	return None
 
 
-def VersionStringToInt(version):
+def VersionStringToInt(version:str):
 	try:
 		m = SplitVersionString(version)
 		return VersionToInt(m[0], m[1], m[2], m[3])
@@ -148,7 +148,7 @@ def VersionStringToInt(version):
 		logex(e)
 	return 0
 
-def VersionStringIsStable(version):
+def VersionStringIsStable(version:str):
 	try:
 		m = SplitVersionString(version)
 		return not m[4]

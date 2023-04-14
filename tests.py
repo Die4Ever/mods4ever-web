@@ -77,6 +77,16 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		self.assertEqual( twitter_version_to_string('v1.9.1.10 Beta'), 'v1.9.1.10 Beta' )
 		self.assertFalse( VersionStringIsStable('v2.3.0.1 Beta') )
 		self.assertTrue( VersionStringIsStable('v2.3.0.2') )
+	
+	def test_update_notification(self):
+		resp = update_notification("vanilla", "v2.0.0", {'map':'DX', 'firstword':'PreFirstEntry'})
+		self.assertIn('notification', resp)
+		resp = update_notification("vanilla", "v2.0.0", {'map':'01_NYC_UNATCOHQ', 'firstword':'PreFirstEntry'})
+		self.assertNotIn('notification', resp)
+		resp = update_notification("vanilla", "v2.0.0", {'map':'DX', 'firstword':'Whatever'})
+		self.assertNotIn('notification', resp)
+		resp = update_notification("vanilla", "v100.0.0", {'map':'DX', 'firstword':'PreFirstEntry'})
+		self.assertNotIn('notification', resp)
 
 	def test_bingo_board_generation(self):
 		print('\n\ntesting bingo board\n')
