@@ -156,12 +156,14 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 			+ 'log_id=%s, name=%s,  totaltime=%s,  gametime=%s,           score=%s,   flagshash=%s,       setseed=%s,      stable_version=%s,              rando_difficulty=%s,   combat_difficulty=%s,   deaths=%s,   loads=%s,       saves=%s,       bingos=%s,           bingo_spots=%s, ending=%s,   newgameplus_loops=%s,   initial_version=%s',
 			(  log_id,    name,     e['realtime'], e['timewithoutmenus'], e['score'], d.get('flagshash'), e['bSetSeed'],   VersionStringIsStable(version), e['rando_difficulty'], e['combat_difficulty'], e['deaths'], e['LoadCount'], e['SaveCount'], e['NumberOfBingos'], bingo_spots,    e['ending'], e['newgameplus_loops'], e['initial_version'])
 		)
+
+		e['placement'] = GetLeaderboardPlacement(cursor, e, d.get('playthrough_id'))
 	except Exception as ex:
 		err('log_beatgame failed', log_id, e)
 		logex(ex)
 
 
-def QueryLeaderboard(cursor, event, playthrough_id):
+def _QueryLeaderboard(cursor, event, playthrough_id):
 	cursor.execute("SELECT "
 		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
@@ -188,11 +190,32 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 		leaderboard.append(arr)
 		users.add(name)
 	
+	return leaderboard
+
+
+def QueryLeaderboard(cursor, event, playthrough_id):
+	leaderboard = _QueryLeaderboard(cursor, event, playthrough_id)
 	# TODO: split the leaderboard to show your position
 	ret = {}
 	for i in range(min(15,len(leaderboard))):
 		ret['leaderboard-'+str(i)] = leaderboard[i]
 	return ret
+
+
+def GetLeaderboardPlacement(cursor, event, playthrough_id):
+	leaderboard = _QueryLeaderboard(cursor, event, playthrough_id)
+	prev_placement = 1
+	playthrough_id = PlaythroughIdToHex(playthrough_id)
+	for run in leaderboard:
+		if run[7] == playthrough_id:
+			if run[6] != '--':
+				return run[6]
+			else:
+				return prev_placement + 1
+		
+		if run[6] != '--':
+			prev_placement = run[6]
+	return None
 
 
 def try_exec(cursor, query):

@@ -219,6 +219,10 @@ def BeatGameMsg(event):
 	msg+= "\nTime: "+gametime_to_string(event["time"])
 	if 'realtime' in event:
 		msg += ', Real Time: '+gametime_to_string(event["realtime"])
+	if 'score' in event:
+		msg += '\nScore: ' + str(event['score'])
+		if event.get('placement'):
+			msg += ', #' + event['placement'] + ' place'
 	if 'NumberOfBingos' in event:
 		msg+= '\nBingo lines: ' + event['NumberOfBingos']
 	if event.get('loadout') and event['loadout'] != 'All Items Allowed':
