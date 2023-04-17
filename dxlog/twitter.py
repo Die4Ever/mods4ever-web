@@ -526,7 +526,7 @@ def gen_event_msg(event,d,mod,version):
 		
 	
 	if seed:
-		msg += '\nSeed: '+str(seed)
+		msg += '\n#DXRandoSeed'+str(seed)
 		if flagshash:
 			msg += ', #DXRandoFlags' + flagshash
 	
