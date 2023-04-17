@@ -186,7 +186,7 @@ def _QueryLeaderboard(cursor, event, playthrough_id):
 			place = '--'
 		else:
 			placement += 1
-		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'], place, PlaythroughIdToHex(d['playthrough_id']) ]
+		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
 	
@@ -205,7 +205,7 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 def GetLeaderboardPlacement(cursor, event, playthrough_id):
 	leaderboard = _QueryLeaderboard(cursor, event, playthrough_id)
 	prev_placement = 1
-	playthrough_id = PlaythroughIdToHex(playthrough_id)
+	playthrough_id = ToHex(playthrough_id)
 	for run in leaderboard:
 		if run[7] == playthrough_id:
 			if run[6] != '--':

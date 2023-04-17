@@ -461,7 +461,7 @@ def gen_event_msg(event,d,mod,version):
 		if not k.startswith("bingo-") and not k.startswith("Aug-"): #Don't sanitize bingo or aug info, that will be processed first
 			event[k] = twitter_sanitize(event[k])
 	seed = twitter_sanitize(d.get('seed'))
-	flagshash = twitter_sanitize(d.get('flagshash'))
+	flagshash = ToHex(d.get('flagshash'))
 	mod = twitter_sanitize(mod)
 	version = twitter_version_to_string(version)
 	typename = event['type']
@@ -528,7 +528,7 @@ def gen_event_msg(event,d,mod,version):
 	if seed:
 		msg += '\nSeed: '+str(seed)
 		if flagshash:
-			msg += ', flagshash: '+str(flagshash)
+			msg += ', flagshash: ' + flagshash
 	
 	msg+= "\n#DeusEx #Randomizer"
 	if mod and mod_names.get(mod):
@@ -540,7 +540,7 @@ def gen_event_msg(event,d,mod,version):
 	typename = {'DEATH': 'Death', 'Trigger':'Event', 'Flag':'Event'}.get(typename, typename)
 	msg += ' #DXRando' + typename
 	try:
-		msg += ' #DXRando' + PlaythroughIdToHex(d['playthrough_id'])# hex to make it shorter?
+		msg += ' #DXRando' + ToHex(d['playthrough_id'])# hex to make it shorter?
 	except:
 		pass
 	msg = profanity.censor(msg)
