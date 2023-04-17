@@ -528,7 +528,7 @@ def gen_event_msg(event,d,mod,version):
 	if seed:
 		msg += '\nSeed: '+str(seed)
 		if flagshash:
-			msg += ', flagshash: ' + flagshash
+			msg += ', #DXRandoFlags' + flagshash
 	
 	msg+= "\n#DeusEx #Randomizer"
 	if mod and mod_names.get(mod):
