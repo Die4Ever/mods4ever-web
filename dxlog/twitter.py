@@ -257,6 +257,7 @@ def BingoMsg(event):
 
 def FlagEventMsg(event,mod):
 	flag = event.get('flag')
+	f = flag.lower()
 	player = censor_name(event['PlayerName'])
 	if flag=='GuntherFreed':
 		return player+' broke Gunther out of jail. Glad you\'re not hurt, Agent.\n'
@@ -331,7 +332,7 @@ def FlagEventMsg(event,mod):
 		return player+' saved the hostages in the hotel. Guess we didn\'t need that specialist after all.\n'
 	elif flag=='SilhouetteHostagesAllRescued':
 		return player+' saved the Silhouette hostages in the catacombs. Merci! Merci!\n'
-	elif flag=='m00meetpage_Played':
+	elif f=='m00meetpage_played':
 		return player+' has completed the training. The real test comes next: active duty.\n'
 	elif flag=='09_NYC_DOCKYARD--796967769':
 		return player+' got Jenny\'s number: ' + event['extra'].strip() + '\n'
