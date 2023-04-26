@@ -123,6 +123,20 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
+	
+	def test_leaderboard(self):
+		cursor = [
+			dict(name='Die4Ever', playthrough_id=1, score=9002, time=1000, seed=123, flagshash=123, setseed=1),
+			dict(name='Die4Ever', playthrough_id=123, score=9000, time=1000, seed=123, flagshash=123, setseed=1),
+			dict(name='Die4Ever', playthrough_id=456, score=8999, time=1000, seed=123, flagshash=123, setseed=1),
+		]
+		event = dict(PlayerName='Die4Ever')
+		playthrough_id = 123
+		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+		self.assertEqual(len(leaderboard), 3, 'All 3 runs displayed')
+		self.assertEqual(leaderboard[0][6], 1, 'First place')
+		self.assertEqual(leaderboard[1][6], '--', 'Hidden run, the run we just did')
+		self.assertEqual(leaderboard[2][6], '--', 'Hidden run, the one we just beat')
 
 
 @typechecked
