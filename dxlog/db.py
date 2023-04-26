@@ -175,17 +175,23 @@ def _QueryLeaderboard(cursor, event, playthrough_id):
 	users = set()
 	leaderboard = []
 	newplacement = 0
+	show_next = False
 	for (d) in cursor:
 		name = unrealscript_sanitize(d['name'])
+		# check if we need to show this run or not
 		if event.get('PlayerName') == name and playthrough_id == d['playthrough_id']:
 			newplacement = len(leaderboard)
+			show_next = True# show the next run from this user, to see what score they just beat
+		elif event.get('PlayerName') == name and show_next and name in users:
+			show_next = False# this is my run that I just beat, so I wanna see it
 		elif name in users:
-			continue
+			continue# don't show this run
+		# ok show the run
 		place = placement
 		if name in users:
-			place = '--'
+			place = '--'# not my best score
 		else:
-			placement += 1
+			placement += 1# yes my best score
 		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
