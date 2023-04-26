@@ -170,7 +170,7 @@ def _QueryLeaderboard(cursor, event, playthrough_id):
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL 1 YEAR "
 		+ " ORDER BY score DESC",
 		(VersionToInt(2,3,0,0),))
-	GroupLeaderboard(cursor, event, playthrough_id)
+	return GroupLeaderboard(cursor, event, playthrough_id)
 
 def GroupLeaderboard(cursor, event, playthrough_id):
 	placement = 1
