@@ -25,7 +25,7 @@ def update_notification(mod, version, data):
     - Improved shuffling
     - Faction-appropriate pairings (no more thugs with MJ12)
     - New appearances
-New game modes.
+New game modes:
     - Zero Rando: great for first time Deus Ex players
     - Randomizer Lite: subtle randomization without affecting the mood of the game
     - Serious Sam: tons of enemies with tuned difficulty to compensate
