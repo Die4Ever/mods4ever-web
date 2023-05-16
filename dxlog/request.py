@@ -2,16 +2,39 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.3.3.2"
+	latest_version = "v2.4.0.3"
 	parts = SplitVersionString(latest_version)
-	short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
+	if parts[2] != '0':
+		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
+	else:
+		short_version = 'v' + parts[0] + '.' + parts[1]
 	notification = 'New ' + short_version + '!'
-	desc = "Important Hotfix!"
+	desc = "Huge overhaul!"
 	detail = ""
 
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-05-16')
+	headers.append("v2.4 The Enemies Are On Patrol!")
+	msgs.append(
+"""Huge overhaul of enemy randomization:
+    - Randomized patrol routes
+    - Random chance to have a helmet or not, affecting damage resistance for their head
+    - Improved shuffling
+    - Faction-appropriate pairings (no more thugs with MJ12)
+    - New appearances
+New game modes.
+    - Zero Rando: great for first time Deus Ex players
+    - Randomizer Lite: subtle randomization without affecting the mood of the game
+    - Serious Sam: tons of enemies with tuned difficulty to compensate
+Option to use music from Unreal and Unreal Tournament
+Improved accessibility
+Less pixel hunting
+Important items will be easier to spot instead of having to pixel hunt for them
+Balance tweaks
+And much more!""")
 
 	dates.append('2023-04-14')
 	headers.append("v2.3.3 ANOTHER HOTFIX")
@@ -64,14 +87,6 @@ And more! Read the Github for more details.""")
     Bingo red highlighting for missed goals
     Score and leaderboard in the credits
 And much more! Read the Github for more details.""")
-
-	dates.append('2023-03-16')
-	headers.append("v2.2.7 Various fixes")
-	msgs.append(
-"""Removed Vinny's fears in mission 8, which is helpful if he spawns in the sewers
-Fixed mission 5 inventory placement when the player loses their items
-Fixed rounding issues with text saying how many lockpicks/multitools are required
-Better update notifications and news on the main menu""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases"
 	visit = "Would you like to visit "+url+" now?"
