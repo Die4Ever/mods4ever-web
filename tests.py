@@ -21,6 +21,7 @@ DEATH: 01_NYC_UNATCOIsland.JCDentonMale8: JC Denton was killed by JCDentonMale J
 INFO: 01_NYC_UNATCOIsland.JCDentonMale8: Speed Enhancement deactivated""")
 		print(d['firstword'])
 		self.assertEqual(d['firstword'], "PreFirstEntry")
+		self.assertEqual(len(d.keys()), 17, 'found correct number of keys')
 
 		d = parse_content("""INFO: 01_NYC_UNATCOIsland.DXRando14: RandoEnter() firstTime: False, IsTravel: False, seed: 828672 01_NYC_UNATCOISLAND
 INFO: 01_NYC_UNATCOIsland.DXRFlags14: AnyEntry 01_NYC_UNATCOISLAND GMDXRandomizer.DXRFlags - version: v1.8.0.1 Beta, flagshash: 1595221376, seed: 828672, autosave: 0, brightness: 15, crowdcontrol: 0, loadout: 0, codes_mode: 0, newgameplus_loops: 0, playthrough_id: 1920337562, gamemode: 0, difficulty: 0, minskill: 1, maxskill: 5, ammo: 90
@@ -32,6 +33,28 @@ INFO: 01_NYC_UNATCOIsland.DXRTelemetry13: health: 100, HealthLegLeft: 100, Healt
 		print(repr(d))
 		print(d['firstword'])
 		self.assertEqual(d['firstword'], "AnyEntry")
+		self.assertEqual(len(d.keys()), 74, 'found correct number of keys')
+
+		d = parse_content("""INFO: 00_Intro.DXRando6: RandoEnter() firstTime: True, IsTravel: True, seed: 0 INTRO
+INFO: 00_Intro.DXRando6: randomizing INTRO using seed 0
+INFO: 00_Intro.DXRFlags5: PreFirstEntry INTRO DeusEx.DXRFlags - version: v2.4.0.3, flagshash: 781491456, seed: 0, playthrough_id: -1427472606, maxrando: 0, autosave: 2, crowdcontrol: 0, loadout: 0, newgameplus_loops: 0, gamemode: 4, setseed: 1, difficulty: 1, minskill: 85, maxskill: 85, ammo: 100, multitools: 100, lockpicks: 100
+INFO: 00_Intro.DXRFlags5: biocells: 100, speedlevel: 0, keys: 0, keys_containers: 0, doorspickable: 0, doorsdestructible: 0, deviceshackable: 0, passwordsrandomized: 0, medkits: 100, enemiesrandomized: 0, enemystats: 0, hiddenenemiesrandomized: 0, enemiesshuffled: 0, infodevices: 0, infodevices_containers: 0, dancingpercent: 0
+INFO: 00_Intro.DXRFlags5: doorsmode: 771, enemyrespawn: 0, skills_disable_downgrades: 0, skills_reroll_missions: 0, skills_independent_levels: 0, startinglocations: 0, goals: 0, equipment: 0, medbots: -1, repairbots: -1, medbotuses: 10, repairbotuses: 10, medbotcooldowns: 0, repairbotcooldowns: 0, medbotamount: 0, repairbotamount: 0
+INFO: 00_Intro.DXRFlags5: turrets_move: 0, turrets_add: 0, merchants: 0, banned_skills: 0, banned_skill_level: 0, enemies_nonhumans: 0, bot_weapons: 0, bot_stats: 0, swapitems: 0, swapcontainers: 0, augcans: 0, aug_value_rando: 0, skill_value_rando: 0, min_weapon_dmg: 100, max_weapon_dmg: 100, min_weapon_shottime: 100, max_weapon_shottime: 100
+INFO: 00_Intro.DXRFlags5: PreFirstEntry INTRO prison_pocket: 0, bingo_win: 0, bingo_freespaces: 1, spoilers: 1, menus_pause: 1, health: 100, energy: 100
+INFO: 00_Intro.DXRando6: done randomizing INTRO using seed 0
+INFO: 00_Intro.DXRFlags5: AnyEntry INTRO DeusEx.DXRFlags - version: v2.4.0.3, flagshash: 781491456, seed: 0, playthrough_id: -1427472606, maxrando: 0, autosave: 2, crowdcontrol: 0, loadout: 0, newgameplus_loops: 0, gamemode: 4, setseed: 1, difficulty: 1, minskill: 85, maxskill: 85, ammo: 100, multitools: 100, lockpicks: 100, biocells: 100
+INFO: 00_Intro.DXRFlags5: speedlevel: 0, keys: 0, keys_containers: 0, doorspickable: 0, doorsdestructible: 0, deviceshackable: 0, passwordsrandomized: 0, medkits: 100, enemiesrandomized: 0, enemystats: 0, hiddenenemiesrandomized: 0, enemiesshuffled: 0, infodevices: 0, infodevices_containers: 0, dancingpercent: 0, doorsmode: 771
+INFO: 00_Intro.DXRFlags5: enemyrespawn: 0, skills_disable_downgrades: 0, skills_reroll_missions: 0, skills_independent_levels: 0, startinglocations: 0, goals: 0, equipment: 0, medbots: -1, repairbots: -1, medbotuses: 10, repairbotuses: 10, medbotcooldowns: 0, repairbotcooldowns: 0, medbotamount: 0, repairbotamount: 0, turrets_move: 0
+INFO: 00_Intro.DXRFlags5: turrets_add: 0, merchants: 0, banned_skills: 0, banned_skill_level: 0, enemies_nonhumans: 0, bot_weapons: 0, bot_stats: 0, swapitems: 0, swapcontainers: 0, augcans: 0, aug_value_rando: 0, skill_value_rando: 0, min_weapon_dmg: 100, max_weapon_dmg: 100, min_weapon_shottime: 100, max_weapon_shottime: 100
+INFO: 00_Intro.DXRFlags5: AnyEntry INTRO prison_pocket: 0, bingo_win: 0, bingo_freespaces: 1, spoilers: 1, menus_pause: 1, health: 100, energy: 100
+INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 100, HealthTorso: 100, HealthHead: 100, HealthArmLeft: 100, HealthArmRight: 100""")
+		print(repr(d))
+		self.assertEqual(d['firstword'], "PreFirstEntry")
+		self.assertEqual(d['seed'], '0', 'got seed 0')
+		self.assertEqual(d['playthrough_id'], '-1427472606', 'got playthrough_id')
+		self.assertEqual(d['flagshash'], '781491456', 'got flagshash')
+		self.assertEqual(len(d.keys()), 86, 'found correct number of keys')
 
 	def test_profanity_numbers(self):
 		load_profanity_filter()

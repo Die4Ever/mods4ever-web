@@ -1,7 +1,7 @@
 from dxlog.base import *
 
 parse_content_r1 = re.compile(r'^(?P<loglevel>\w+): (?P<map>[^\.]+)\.(?P<module>[^:]+?)\d+: ((?P<firstword>\w+) )?(?P<remaining>.*)$', flags=re.MULTILINE)
-parse_content_r2 = re.compile(r' (?P<key>\w+): (?P<value>[\w\d]+)')
+parse_content_r2 = re.compile(r' (?P<key>\w+): (?P<value>[\-\w\d]+)')
 
 def parse_content(content):
 	d = {}
