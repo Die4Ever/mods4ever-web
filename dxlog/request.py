@@ -2,19 +2,41 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.4.0.3"
+	latest_version = "v2.4.1.2"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
 	else:
 		short_version = 'v' + parts[0] + '.' + parts[1]
 	notification = 'New ' + short_version + '!'
-	desc = "Huge overhaul!"
+	desc = "Fixes and Balance Tweaks!"
 	detail = ""
 
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-05-24')
+	headers.append("v2.4.1 Fixes, Balance Tweaks, and Remembering Recently Skipped Songs!")
+	msgs.append(
+"""A little more ammo for Stick With the Prod modes
+Serious Sam mode tweaked settings to increase ammo, healing, and skill costs
+Rando options menu
+    - Option for disabling memes
+    - Remembering recently skipped songs
+        - This is still different from disabling the song since it's temporary
+        - Remembers the 10 most recently skipped songs for as long as the program is open
+    - Option for enemies throwing melee weapons when dying
+- Merging picked up melee weapons you already have (helps if you have the melee weapons option set to don't throw)
+- Medbots/Repairbots greatly reduced cooldowns
+- Detection of bad dynamic patrol routes, so enemies don't get stuck standing still, they will switch to wandering
+- M12 Vandenberg Command, added a ShopLight for climbing to the roof (#446)
+- AugMuscle now has randomized cost instead of strength
+- Shotguns reduced range and accuracy
+- Don't swap M03 Airfield boatguard with other enemies, because he has the east gate key
+- Tweaked scoring for flags, see the Wiki
+- Crowd Control 2.0 preparation
+And more!""")
 
 	dates.append('2023-05-16')
 	headers.append("v2.4 The Enemies Are On Patrol!")
@@ -74,19 +96,6 @@ Other changes:
     -Added DiscordBot for a Discord version of Crowd Control
     -Slightly reduced weapon animation speed scaling with high skills compared to v2.3
 And more! Read the Github for more details.""")
-	
-	dates.append('2023-03-29')
-	headers.append("v2.3 Anna overhaul, balance changes, and much more!")
-	msgs.append(
-"""Way too many changes to list here! Including:
-    Anna Navarre overhaul
-    Many improvements to goal randomization
-    Buffs to grenades, plasma rifle, and Private Lloyd
-    Weapon animation speeds now scale with your skill
-    Tweaked doors rules and hackable devices for more variety
-    Bingo red highlighting for missed goals
-    Score and leaderboard in the credits
-And much more! Read the Github for more details.""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases"
 	visit = "Would you like to visit "+url+" now?"

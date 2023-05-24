@@ -137,7 +137,8 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertIn('Happy birthday', msg)
 
-		date = currentDate.replace(day=(currentDate.day+3)%28)# a different day that isn't today
+		day = (currentDate.day+2)%27 + 1 # make sure it isn't 0
+		date = currentDate.replace(day=day)# a different day that isn't today
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
