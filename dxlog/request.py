@@ -20,12 +20,12 @@ def update_notification(mod, version, data):
 	headers.append("v2.4.1 Fixes, Balance Tweaks, and Remembering Recently Skipped Songs!")
 	msgs.append(
 """A little more ammo for Stick With the Prod modes
-Serious Sam mode tweaked settings to increase ammo, healing, and skill costs
+Serious Sam mode tweaked settings to increase ammo and medkits
 Rando options menu
     - Option for disabling memes
     - Remembering recently skipped songs
         - This is still different from disabling the song since it's temporary
-        - Remembers the 10 most recently skipped songs for as long as the program is open
+        - Remembers the 10 most recently skipped songs for as long as the game is open
     - Option for enemies throwing melee weapons when dying
 - Merging picked up melee weapons you already have (helps if you have the melee weapons option set to don't throw)
 - Medbots/Repairbots greatly reduced cooldowns
