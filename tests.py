@@ -56,8 +56,9 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		self.assertEqual(d['flagshash'], '781491456', 'got flagshash')
 		self.assertEqual(len(d.keys()), 86, 'found correct number of keys')
 
-	def test_profanity_numbers(self):
+	def test_profanity(self):
 		load_profanity_filter()
+		self.not_censored('Pimp')
 		self.not_censored('.71, 7.8')
 		for i in range(1000):#range(100000):
 			self.not_censored(i/10)
