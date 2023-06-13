@@ -54,6 +54,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		self.assertEqual(d['seed'], '0', 'got seed 0')
 		self.assertEqual(d['playthrough_id'], '-1427472606', 'got playthrough_id')
 		self.assertEqual(d['flagshash'], '781491456', 'got flagshash')
+		self.assertEqual(d['map'], '00_Intro', 'got map')
 		self.assertEqual(len(d.keys()), 86, 'found correct number of keys')
 
 	def test_profanity(self):

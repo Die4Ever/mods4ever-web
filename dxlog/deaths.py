@@ -61,6 +61,11 @@ def filter_deaths(deaths):
 def select_deaths(cursor, mod, map):
 	if not map:
 		map = "01_nyc_unatcoisland"
+	# HACK: mirrored maps
+	if map.endswith('_-1_1_1'):
+		map2 = map.replace('_-1_1_1', '')
+	else:
+		map2 = map + '_-1_1_1'
 	ret = {}
 	# we select more than we return because we might combine some, or choose some more spread out ones instead of just going by age?
 	modcondition = ""
@@ -73,9 +78,9 @@ def select_deaths(cursor, mod, map):
 	cursor.execute("SELECT "
 		+ "deaths.id as deathid, modname, ip, name, killer, killerclass, damagetype, x, y, z, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age "
 		+ "FROM deaths JOIN logs on(deaths.log_id=logs.id) "
-		+ "WHERE map=%s "
+		+ "WHERE (map=%s OR map=%s) "
 		+ modcondition
-		+ " ORDER BY created DESC LIMIT 100", (map,))
+		+ " ORDER BY created DESC LIMIT 100", (map,map2))
 	
 	for (d) in cursor:
 		# need to sanitize these because unrealscript's json parsing isn't perfect
