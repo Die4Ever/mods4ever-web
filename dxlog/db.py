@@ -204,7 +204,7 @@ def GroupLeaderboard(cursor, event, playthrough_id):
 	end = newplacement + 3
 	end = min(end, len(leaderboard))
 
-	if start != end:
+	if newplacement and start != end:
 		return leaderboard[:15-(end-start)] + leaderboard[start:end]
 	return leaderboard[:15]
 
