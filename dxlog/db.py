@@ -241,7 +241,7 @@ def GroupLeaderboard(cursor, event, playthrough_id):
 	if len(ret) < 15:
 		afterend = 15-len(ret)
 		ret += leaderboard[after:afterend]
-	print(pbstart, pbend, newstart, newend, end, after, afterend, len(ret))
+	info(ToHex(playthrough_id), pbstart, pbend, newstart, newend, end, after, afterend, len(ret))
 	return ret
 
 

@@ -168,6 +168,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
 		print(repr(leaderboard))
 		self.assertEqual(len(leaderboard), 3, '3 runs displayed')
+		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
 		self.assertEqual(leaderboard[0][6], 1, 'First place')
 		self.assertGreater(leaderboard[0][1], theone['score'], 'First place score')
 
@@ -187,6 +188,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
 		print(repr(leaderboard))
 		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
+		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
 		self.assertEqual(leaderboard[0][6], 1, 'First place')
 		self.assertEqual(leaderboard[12][7], ToHex(playthrough_id), 'the run we just did placethrough id')
 		self.assertNotEqual(leaderboard[14][6], 15, 'last entry not 15th place')
@@ -201,10 +203,106 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		event = dict(PlayerName='Die4Ever2')
 		leaderboard = GroupLeaderboard(cursor, event, 42)
 		print(repr(leaderboard))
-		self.assertEqual(len(leaderboard), 6, '6 runs displayed') # 
+		self.assertEqual(len(leaderboard), 6, '6 runs displayed')
+		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], 42)
+
+		print('\nreal db data')
+		runs_dbdata = [
+			["Serious Jesus 2", 118546, -23381102],
+			["Jehuty 19 Max Rando", 111862, 1925599382],
+			["Jehuty 12 ProdPlus", 111158, 1964890607],
+			["Jehuty 15 Autosave", 110078, 685496802],
+			["Jesus 12 June", 108824, -901629229],
+			["Jehuty 10", 108666, 1653135951],
+			["Jesus 28 May", 108552, 1430094222],
+			["Jesus Down with the sickness", 108223, 599663118],
+			["Jehuty 16 Full Bingo", 108171, 1887935333],
+			["Jehuty 25", 105621, 2098955228],
+			["Jehuty 27", 104208, 1258875203],
+			["htaportsAehT", 97926, -726513848],
+			["Jesus Birthday woot", 96612, 1228225928],
+			["Jesus 13 april 2023", 94619, 1533056676],
+			["Jesus 13 april 2023", 94541, 1533056676],
+			["Jesus Crowd Control Sim 19 4 23", 94454, 948679561],
+			["Jesus 13 april 2023", 93438, 1533056676],
+			["Jesus Third Person", 90519, 362786397],
+			["Jesus Serious Sam respawn", 90444, 1541094718],
+			["Ramisme", 86145, 1454581816],
+			["jesus 5000 enemies", 82397, 743054318],
+			["Jehuty 27", 81316, 1977075558],
+			["TheAstropath", 80562, 1315902344],
+			["Jehuty 24", 79908, 1925488339],
+			["Extreme Jezuz", 79568, 1602688617],
+			["Die4Ever", 78758, 1157006666],
+			["Ramisme", 73498, 1417294301],
+			["TheAstropath iMac", 73422, 1386568112],
+			["TheAstropath", 68699, 1305193558],
+			["TheAstropath Bogus", 66008, -917692161],
+			["TheAstropath Bogus", 65887, 1510924585],
+			["Die4Ever", 64862, 1656622478],
+			["Die4Ever", 64225, 1656622478],
+			["Die4Ever", 63481, 1656622478],
+			["Jehuty 18 Prod Pure", 63284, 333508554],
+			["Jehuty 23 Gutsman", 61406, 1372459519],
+			["Jehuty 17 Heavy and Explosives", 60920, 665704856],
+			["Jehuty 22 EntRando", 60513, 754226256],
+			["TheAstropath ogniB", 60508, -1904543835],
+			["TheAstropath", 58872, 1517837098],
+			["TheAstropath", 58802, 1517837098],
+			["TheAstropath Bogus", 55637, 242814721],
+			["Jehuty 21 Suitmode", 55301, 793633467],
+			["Jehuty 21 Suitmode", 55166, 793633467],
+			["Jehuty 21 Suitmode", 55089, 793633467],
+			["TheAstropath", 53094, 148060962],
+			["TheAstropath ogniB", 48998, -1904543835],
+			["TheAstropath ogniB", 48873, -1904543835],
+			["Jehuty 27", 48822, 13713069],
+			["TheAstropath ogniB", 48270, -1480940464],
+			["TheAstropath Boing", 46433, -1722030244],
+			["TheAstropath Bingo", 42008, 858923826],
+			["Jesus Birthday Bingo", 40921, 379215440],
+			["Jehuty 20 Mini Infamy", 38821, 409161902],
+			["TheAstropath Bingo", 37094, 1080634536],
+			["TheAstropath WaltonWare", 31828, -2054749866],
+			["Jehuty 12 ProdPlus", 22729, 466213372],
+			["Heinki", 17777, 877647836],
+			["Heinki", 17081, 318850018],
+			["Bingothon", 16787, -1801708934],
+			["Jehuty 11 Respawn", 16180, 1553672512],
+		]
+		cursor = []
+		for i in runs_dbdata:
+			d = dict(name=i[0], playthrough_id=i[2], score=i[1], time=1000, seed=123, flagshash=123, setseed=1)
+			cursor.append(d)
+
+		event = dict(PlayerName='TheAstropath ogniB')
+		playthrough_id = -1904543835
+		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+		print(repr(leaderboard))
+		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
+		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
+
+		event = dict(PlayerName='Die4Ever')
+		playthrough_id = 1656622478
+		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+		print(repr(leaderboard))
+		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
+		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
 
 		print('\n')
 
+	def find_entries(self, leaderboard:list, name:str, playthrough:int):
+		PBEntry = None
+		PlaythroughEntry = None
+		for i in leaderboard:
+			if i[0] == name and i[6] != '--':
+				PBEntry = i
+			if i[7] == ToHex(playthrough):
+				PlaythroughEntry = i
+		print('find_entries', name, playthrough, PBEntry, PlaythroughEntry)
+		self.assertTrue(PBEntry, 'found PB for '+name)
+		self.assertTrue(PlaythroughEntry, 'found playthrough for '+name)
+		return (PBEntry, PlaythroughEntry)
 
 @typechecked
 class MockFailCursor:
