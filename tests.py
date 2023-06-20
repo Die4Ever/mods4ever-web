@@ -151,18 +151,46 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		self.assertNotIn('Happy birthday', msg)
 	
 	def test_leaderboard(self):
+		print('\n\ntest_leaderboard')
 		cursor = [
 			dict(name='Die4Ever', playthrough_id=1, score=9002, time=1000, seed=123, flagshash=123, setseed=1),
 			dict(name='Die4Ever', playthrough_id=123, score=9000, time=1000, seed=123, flagshash=123, setseed=1),
-			dict(name='Die4Ever', playthrough_id=456, score=8999, time=1000, seed=123, flagshash=123, setseed=1),
 		]
+		for i in range(100):
+			d = dict(name='Die4Ever', playthrough_id=456, score=8999, time=1000, seed=123, flagshash=123, setseed=1)
+			d['playthrough_id'] += i
+			d['score'] -= i
+			if d['playthrough_id'] == 500:
+				theone = d
+			cursor.append(d)
 		event = dict(PlayerName='Die4Ever')
-		playthrough_id = 123
+		playthrough_id = theone['playthrough_id']
 		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
-		self.assertEqual(len(leaderboard), 3, 'All 3 runs displayed')
+		self.assertEqual(len(leaderboard), 3, '3 runs displayed')
 		self.assertEqual(leaderboard[0][6], 1, 'First place')
-		self.assertEqual(leaderboard[1][6], '--', 'Hidden run, the run we just did')
-		self.assertEqual(leaderboard[2][6], '--', 'Hidden run, the one we just beat')
+		self.assertGreater(leaderboard[0][1], theone['score'], 'First place score')
+
+		self.assertEqual(leaderboard[1][6], '--', 'the run we just did placement')
+		self.assertEqual(leaderboard[1][7], ToHex(playthrough_id), 'the run we just did placethrough id')
+		self.assertEqual(leaderboard[1][1], theone['score'], 'the run we just did score')
+
+		self.assertEqual(leaderboard[2][6], '--', 'Hidden run, the one we just beat placement')
+		self.assertLess(leaderboard[2][1], theone['score'], 'the one we just beat score')
+
+		i=0
+		for d in cursor:
+			d['name'] = 'test'+str(i)
+			i+=1
+		theone['name'] = 'Die4Ever'
+
+		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
+		self.assertEqual(leaderboard[0][6], 1, 'First place')
+		self.assertEqual(leaderboard[12][7], ToHex(playthrough_id), 'the run we just did placethrough id')
+		self.assertNotEqual(leaderboard[14][6], 15, 'last entry not 15th place')
+
+		print(repr(leaderboard))
+		print('\n')
 
 
 @typechecked

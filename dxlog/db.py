@@ -198,7 +198,15 @@ def GroupLeaderboard(cursor, event, playthrough_id):
 		leaderboard.append(arr)
 		users.add(name)
 	
-	return leaderboard
+	start = newplacement - 2
+	start = max(start, 10)
+
+	end = newplacement + 3
+	end = min(end, len(leaderboard))
+
+	if start != end:
+		return leaderboard[:15-(end-start)] + leaderboard[start:end]
+	return leaderboard[:15]
 
 
 def QueryLeaderboard(cursor, event, playthrough_id):
