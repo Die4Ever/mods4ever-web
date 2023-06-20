@@ -166,6 +166,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		event = dict(PlayerName='Die4Ever')
 		playthrough_id = theone['playthrough_id']
 		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+		print(repr(leaderboard))
 		self.assertEqual(len(leaderboard), 3, '3 runs displayed')
 		self.assertEqual(leaderboard[0][6], 1, 'First place')
 		self.assertGreater(leaderboard[0][1], theone['score'], 'First place score')
@@ -184,12 +185,24 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		theone['name'] = 'Die4Ever'
 
 		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+		print(repr(leaderboard))
 		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
 		self.assertEqual(leaderboard[0][6], 1, 'First place')
 		self.assertEqual(leaderboard[12][7], ToHex(playthrough_id), 'the run we just did placethrough id')
 		self.assertNotEqual(leaderboard[14][6], 15, 'last entry not 15th place')
 
+		cursor = []
+		for i in range(100):
+			d = dict(name='Die4Ever', playthrough_id=456, score=8999, time=1000, seed=123, flagshash=123, setseed=1)
+			d['name'] = 'Die4Ever' + str(i%4)
+			d['playthrough_id'] = i
+			d['score'] = i
+			cursor.append(d)
+		event = dict(PlayerName='Die4Ever2')
+		leaderboard = GroupLeaderboard(cursor, event, 42)
 		print(repr(leaderboard))
+		self.assertEqual(len(leaderboard), 6, '6 runs displayed') # 
+
 		print('\n')
 
 

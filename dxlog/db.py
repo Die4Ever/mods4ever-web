@@ -172,17 +172,31 @@ def _QueryLeaderboard(cursor, event, playthrough_id):
 		(VersionToInt(2,3,0,0),))
 	return GroupLeaderboard(cursor, event, playthrough_id)
 
+def GetCutaway(leaderboard, slot):
+	start = slot - 2
+	start = max(start, 0)
+	end = slot + 3
+	end = min(end, len(leaderboard))
+	end = max(end, start)
+	return (start, end)
+
 def GroupLeaderboard(cursor, event, playthrough_id):
 	placement = 1
 	users = set()
 	leaderboard = []
-	newplacement = 0
+	newplacement = None
+	mypbspot = None
 	show_next = False
 	for (d) in cursor:
 		name = unrealscript_sanitize(d['name'])
+		if event.get('PlayerName') == name:
+			if mypbspot is None:
+				mypbspot = len(leaderboard)
+
 		# check if we need to show this run or not
 		if event.get('PlayerName') == name and playthrough_id == d['playthrough_id']:
-			newplacement = len(leaderboard)
+			if newplacement is None:
+				newplacement = len(leaderboard)
 			show_next = True# show the next run from this user, to see what score they just beat
 		elif event.get('PlayerName') == name and show_next and name in users:
 			show_next = False# this is my run that I just beat, so I wanna see it
@@ -198,15 +212,37 @@ def GroupLeaderboard(cursor, event, playthrough_id):
 		leaderboard.append(arr)
 		users.add(name)
 	
-	start = newplacement - 2
-	start = max(start, 10)
-
-	end = newplacement + 3
-	end = min(end, len(leaderboard))
-
-	if newplacement and start != end:
-		return leaderboard[:15-(end-start)] + leaderboard[start:end]
-	return leaderboard[:15]
+	(pbstart,pbend,newstart,newend) = (None,None,None,None)
+	if mypbspot is not None:
+		(pbstart,pbend) = GetCutaway(leaderboard, mypbspot)
+	if newplacement is not None:
+		(newstart,newend) = GetCutaway(leaderboard, newplacement)
+	
+	if mypbspot is not None and newplacement is not None:
+		# handle overlap
+		pbend = min(pbend, newstart)
+	
+	after = None
+	afterend = None
+	ret = []
+	if mypbspot is not None and pbstart != pbend:
+		ret += leaderboard[pbstart:pbend]
+		after = pbend
+	if newplacement is not None and newstart != newend:
+		ret += leaderboard[newstart:newend]
+		after = newend
+	
+	end = 15 - len(ret)
+	if mypbspot is not None and pbstart != pbend:
+		end  = min(end, pbstart)
+	if newplacement is not None and newstart != newend:
+		end  = min(end, newstart)
+	ret = leaderboard[:end] + ret
+	if len(ret) < 15:
+		afterend = 15-len(ret)
+		ret += leaderboard[after:afterend]
+	print(pbstart, pbend, newstart, newend, end, after, afterend, len(ret))
+	return ret
 
 
 def QueryLeaderboard(cursor, event, playthrough_id):
