@@ -2,19 +2,32 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.4.1.2"
+	latest_version = "v2.5.0.11"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
 	else:
 		short_version = 'v' + parts[0] + '.' + parts[1]
 	notification = 'New ' + short_version + '!'
-	desc = "Fixes and Balance Tweaks!"
+	desc = "Mirrored Maps!"
 	detail = ""
 
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-06-22')
+	headers.append("v2.5 srorriM erA eroM nuF nahT noisiveleT")
+	msgs.append(
+"""Mirrored Maps!
+    - Play through the game with a random mix of mirrored maps, which will keep you on your toes even more than the randomizer has before!
+    - Choose what percentage of maps should be mirrored!
+Choose what map to start the game on
+New installer program
+    - Supports installing on top of vanilla, LDDP, GMDX, Revision, HX, or Vanilla? Madder.
+Randomized visors for enemies
+    - Gives resistance to pepper spray and gas grenades
+And more! Read the full patch notes on Github""")
 
 	dates.append('2023-05-24')
 	headers.append("v2.4.1 Fixes, Balance Tweaks, and Remembering Recently Skipped Songs!")
@@ -76,27 +89,6 @@ Map teleporters now have better names
 Improved Entrance Rando spoiler logs
 Leaderboard improvements (look in the credits)""")
 	
-	dates.append('2023-04-10')
-	headers.append("v2.3.1 Support for Vanilla? Madder. 1.75, and more!")
-	msgs.append(
-"""Vanilla? Madder. 1.75 was just released today!
-    -Many new mechanics and features that synergize really well with the Randomizer.
-    -Definitely try this out, this combination is possibly the most in depth Deus Ex experience ever!
-Goal Locations Randomization improvements:
-    -Mission 2 Email Computer now tells you where the Generator is and the Generator's Computer
-    -Slightly updated locations for Dragon's Tooth Sword so they're a little more visible
-        -Jock's Bed instead of his couch
-        -Sniper's Nest is now slightly sticking out over the ledge so you can see from below
-    -Mission 14 move datalink with UC computer
-    -Mission 14 Email Computer now tells you where the UC Computer is
-Other changes:
-    -Option for menus not pausing the game
-    -Balance tweaks to shotguns, throwing knives, and security computers
-    -Improved physics for gibbing enemies
-    -Added DiscordBot for a Discord version of Crowd Control
-    -Slightly reduced weapon animation speed scaling with high skills compared to v2.3
-And more! Read the Github for more details.""")
-
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases"
 	visit = "Would you like to visit "+url+" now?"
 
