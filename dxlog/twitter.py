@@ -508,7 +508,8 @@ def gen_event_msg(event,d,mod,version):
 			return None
 	
 	elif typename=='SavedPaul':
-		msg = event['PlayerName']+' saved Paul\'s life during the raid!\n'
+		player = censor_name(event.get('PlayerName', ''))
+		msg = player +' saved Paul\'s life during the raid!\n'
 		if 'PaulHealth' in event:
 			msg += 'Paul had ' + str(int(event['PaulHealth'])) + '% health remaining\n'
 			
