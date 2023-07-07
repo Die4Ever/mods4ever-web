@@ -1,5 +1,7 @@
 import autoinstaller
 from typeguard import typechecked, install_import_hook
+
+from dxlog.db import _GetLeaderboardPlacement# functions starting with an underscore aren't imported in *
 install_import_hook('dxlog')
 from dxlog.base import *
 from dxlog.db import *
@@ -165,12 +167,9 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 			cursor.append(d)
 		event = dict(PlayerName='Die4Ever')
 		playthrough_id = theone['playthrough_id']
-		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
-		print(repr(leaderboard))
-		self.assertEqual(len(leaderboard), 3, '3 runs displayed')
-		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Die4Ever', playthrough_id, 2, num_runs=3)
 		self.assertEqual(leaderboard[0][6], 1, 'First place')
-		self.assertGreater(leaderboard[0][1], theone['score'], 'First place score')
+		self.assertGreater(leaderboard[0][1], theone['score'], 'First place score greater than mine')
 
 		self.assertEqual(leaderboard[1][6], '--', 'the run we just did placement')
 		self.assertEqual(leaderboard[1][7], ToHex(playthrough_id), 'the run we just did placethrough id')
@@ -185,10 +184,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 			i+=1
 		theone['name'] = 'Die4Ever'
 
-		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
-		print(repr(leaderboard))
-		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
-		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Die4Ever', playthrough_id, 47)
 		self.assertEqual(leaderboard[0][6], 1, 'First place')
 		self.assertEqual(leaderboard[12][7], ToHex(playthrough_id), 'the run we just did placethrough id')
 		self.assertNotEqual(leaderboard[14][6], 15, 'last entry not 15th place')
@@ -200,11 +196,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 			d['playthrough_id'] = i
 			d['score'] = i
 			cursor.append(d)
-		event = dict(PlayerName='Die4Ever2')
-		leaderboard = GroupLeaderboard(cursor, event, 42)
-		print(repr(leaderboard))
-		self.assertEqual(len(leaderboard), 6, '6 runs displayed')
-		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], 42)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Die4Ever2', 42, 5, num_runs=6)
 
 		print('\nreal db data')
 		runs_dbdata = [
@@ -275,21 +267,26 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 			d = dict(name=i[0], playthrough_id=i[2], score=i[1], time=1000, seed=123, flagshash=123, setseed=1)
 			cursor.append(d)
 
-		event = dict(PlayerName='TheAstropath ogniB')
-		playthrough_id = -1904543835
-		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
-		print(repr(leaderboard))
-		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
-		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
-
-		event = dict(PlayerName='Die4Ever')
-		playthrough_id = 1656622478
-		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
-		print(repr(leaderboard))
-		self.assertEqual(len(leaderboard), 15, '15 runs displayed')
-		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, event['PlayerName'], playthrough_id)
-
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Serious Jesus 2', -23381102, 1)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Jehuty 19 Max Rando', 1925599382, 2)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Ramisme', 1454581816, 18)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Ramisme', 1417294301, 24)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Die4Ever', 1656622478, 26)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Die4Ever', 1656622478, 26, num_runs=42, max_len=None)
+		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'TheAstropath ogniB', -1904543835, 30)
 		print('\n')
+
+
+	def check_run(self, cursor, PlayerName, playthrough_id, placement, num_runs=15, max_len=15):
+		print('testing', '#'+str(placement), PlayerName, playthrough_id)
+		event = dict(PlayerName=PlayerName)
+		leaderboard = GroupLeaderboard(cursor, event, playthrough_id, max_len)
+		print(repr(leaderboard))
+		self.assertEqual(len(leaderboard), num_runs, str(num_runs) + ' runs displayed for '+PlayerName)
+		(PBEntry, PlaythroughEntry) = self.find_entries(leaderboard, PlayerName, playthrough_id)
+		self.assertEqual( _GetLeaderboardPlacement(leaderboard, playthrough_id), placement, PlayerName + ' _GetLeaderboardPlacement ' + str(placement))
+		return (leaderboard, PBEntry, PlaythroughEntry)
+	
 
 	def find_entries(self, leaderboard:list, name:str, playthrough:int):
 		PBEntry = None
@@ -356,7 +353,7 @@ def run_tests():
 	info("logdir: "+logdir)
 	info("db config: " + repr(get_config()))
 	#write_db("0", "test")
-	unittest.main(verbosity=9, warnings="error")
+	unittest.main(verbosity=9, warnings="error", failfast=True)
 
 
 if __name__ == '__main__':

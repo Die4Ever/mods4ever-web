@@ -163,14 +163,14 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		logex(ex)
 
 
-def _QueryLeaderboard(cursor, event, playthrough_id):
+def _QueryLeaderboard(cursor, event, playthrough_id, max_len=15):
 	cursor.execute("SELECT "
 		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL 1 YEAR "
 		+ " ORDER BY score DESC",
 		(VersionToInt(2,3,0,0),))
-	return GroupLeaderboard(cursor, event, playthrough_id)
+	return GroupLeaderboard(cursor, event, playthrough_id, max_len)
 
 def GetCutaway(leaderboard, slot):
 	start = slot - 2
@@ -180,7 +180,7 @@ def GetCutaway(leaderboard, slot):
 	end = max(end, start)
 	return (start, end)
 
-def GroupLeaderboard(cursor, event, playthrough_id):
+def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 	placement = 1
 	users = set()
 	leaderboard = []
@@ -212,6 +212,9 @@ def GroupLeaderboard(cursor, event, playthrough_id):
 		leaderboard.append(arr)
 		users.add(name)
 	
+	if not max_len:
+		return leaderboard
+	
 	(pbstart,pbend,newstart,newend) = (None,None,None,None)
 	if mypbspot is not None:
 		(pbstart,pbend) = GetCutaway(leaderboard, mypbspot)
@@ -232,14 +235,14 @@ def GroupLeaderboard(cursor, event, playthrough_id):
 		ret += leaderboard[newstart:newend]
 		after = newend
 	
-	end = 15 - len(ret)
+	end = max_len - len(ret)
 	if mypbspot is not None and pbstart != pbend:
 		end  = min(end, pbstart)
 	if newplacement is not None and newstart != newend:
 		end  = min(end, newstart)
 	ret = leaderboard[:end] + ret
-	if len(ret) < 15:
-		afterend = 15-len(ret)
+	if len(ret) < max_len:
+		afterend = after + max_len-len(ret)
 		ret += leaderboard[after:afterend]
 	info(ToHex(playthrough_id), pbstart, pbend, newstart, newend, end, after, afterend, len(ret))
 	return ret
@@ -256,6 +259,10 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 
 def GetLeaderboardPlacement(cursor, event, playthrough_id):
 	leaderboard = _QueryLeaderboard(cursor, event, playthrough_id)
+	_GetLeaderboardPlacement(leaderboard, playthrough_id)
+
+
+def _GetLeaderboardPlacement(leaderboard, playthrough_id):
 	prev_placement = 1
 	playthrough_id = ToHex(playthrough_id)
 	for run in leaderboard:
