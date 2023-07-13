@@ -122,15 +122,19 @@ Leaderboard improvements (look in the credits)""")
 	return response
 
 
-def print_response(mod, version, response):
+def generate_response(mod, version, response):
 	if VersionStringToInt(version) >= VersionToInt(1, 7, 3, 3):
-		print(json.dumps(response))
+		return json.dumps(response)
 	else:
-		print(response['status'])
+		ret = ''
+		ret += response['status'] + "\n"
 		if 'notification' in response:
-			print("notification: " + response['notification'])
-			print(response['message'])
+			ret += "notification: " + response['notification']
+			ret += "\n" + response['message'] + "\n"
+		return ret
 
+def print_response(mod, version, response):
+	print(generate_response(mod, version, response))
 
 
 def get_request():

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-# enable debugging
+# deprecated by api.py
 
 from dxlog.base import *
 from dxlog.db import *
