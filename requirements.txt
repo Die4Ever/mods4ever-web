@@ -4,3 +4,5 @@ better_profanity
 Pillow
 Mastodon.py
 typeguard>=3.0.0
+flask
+waitress
