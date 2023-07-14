@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="leaderboard"></div>
+{% endblock %}
+
+{% block footer %}
+<script>
+$(function() {
+    $.getJSON( "/api/dxrando/leaderboard", function( r ) {
+        var el = $('.leaderboard');
+        el.html('');
+        RenderLeaderboard(el, r);
+    });
+});
+</script>
+{% endblock %}

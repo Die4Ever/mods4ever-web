@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mods4Ever</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="/style.css"/>
+    <script src="/js.js"></script>
+    {% block header %}{% endblock %}
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="/">🏠 Home</a>
+        <a href="https://lemmy.mods4ever.com/communities"><img src="/Lemmy_logo.svg"/>Lemmy</a>
+        <a href="https://kbin.social/m/meta@lemmy.mods4ever.com/t/193090/Mods4Ever-FAQ-and-Links"><img src="/kbin_favicon.svg"/>kbin</a>
+        <a href="https://programming.dev/post/442419">FAQ</a>
+        <a href="https://discord.gg/tCwBJwNY6V">Discord</a>
+        <a href="https://www.youtube.com/playlist?list=PLZIQTa_kwZhBksj7UzcahPiRaHk87fWch">Youtube</a>
+    </div>
+
+    <div class="content">
+        {% block content %}
+            {% block projects %}
+            <ul class="projects">
+                {% for projectname,project in g.projects.items() %}
+                    <li><span class="caret">{{ projectname }}</span>
+                        <ul class="nested">
+                            <li><a href="https://github.com/{{ project.repo }}/#readme">README</a></li>
+                            {% for downloadname,downloadurl in project.downloads.items() %}
+                                <li><a href="https://github.com/{{ project.repo }}/releases/latest/download/{{ downloadurl }}">Download {{ downloadname }}</a></li>
+                            {% endfor %}
+                            <li><a href="https://github.com/{{ project.repo }}/releases/latest">Latest Release</a></li>
+                            <li><a href="https://lemmy.mods4ever.com/c/{{ project.community }}">Lemmy</a></li>
+                            <li><a href="https://kbin.social/m/{{ project.community }}@lemmy.mods4ever.com">kbin</a></li>
+                            {% for linkname,linkurl in project.links.items() %}
+                                <li><a href="{{ linkurl }}">{{ linkname }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% endblock %}
+        {% endblock %}
+        </div>
+</body>
+
+{% block footer %}{% endblock %}
+</html>

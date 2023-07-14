@@ -1,0 +1,43 @@
+body { background-color: black; color: #ddd; margin: 0; }
+a { color: #ddd; }
+
+.topnav > a { padding: 1rem; border: 1px solid #888; text-decoration: none; }
+.topnav > a:hover { color: #fff; border-color: #fff; }
+.topnav img { height: 1rem; padding-right: 0.5rem; }
+.topnav { padding: 1rem; background: #111; }
+
+.content { margin: 1rem; }
+th, td { padding: 0 1rem; }
+
+.projects > li { font-size: 24px; list-style-type: none; padding: 1rem 0; }
+.projects > li > :not(.caret) { font-size:18px; margin-left: 1rem; }
+
+
+/* collapsed sections */
+.caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+  }
+  
+  /* Create the caret/arrow with a unicode, and style it */
+  .caret::before {
+    content: "\25B6";
+    /*color: black;*/
+    display: inline-block;
+    margin-right: 6px;
+  }
+  
+  /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+  .caret-down::before {
+    transform: rotate(90deg);
+  }
+  
+  /* Hide the nested list */
+  .nested {
+    display: none;
+  }
+  
+  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+  .active {
+    display: block;
+  }
