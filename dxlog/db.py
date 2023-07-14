@@ -241,6 +241,8 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 	if newplacement is not None and newstart != newend:
 		end  = min(end, newstart)
 	ret = leaderboard[:end] + ret
+	if not after:
+		after = len(ret)
 	if len(ret) < max_len:
 		afterend = after + max_len-len(ret)
 		ret += leaderboard[after:afterend]

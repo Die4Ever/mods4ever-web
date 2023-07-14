@@ -4,8 +4,12 @@ from flask import Flask, request
 
 from dxlog.base import *
 from dxlog.handler import handle_telem
+from apis import dxrando
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='', 
+            static_folder='public',# on the real server we use nginx
+            template_folder='templates')
 
 @app.route('/dxrando/log.py', methods=["GET", "POST"])
 def telem():
@@ -16,6 +20,10 @@ def telem():
     data = request.get_data()
     params = request.args
     return handle_telem(data, ip, params)
+
+@app.route('/api/dxrando/leaderboard')
+def dxrando_leaderboard():
+    return dxrando.leaderboard()
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

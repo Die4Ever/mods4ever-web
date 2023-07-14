@@ -2,15 +2,56 @@
 <html>
 
 <head>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <style>
     body { background-color: black; color: white; }
+    .topnav span { padding: 1rem; }
+    .topnav { margin: 1rem; }
+    th, td { padding: 0 1rem; }
 </style>
 </head>
 
 <body>
-    <div><a href="https://lemmy.mods4ever.com/communities"><img src="Lemmy_logo.svg" width="32px"/>Lemmy</a></div>
-    <div><a href="https://programming.dev/post/442419">FAQ</a></div>
-    <div><a href="https://discord.gg/tCwBJwNY6V">Discord</a></div>
-    <div><a href="https://www.youtube.com/playlist?list=PLZIQTa_kwZhBksj7UzcahPiRaHk87fWch">Youtube</a></div>
+    <div class="topnav">
+        <span><a href="https://lemmy.mods4ever.com/communities"><img src="Lemmy_logo.svg" width="32px"/>Lemmy</a></span>
+        <span><a href="https://programming.dev/post/442419">FAQ</a></span>
+        <span><a href="https://discord.gg/tCwBJwNY6V">Discord</a></span>
+        <span><a href="https://www.youtube.com/playlist?list=PLZIQTa_kwZhBksj7UzcahPiRaHk87fWch">Youtube</a></span>
+    </div>
+
+    <div class="leaderboard"></div>
 </body>
 </html>
+
+<script>
+$(function() {
+    //alert('hello world');
+    $.getJSON( "http://127.0.0.1:10451/api/dxrando/leaderboard", function( r ) {
+        var el = $('.leaderboard');
+        el.html('');
+        RenderLeaderboard(el, r);
+    });
+});
+
+function RenderLeaderboard(parent, leaderboard) {
+    table = $('<table>');
+    row = $('<tr>');
+    row.append($('<th>Place</th><th>Name</th><th>Score</th>'));
+    table.append(row);
+    for(var i=0; i<leaderboard.length; i++) {
+        row = RenderRun(leaderboard[i]);
+        table.append(row);
+    }
+    parent.append(table);
+}
+
+function RenderRun(run) {
+    row = $('<tr>');
+    row.append($(
+        '<td>#'+run['place']+'</td>'
+        +'<td>'+run['name']+'</td>'
+        +'<td>'+run['score']+'</td>'
+    ));
+    return row;
+}
+</script>
