@@ -76,6 +76,10 @@ error_log = logdir + "error_log"
 def write_error_log(prefix:str, msg:str, *args):
 	try:
 		print(prefix, msg, *args, file=sys.stderr)
+	except:
+		pass
+	
+	try:
 		with open(error_log, "a") as file:
 				print(prefix, msg, *args, file=file)
 	except Exception as e:
