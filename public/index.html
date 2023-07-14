@@ -52,6 +52,7 @@ function RenderRun(run) {
         +'<td>'+run['name']+'</td>'
         +'<td>'+run['score']+'</td>'
     ));
+    row.attr('title', JSON.stringify(run));
     return row;
 }
 </script>
