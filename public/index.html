@@ -26,7 +26,7 @@
 <script>
 $(function() {
     //alert('hello world');
-    $.getJSON( "http://127.0.0.1:10451/api/dxrando/leaderboard", function( r ) {
+    $.getJSON( "/api/dxrando/leaderboard", function( r ) {
         var el = $('.leaderboard');
         el.html('');
         RenderLeaderboard(el, r);
