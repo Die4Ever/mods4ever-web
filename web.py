@@ -28,13 +28,13 @@ def api_dxrando_leaderboard():
 
 @app.route('/dxrando/leaderboard')
 def dxrando_leaderboard():
-    return render_template('dxrando/leaderboard.html')
+    return render_template('dxrando/leaderboard.jinja2')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     g.projects = get_projects()
-    return render_template('base.html')
+    return render_template('base.jinja2')
 
 if __name__ == "__main__":
     from waitress import serve
