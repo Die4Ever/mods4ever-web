@@ -1,4 +1,3 @@
-# deus-ex-randomizer-telemetry
-Deus Ex Randomizer Telemetry
+# mods4ever-web
 
-You're probably looking for this https://github.com/Die4Ever/deus-ex-randomizer
+[Mods4Ever Website](https://mods4ever.com/), and also backend API calls for [Deus Ex Randomizer](https://github.com/Die4Ever/deus-ex-randomizer)
