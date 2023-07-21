@@ -5,7 +5,7 @@ from dxlog.request import generate_response, update_notification
 
 
 def handle_telem(postdata:bytes, ip, params):
-	response = {}
+	response = {'status': 'ok'}
 	try:
 		content = read_binary_content(postdata)
 		content = content.replace('\x00','').replace('\r','')
@@ -24,6 +24,7 @@ def handle_telem(postdata:bytes, ip, params):
 		config = get_config()
 		#write_log(mod, version, ip, content, response)
 	except Exception as e:
+		response['status'] = 'ERROR: failed to parse content'
 		print("failed to parse content")
 		err("failed to parse content")
 		logex(e)
@@ -32,6 +33,7 @@ def handle_telem(postdata:bytes, ip, params):
 		db_data = write_db(mod, version, ip, content, config, data)
 		response.update(db_data)
 	except Exception as e:
+		response['status'] = 'ERROR: failed to write to db'
 		print("failed to write to db")
 		err("failed to write to db")
 		logex(e)
