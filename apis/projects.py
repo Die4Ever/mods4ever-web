@@ -16,59 +16,60 @@ def get_projects():
         'RollerCoaster Tycoon Randomizer': {
             'repo': 'Die4Ever/rollercoaster-tycoon-randomizer',
             'community': 'rct_randomizer',
-            'downloads': {
-                #'': '',
-            }
+            'links': {
+                'OpenRCT2': 'https://openrct2.org/',
+            },
         },
         'Unreal Tournament (1999) Crowd Control / Randomizer': {
             'repo': 'TheAstropath/UT99CrowdControl',
             'community': 'ut99_crowdcontrol',
-            'downloads': {
-                #'': '',
-            }
+            'links': {
+                'OldUnreal Unreal Tournament 99 patch': 'https://github.com/OldUnreal/UnrealTournamentPatches/releases',
+            },
         },
         'Build Engine Randomizer': {
             'repo': 'Die4Ever/build-engine-randomizer',
             'community': 'build_randomizer',
-            'downloads': {
-                #'': '',
-            }
+            'links': {
+                'Wiki': 'https://github.com/Die4Ever/build-engine-randomizer/wiki',
+            },
         },
-        'StarCraft 2 Randomizer': {
+        'StarCraft 2 Balance Patch Randomizer': {
             'repo': 'Die4Ever/starcraft-2-randomizer',
             'community': 'sc2_randomizer',
-            'downloads': {
-                #'': '',
-            }
+            'links': {
+                'TL.net Discussion Thread': 'https://tl.net/forum/starcraft-2/575425-balance-patch-randomizer-mod#1',
+            },
         },
         'Unreal Randomizer': {
             'repo': 'Die4Ever/unreal-randomizer',
             'community': 'unreal_randomizer',
-            'downloads': {
-                #'': '',
-            }
+            'links': {
+                'Unreal patch 227i': 'https://www.oldunreal.com/downloads/unreal/oldunreal-patches/',
+            },
         },
         'Duke Nukem Forever 2001 Restoration Project Randomizer': {
             'repo': 'Die4Ever/dnf2001-randomizer',
             'community': 'dnf_randomizer',
-            'downloads': {
-                #'': '',
-            }
+            'links': {
+                'Duke Nukem Forever 2001: Restoration Project': 'https://www.moddb.com/mods/dnf2001-restoration-project',
+            },
         },
         'Stream Detective': {
             'repo': 'TheAstropath/StreamDetective',
             'community': 'stream_detective',
-            'downloads': {
-                #'': '',
-            }
+        },
+        'ScummVM Groovie (The 7th Guest, The 11th Hour...)': {
+            'description': 'I mostly worked The 11th Hour, Clandestiny, Tender Loving Care, and Uncle Henry\'s Playhouse.<br/>But also some improvements to The 7th Guest, like the new option for Easier AI.',
+            'repo': 'scummvm/scummvm',
+            'community': 'stauf_mansion',
+            'links': {
+                'ScummVM Website': 'https://www.scummvm.org/',
+                'Downloads': 'https://www.scummvm.org/downloads/',
+                'Demos': 'https://www.scummvm.org/demos/',
+                'Wiki': 'https://wiki.scummvm.org/',
+            },
         },
     }
 
-    for (k,v) in d.items():
-        if 'downloads' not in v:
-            v['downloads'] = {}
-        if 'links' not in v:
-            v['links'] = {}
-
     return d
-
