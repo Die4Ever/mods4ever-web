@@ -29,7 +29,7 @@ def load_profanity_filter():
 	profanity.load_censor_words(whitelist_words=[
 		'thug', 'hooker', 'junkie', 'god', 'hell', 'urinal', 'ass', 'asses',
 		'717', 'tit', 't1t', 'titi', 'titis', 'tits', 'titt', 'titts', 'teat', 'teats', 'teets', 'toots',
-		'teste', 'testee', 'testes', 'loin', 'omg', 'nad', 'pimp', 'dick'
+		'teste', 'testee', 'testes', 'loin', 'omg', 'nad', 'pimp', 'dick', 'sniper'
 	])
 	
 	custom_badwords = get_config().get('custom_badwords',[])
