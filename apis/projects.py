@@ -60,10 +60,11 @@ def get_projects():
             'community': 'stream_detective',
         },
         'ScummVM Groovie (The 7th Guest, The 11th Hour...)': {
-            'description': 'I mostly worked The 11th Hour, Clandestiny, Tender Loving Care, and Uncle Henry\'s Playhouse.<br/>But also some improvements to The 7th Guest, like the new option for Easier AI.',
+            'description': 'I mostly worked on The 11th Hour, Clandestiny, Tender Loving Care, and Uncle Henry\'s Playhouse.<br/>But also some improvements to The 7th Guest, like the new option for Easier AI.',
             'repo': 'scummvm/scummvm',
             'community': 'stauf_mansion',
             'links': {
+                "Stauf's Mansion Discord": 'https://discord.gg/Hss5cJg',
                 'ScummVM Website': 'https://www.scummvm.org/',
                 'Downloads': 'https://www.scummvm.org/downloads/',
                 'Demos': 'https://www.scummvm.org/demos/',

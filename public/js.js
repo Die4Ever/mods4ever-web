@@ -23,9 +23,20 @@ function RenderRun(run) {
 
 $(function() {
     $('.caret').click(function(e) {
-        var parent = $(this).parent();
-        var nested = parent.find('.nested');
-        nested.toggleClass('active');
-        $(this).toggleClass('caret-down');
+        var li = $(this).parent();
+        var ul = li.parent();
+        var nested = li.find('.nested');
+        if(nested.hasClass('active')) {
+            nested.removeClass('active');
+            $(this).removeClass('caret-down');
+        } else {
+            var actives = ul.find('> li > .active');
+            actives.removeClass('active');
+            var carets = ul.find('> li > .caret-down');
+            carets.removeClass('caret-down');
+
+            nested.addClass('active');
+            $(this).addClass('caret-down');
+        }
     });
 });

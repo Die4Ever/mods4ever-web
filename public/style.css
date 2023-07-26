@@ -16,31 +16,39 @@ th, td { padding: 0 1rem; }
 .caret {
     cursor: pointer;
     user-select: none; /* Prevent text selection */
-  }
-  
+}
+
   /* Create the caret/arrow with a unicode, and style it */
-  .caret::before {
+.caret::before {
     content: "\25B6";
     display: inline-block;
     margin-right: 6px;
-  }
-  
-  /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
-  .caret-down::before {
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
     transform: rotate(90deg);
-  }
-  
-  /* Hide the nested list */
-  .nested {
-    display: none;
+}
+
+/* Hide the nested list */
+.nested {
+    display: block;
     max-width: 50em;
     border: 2px solid #333;
     border-width: 0px 0px 0px 2px;
-    font-size:1.2rem;
     margin-left: 1em;
-  }
-  
-  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
-  .active {
-    display: block;
-  }
+
+    /* animation stuff */
+    font-size:0rem;
+    opacity: 0;
+    max-height: 0rem;
+    transition: max-height 0ms ease 400ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+    font-size:1.2rem;
+    opacity: 1;
+    max-height: 50rem;
+    transition: max-height 0ms ease 0ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
+}
