@@ -1,6 +1,6 @@
 
 {% macro project_html(projectname, project) -%}
-<li><span class="caret">{{ projectname }}</span>
+<li><a class="caret">{{ projectname }}</a>
     <ul class="nested">
 
         {% if project.get('description') %}
