@@ -16,13 +16,14 @@ th, td { padding: 0 1rem; }
 .caret {
     cursor: pointer;
     user-select: none; /* Prevent text selection */
+    padding: 0.5rem 2rem 0.5rem 0rem;
 }
 
   /* Create the caret/arrow with a unicode, and style it */
 .caret::before {
     content: "\25B6";
     display: inline-block;
-    margin-right: 6px;
+    margin-right: 0.5rem;
     transform: rotate(0deg);
     transition: transform 400ms ease 0ms;
 }
