@@ -3,8 +3,8 @@ a { color: #ddd; }
 
 .topnav > a { padding: 1rem; border: 1px solid #888; text-decoration: none; }
 .topnav > a:hover { color: #fff; border-color: #fff; }
-.topnav img { height: 1rem; padding-right: 0.5rem; }
-.topnav { padding: 1rem 0; background: #111; }
+.topnav img { height: 1.3rem; padding-right: 0.5rem; vertical-align: middle; min-width: 1rem; }
+.topnav { padding: 1rem 0; background: #141414; }
 
 .content { margin: 1rem; }
 th, td { padding: 0 1rem; }
