@@ -11,7 +11,7 @@
 
 <body>
     <div class="topnav">
-        <a href="/"><span style="font-size:130%; color: #0000; text-shadow: 0 0 #ddd;">🏠</span> Home</a>
+        <a href="/"><span style="color: #0000; text-shadow: 0 0 #ddd;">🏠</span> Home</a>
         <a href="https://lemmy.mods4ever.com/communities" title="Decentralized and open source version of Reddit"><img src="/Lemmy_logo.svg"/>Lemmy</a>
         <a href="https://kbin.social/m/meta@lemmy.mods4ever.com/t/193090/Mods4Ever-FAQ-and-Links" title="Decentralized and open source version of Reddit"><img src="/kbin_favicon.svg"/>kbin</a>
         <a href="https://discord.gg/tCwBJwNY6V"><img src="/discord_logo.svg"/>Discord</a>
@@ -20,6 +20,7 @@
 
     <div class="content">
         {% block content %}
+            <h1>Mods4Ever Projects:</h1>
             {% block projects %}
                 {% from 'project.jinja2' import project_html %}
                 <ul class="projects">
