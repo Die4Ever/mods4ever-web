@@ -1,6 +1,6 @@
 # flask --app web.py run --debug --port 10451
 # or just python3 web.py
-from flask import Flask, render_template, request, g
+from flask import Flask, redirect, render_template, request, g
 from apis.projects import get_projects
 
 from dxlog.base import *
@@ -29,6 +29,13 @@ def api_dxrando_leaderboard():
 @app.route('/dxrando/leaderboard')
 def dxrando_leaderboard():
     return render_template('dxrando/leaderboard.jinja2')
+
+@app.route('/project/<path:path>')
+def project(path):
+    g.project = get_projects().get(path)
+    if not g.project:
+        return redirect('/', code=302)
+    return render_template('project.jinja2')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

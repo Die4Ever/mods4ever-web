@@ -1,10 +1,11 @@
 /* GENERAL */
 body { background-color: #252525; color: #ddd; margin: 0; }
 
-a { color: #ddd; }
+a { color: #ddd; text-decoration: none; }
 a:hover { color: #fff; border-color: #fff !important; }
 
 th, td { padding: 0 1rem; }
+li { padding: 0.5em 0; }
 
 /* collapsed sections */
 .caret {
@@ -76,7 +77,6 @@ th, td { padding: 0 1rem; }
     box-shadow: 0rem 0rem 1rem 0.5rem #141414; /* make sure same color as topnav */
 }
 
-.projects li { padding: 0.5em 0; }
 .projects > li { font-size: 1.5rem; list-style-type: none; }
 
 /* SCREEN SIZES */

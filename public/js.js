@@ -38,5 +38,6 @@ $(function() {
             nested.addClass('active');
             $(this).addClass('caret-down');
         }
+        return false;
     });
 });

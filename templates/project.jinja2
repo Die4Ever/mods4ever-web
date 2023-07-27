@@ -1,27 +1,10 @@
+{% extends 'base.jinja2' %}
 
-{% macro project_html(projectname, project) -%}
-<li><a class="caret">{{ projectname }}</a>
-    <ul class="nested">
+{% block content %}
 
-        {% if project.get('description') %}
-            <li>{{ project.description }}</li>
-        {% endif %}
+{% from 'macros.jinja2' import project_inner %}
+<h1>{{ g.project.name }}</h1>
+{{ project_inner(g.project) }}
 
-        <li><a href="https://github.com/{{ project.repo }}/#readme">README</a></li>
-
-        {% for downloadname,downloadurl in project.get('downloads', {}).items() %}
-            <li><a href="https://github.com/{{ project.repo }}/releases/latest/download/{{ downloadurl }}">Download {{ downloadname }}</a></li>
-        {% endfor %}
-
-        <li><a href="https://github.com/{{ project.repo }}/releases/latest">Latest Release</a></li>
-
-        <li><a href="https://lemmy.mods4ever.com/c/{{ project.community }}" title="Decentralized and open source version of Reddit">{{ project.community }} Lemmy</a></li>
-
-        <li><a href="https://kbin.social/m/{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Reddit">{{ project.community }} kbin</a></li>
-        
-        {% for linkname,linkurl in project.get('links', {}).items() %}
-            <li><a href="{{ linkurl }}">{{ linkname }}</a></li>
-        {% endfor %}
-    </ul>
-</li>
-{%- endmacro %}
+<h3><a href="/">More Projects Here</a></h3>
+{% endblock %}

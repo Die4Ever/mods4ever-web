@@ -1,0 +1,30 @@
+
+{% macro project_html(projectkey, project) -%}
+<li><a class="caret" href="/project/{{ projectkey }}">{{ project.name }}</a>
+    <ul class="nested">
+        {{ project_inner(project) }}
+    </ul>
+</li>
+{%- endmacro %}
+
+{% macro project_inner(project) -%}
+    {% if project.get('description') %}
+        <li>{{ project.description }}</li>
+    {% endif %}
+
+    <li><a href="https://github.com/{{ project.repo }}/#readme">README</a></li>
+
+    {% for downloadname,downloadurl in project.get('downloads', {}).items() %}
+        <li><a href="https://github.com/{{ project.repo }}/releases/latest/download/{{ downloadurl }}">Download {{ downloadname }}</a></li>
+    {% endfor %}
+
+    <li><a href="https://github.com/{{ project.repo }}/releases/latest">Latest Release</a></li>
+
+    <li><a href="https://lemmy.mods4ever.com/c/{{ project.community }}" title="Decentralized and open source version of Reddit">{{ project.community }} Lemmy</a></li>
+
+    <li><a href="https://kbin.social/m/{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Reddit">{{ project.community }} kbin</a></li>
+    
+    {% for linkname,linkurl in project.get('links', {}).items() %}
+        <li><a href="{{ linkurl }}">{{ linkname }}</a></li>
+    {% endfor %}
+{%- endmacro %}
