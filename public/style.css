@@ -7,6 +7,12 @@ a:hover { color: #fff; border-color: #fff !important; }
 th, td { padding: 0 1rem; }
 li { padding: 0.5em 0; }
 
+iframe {
+    max-width: 100%;
+    width: 560px;
+    height: 315px;
+}
+
 /* collapsed sections */
 .caret {
     cursor: pointer;
@@ -31,8 +37,8 @@ li { padding: 0.5em 0; }
 
 /* Hide the nested list */
 .nested {
+    pointer-events: none;
     display: block;
-    max-width: 50em;
     border: 2px solid #333;
     border-width: 0px 0px 0px 2px;
     margin-left: 1em;
@@ -41,15 +47,28 @@ li { padding: 0.5em 0; }
     font-size:0rem;
     opacity: 0;
     max-height: 0rem;
-    transition: max-height 0ms ease 400ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
+    transition: max-height 200ms ease 200ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
+}
+
+.nested iframe {
+    width: 0px;
+    height: 0px;
+    transition: width 400ms ease 0ms, height 400ms ease 0ms;
 }
 
 /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
 .active {
+    pointer-events: all;
     font-size:1.2rem;
     opacity: 1;
     max-height: 50rem;
-    transition: max-height 0ms ease 0ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
+    transition: max-height 200ms ease 0ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
+}
+
+.active iframe {
+    width: 560px;
+    height: 315px;
+    transition: width 400ms ease 0ms, height 400ms ease 0ms;
 }
 
 /* SPECIFIC */

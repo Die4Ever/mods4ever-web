@@ -3,6 +3,8 @@ def get_projects():
     d = {
         'DXRando': {
             'name': 'Deus Ex Randomizer',
+            'description': 'This is a mod for the original Deus Ex that takes everything and shuffles it all around to make it like a new game every time but with the same great story. The goal is to increase the replayability and strategy.',
+            'youtube': 'XsoIKbn_suE',
             'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',
             'downloads': {
@@ -17,6 +19,7 @@ def get_projects():
         },
         'RCTRando': {
             'name': 'RollerCoaster Tycoon Randomizer',
+            'youtube': 'IeLoyNDq_7A?start=411',
             'repo': 'Die4Ever/rollercoaster-tycoon-randomizer',
             'community': 'rct_randomizer',
             'links': {
@@ -32,7 +35,9 @@ def get_projects():
             },
         },
         'BERando': {
-            'name': 'Build Engine Randomizer',
+            'name': 'Build Engine Randomizer (Duke Nukem 3D, Blood, etc)',
+            'description': 'Build Engine Randomizer currently supports: Duke Nukem 3D, Ion Fury, Shadow Warrior (1997), Blood, or PowerSlave/Exhumed (and maybe more in the future!)',
+            'youtube': 'ARZhfS1SLVE',
             'repo': 'Die4Ever/build-engine-randomizer',
             'community': 'build_randomizer',
             'links': {
@@ -41,6 +46,7 @@ def get_projects():
         },
         'SC2Rando': {
             'name': 'StarCraft 2 Balance Patch Randomizer',
+            'youtube': 'gb_XERKBfJE',
             'repo': 'Die4Ever/starcraft-2-randomizer',
             'community': 'sc2_randomizer',
             'links': {

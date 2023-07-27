@@ -12,6 +12,13 @@
         <li>{{ project.description }}</li>
     {% endif %}
 
+    {% if project.get('youtube') %}
+        {% set url = "https://www.youtube.com/embed/" + project.youtube %}
+        {% set url = url + ('&' if '?' in project.youtube else '?') %}
+        {% set url = url + "list=PLZIQTa_kwZhBksj7UzcahPiRaHk87fWch&enablejsapi=1" %}
+        <iframe src="{{ url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    {% endif %}
+
     <li><a href="https://github.com/{{ project.repo }}/#readme">README</a></li>
 
     {% for downloadname,downloadurl in project.get('downloads', {}).items() %}

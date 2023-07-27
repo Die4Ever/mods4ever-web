@@ -21,6 +21,12 @@ function RenderRun(run) {
     return row;
 }
 
+function pauseYoutube(el) {
+    el.each(function() {
+        jQuery(this)[0].contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+    });
+}
+
 $(function() {
     $('.caret').click(function(e) {
         var li = $(this).parent();
@@ -29,9 +35,11 @@ $(function() {
         if(nested.hasClass('active')) {
             nested.removeClass('active');
             $(this).removeClass('caret-down');
+            pauseYoutube(nested.find("iframe"));
         } else {
             var actives = ul.find('> li > .active');
             actives.removeClass('active');
+            pauseYoutube(actives.find("iframe"));
             var carets = ul.find('> li > .caret-down');
             carets.removeClass('caret-down');
 
