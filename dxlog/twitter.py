@@ -53,7 +53,7 @@ def tweet(config, playthrough_data, events, mod, version):
 				attachments.append(bingoBoard)
 		if "Aug-12" in event: #Aug-12 should always be the light
 			try:
-				augDrawer = AugScreenDrawer(event,config.get("aug_image_location","AugDrawImages/"),event["PlayerIsFemale"])
+				augDrawer = AugScreenDrawer(event, isFemale=event["PlayerIsFemale"])
 				augScreen = augDrawer.getImageInMemory()
 			except Exception as e:
 				err('Failed to generate augmentations image:', e, e.args)

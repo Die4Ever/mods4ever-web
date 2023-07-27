@@ -215,7 +215,7 @@ class AugScreenDrawer:
         return alt
         
 
-    def __init__(self,jsonIn,imageDir,isFemale):
+    def __init__(self, jsonIn, imageDir="AugDrawImages/", isFemale=False):
         self.ImageFolder = imageDir
         if isFemale=="True":
             baseImage = "AugScreenFemale.png"
