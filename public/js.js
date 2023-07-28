@@ -29,6 +29,8 @@ function pauseYoutube(el) {
 
 $(function() {
     $('.caret').click(function(e) {
+        var id = $(this)[0].id;
+        history.pushState({}, '', '#'+id);
         var li = $(this).parent();
         var ul = li.parent();
         var nested = li.find('.nested');
@@ -48,4 +50,11 @@ $(function() {
         }
         return false;
     });
+
+    if(location.hash.length > 1) {
+        var el = $(location.hash);
+        if(el.hasClass('caret')) {
+            el.click();
+        }
+    }
 });

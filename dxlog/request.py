@@ -89,7 +89,7 @@ Map teleporters now have better names
 Improved Entrance Rando spoiler logs
 Leaderboard improvements (look in the credits)""")
 	
-	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases"
+	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
 
 	assert len(desc) < 35
