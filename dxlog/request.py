@@ -2,19 +2,33 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.5.0.11"
+	latest_version = "v2.5.1.9"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
 	else:
 		short_version = 'v' + parts[0] + '.' + parts[1]
 	notification = 'New ' + short_version + '!'
-	desc = "Mirrored Maps!"
+	desc = "Please update!"
 	detail = ""
 
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-07-28')
+	headers.append("v2.5.1 Augmented Enemies, Walton Ware mode, and more!")
+	msgs.append(
+"""Augmented Enemies for an increased challenge!
+Walton Ware mode: a game mode focused on quickly doing bingos and New Game+
+We're also now over 200 bingo events!
+New Speedrun mode: speedrun with fewer resets while still being able to enjoy higher difficulties.
+Crowd Control online and simulated together for the average streamer that doesn't have many viewers
+Fixes to various mirrored maps, so make sure to tell the installer to download the new mirrored maps!
+Autofill passwords even in Zero Rando mode, great for Steam Deck players!
+We now prevent using lockpicks/multitools on doors/keypads you have the key/code for, great for people who don't read!
+New website Mods4Ever.com
+And more! Read the full patch notes on Github""")
 
 	dates.append('2023-06-22')
 	headers.append("v2.5 srorriM erA eroM nuF nahT noisiveleT")
@@ -79,15 +93,6 @@ And much more!""")
         (for real this time!)
 Improved AI getting closer to use shotguns
 Fixed teleporter names in the training mission""")
-	
-	dates.append('2023-04-13')
-	headers.append("v2.3.2 IMPORTANT HOTFIX")
-	msgs.append(
-"""IMPORTANT HOTFIX FOR MISSION 8
-    -Fixed issue where Harley Filben might not appear
-Map teleporters now have better names
-Improved Entrance Rando spoiler logs
-Leaderboard improvements (look in the credits)""")
 	
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
