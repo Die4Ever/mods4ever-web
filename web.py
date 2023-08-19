@@ -24,7 +24,8 @@ def telem():
 
 @app.route('/api/dxrando/leaderboard')
 def api_dxrando_leaderboard():
-    return dxrando.leaderboard(SortBy=request.args.get('SortBy', 'score'))
+    SortBy = request.args.get('SortBy', 'score')
+    return dxrando.leaderboard(SortBy=SortBy)
 
 @app.route('/dxrando/leaderboard')
 def dxrando_leaderboard():

@@ -2,12 +2,12 @@
 from dxlog.base import get_config
 from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 
-def leaderboard(SortByScore):
+def leaderboard(SortBy='score'):
     config = get_config()
     if config and config.get('database'):
         db = db_connect(config)
         cursor = db.cursor(dictionary=True)
-        leaderboard = _QueryLeaderboard(cursor, {}, 0, 100, SortByScore=SortByScore)
+        leaderboard = _QueryLeaderboard(cursor, {}, 0, 100, SortByScore=SortBy)
     else:
         cursor = [
             dict(name='testrun1', playthrough_id=1, score=9002, time=10000, seed=123, flagshash=123, setseed=1),
