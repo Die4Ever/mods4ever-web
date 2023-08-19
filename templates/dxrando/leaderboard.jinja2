@@ -7,7 +7,8 @@
 {% block footer %}
 <script>
 $(function() {
-    $.getJSON( "/api/dxrando/leaderboard", function( r ) {
+    var SortBy = 'score';
+    $.getJSON( "/api/dxrando/leaderboard?SortBy="+SortBy, function( r ) {
         var el = $('.leaderboard');
         el.html('');
         RenderLeaderboard(el, r);

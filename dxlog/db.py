@@ -163,13 +163,13 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		logex(ex)
 
 
-def _QueryLeaderboard(cursor, event, playthrough_id, max_len=15):
+def _QueryLeaderboard(cursor, event, playthrough_id, max_len=15, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
 	cursor.execute("SELECT "
 		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
-		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL 1 YEAR "
-		+ " ORDER BY score DESC",
-		(VersionToInt(2,3,0,0),))
+		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
+		+ (" ORDER BY score DESC" if SortBy=='score' else " ORDER BY time ASC"),
+		(int(version), int(maxdays)))
 	return GroupLeaderboard(cursor, event, playthrough_id, max_len)
 
 def GetCutaway(leaderboard, slot):
