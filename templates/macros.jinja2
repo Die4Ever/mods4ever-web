@@ -30,6 +30,8 @@
     <li><a href="https://lemmy.mods4ever.com/c/{{ project.community }}" title="Decentralized and open source version of Reddit">{{ project.community }} Lemmy</a></li>
 
     <li><a href="https://kbin.social/m/{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Reddit">{{ project.community }} kbin</a></li>
+
+    <li><a href="https://mastodon.gamedev.place/@{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Twitter">{{ project.community }} Mastodon</a></li>
     
     {% for linkname,linkurl in project.get('links', {}).items() %}
         <li><a href="{{ linkurl }}">{{ linkname }}</a></li>
