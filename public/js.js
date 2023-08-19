@@ -17,7 +17,7 @@ function FormatTime(time) {
     var minutes = Math.floor(remaining/60);
     var seconds = total_seconds - hours*3600 - minutes*60;
 
-    return hours+'h' + minutes.toString().padStart(2, '0')+'m' + seconds.toFixed(1)+'s';
+    return hours+'h ' + minutes.toString().padStart(2, '0')+'m ' + seconds.toFixed(1)+'s';
 }
 
 function RenderRun(run) {
