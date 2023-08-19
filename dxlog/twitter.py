@@ -231,6 +231,8 @@ def BeatGameMsg(event):
 		msg+= '\nGame Mode: '+event['GameMode']
 	if 'deaths' in event:
 		msg+= '\nDeaths: '+str(event['deaths'])+', Save count: '+str(event['SaveCount'])
+	if event.get('newgameplus_loops'):
+		msg+= '\nNew Game+ Loops: '+str(event.get('newgameplus_loops'))
 	return msg
 
 
