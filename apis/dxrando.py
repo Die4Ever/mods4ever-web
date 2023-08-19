@@ -10,9 +10,9 @@ def leaderboard():
         leaderboard = _QueryLeaderboard(cursor, {}, 0, 100)
     else:
         cursor = [
-            dict(name='testrun1', playthrough_id=1, score=9002, time=1000, seed=123, flagshash=123, setseed=1),
-            dict(name='testrun2', playthrough_id=123, score=9001, time=1000, seed=123, flagshash=123, setseed=1),
-            dict(name='testrun3', playthrough_id=1234, score=9000, time=1000, seed=123, flagshash=123, setseed=1),
+            dict(name='testrun1', playthrough_id=1, score=9002, time=10000, seed=123, flagshash=123, setseed=1),
+            dict(name='testrun2', playthrough_id=123, score=9001, time=40000, seed=123, flagshash=123, setseed=1),
+            dict(name='testrun3', playthrough_id=1234, score=9000, time=90015, seed=123, flagshash=123, setseed=1),
         ]
         leaderboard = GroupLeaderboard(cursor, {}, 0, 100)
     

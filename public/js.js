@@ -1,7 +1,7 @@
 function RenderLeaderboard(parent, leaderboard) {
     table = $('<table>');
     row = $('<tr>');
-    row.append($('<th>Place</th><th>Name</th><th>Score</th>'));
+    row.append($('<th>Place</th><th>Name</th><th>Score</th><th>Time</th>'));
     table.append(row);
     for(var i=0; i<leaderboard.length; i++) {
         row = RenderRun(leaderboard[i]);
@@ -10,12 +10,23 @@ function RenderLeaderboard(parent, leaderboard) {
     parent.append(table);
 }
 
+function FormatTime(time) {
+    var total_seconds = time/10;
+    var hours = Math.floor(total_seconds/3600);
+    var remaining = total_seconds - hours*3600;
+    var minutes = Math.floor(remaining/60);
+    var seconds = total_seconds - hours*3600 - minutes*60;
+
+    return hours+'h' + minutes.toString().padStart(2, '0')+'m' + seconds+'s';
+}
+
 function RenderRun(run) {
     row = $('<tr>');
     row.append($(
         '<td>#'+run['place']+'</td>'
         +'<td>'+run['name']+'</td>'
         +'<td>'+run['score']+'</td>'
+        +'<td>'+FormatTime(run['time'])+'</td>'
     ));
     row.attr('title', JSON.stringify(run));
     return row;
