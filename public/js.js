@@ -1,7 +1,7 @@
 function RenderLeaderboard(parent, leaderboard) {
     table = $('<table>');
     row = $('<tr>');
-    row.append($('<th>Place</th><th>Name</th><th>Score</th><th>Time</th>'));
+    row.append($('<th>Place</th><th>Name</th><th>Score</th><th>Time</th><th>Flags</th>'));
     table.append(row);
     for(var i=0; i<leaderboard.length; i++) {
         row = RenderRun(leaderboard[i]);
@@ -27,6 +27,7 @@ function RenderRun(run) {
         +'<td>'+run['name']+'</td>'
         +'<td>'+run['score']+'</td>'
         +'<td>'+FormatTime(run['time'])+'</td>'
+        +'<td>'+run['flagshash']+'</td>'
     ));
     row.attr('title', JSON.stringify(run));
     return row;
