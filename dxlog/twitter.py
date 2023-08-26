@@ -415,7 +415,7 @@ def ExtinguishFireMsg(event):
 
 
 
-mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'VanillaMadder' }
+mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'Vanilla? Madder.' }
 flag_to_character_names = {
 	'TerroristCommander_Dead': 'Terrorist Commander',
 	'TiffanySavage_Dead': 'Tiffany Savage',
@@ -533,9 +533,9 @@ def gen_event_msg(event,d,mod,version):
 		if flagshash:
 			msg += ', #DXRandoFlags' + flagshash
 	
-	msg+= "\n#DeusEx #Randomizer"
+	msg+= "\nDeus Ex Randomizer"
 	if mod and mod_names.get(mod):
-		msg += ' #' + mod_names.get(mod)
+		msg += ' ' + mod_names.get(mod)
 	if version:
 		msg += ' ' + version
 	
