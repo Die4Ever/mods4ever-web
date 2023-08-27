@@ -155,6 +155,14 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
+
+		d = {'PlayerName': 'Die4Ever', 'flag': '06_Datacube05', 'extra': 'July 18'}
+		r = FlagEventMsg(d, 'RevRandomizer')
+		self.assertIn('Hello Maggie', r)
+
+		d = {'PlayerName': 'Die4Ever', 'flag': '06_Datacube05', 'extra': 'July 18th'}
+		r = FlagEventMsg(d, 'RevRandomizer')
+		self.assertIn('Hello Maggie', r)
 	
 	def test_leaderboard(self):
 		print('\n\ntest_leaderboard')
