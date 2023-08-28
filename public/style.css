@@ -25,6 +25,7 @@ iframe {
     content: "\25B6";
     display: inline-block;
     margin-right: 0.5rem;
+    width: 2rem;
     transform: rotate(0deg);
     transition: transform 400ms ease 0ms;
 }
@@ -61,7 +62,7 @@ iframe {
     pointer-events: all;
     font-size:1.2rem;
     opacity: 1;
-    max-height: 50rem;
+    max-height: 100rem;
     transition: max-height 200ms ease 0ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
 }
 
