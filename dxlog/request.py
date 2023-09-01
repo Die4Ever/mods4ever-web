@@ -20,7 +20,7 @@ def update_notification(mod, version, data):
 	headers.append("v2.5.2 Various improvements and fixes!")
 	msgs.append(
 """Lots of Walton Ware and bingo improvements
-Improve autosave
+Improved autosave
 New Game+ fixes
 Randomizer weapon mods types
 Shield aug guys now take 10% damage from main resistances rather than none
