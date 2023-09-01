@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.5.1.9"
+	latest_version = "v2.5.2.11"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,21 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-08-31')
+	headers.append("v2.5.2 Various improvements and fixes!")
+	msgs.append(
+"""Lots of Walton Ware and bingo improvements
+Improve autosave
+New Game+ fixes
+Randomizer weapon mods types
+Shield aug guys now take 10% damage from main resistances rather than none
+Revision goals randomization
+Bug fixes for Revision Randomizer
+Bug fixes for HX Randomizer co-op
+Reduced visor chances for enemies
+Vision Enhancement augmentation can now see items through walls at level 1 instead of needing level 2.
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2023-07-28')
 	headers.append("v2.5.1 Augmented Enemies, Walton Ware mode, and more!")
@@ -85,15 +100,6 @@ Important items will be easier to spot instead of having to pixel hunt for them
 Balance tweaks
 And much more!""")
 
-	dates.append('2023-04-14')
-	headers.append("v2.3.3 ANOTHER HOTFIX")
-	msgs.append(
-"""ANOTHER IMPORTANT HOTFIX FOR MISSION 8
-    -Fixed issue where Harley Filben might not appear
-        (for real this time!)
-Improved AI getting closer to use shotguns
-Fixed teleporter names in the training mission""")
-	
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
 
