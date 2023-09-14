@@ -221,7 +221,7 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 		users.add(name)
 
 	with open('leaderboard.json', 'w') as out:
-		json.dump(leaderboard, out)
+		json.dump(outdata, out)
 	return {'leaderboard':leaderboard, 'mypbspot':mypbspot, 'newplacement':newplacement}
 
 
