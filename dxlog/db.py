@@ -219,8 +219,8 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 		arr = [ name, d['score'], d['totaltime'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
-	
-	with open('leaderboard.json') as out:
+
+	with open('leaderboard.json', 'w') as out:
 		json.dump(leaderboard, out)
 	return {'leaderboard':leaderboard, 'mypbspot':mypbspot, 'newplacement':newplacement}
 
