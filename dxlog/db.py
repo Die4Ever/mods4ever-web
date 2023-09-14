@@ -193,9 +193,7 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 	newplacement = None
 	mypbspot = None
 	show_next = False
-	outdata = []
 	for (d) in cursor:
-		outdata.append(d)
 		name = unrealscript_sanitize(d['name'])
 		if event.get('PlayerName') == name:
 			if mypbspot is None:
@@ -219,9 +217,6 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 		arr = [ name, d['score'], d['totaltime'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
-
-	with open('leaderboard.json', 'w') as out:
-		json.dump(outdata, out)
 	return {'leaderboard':leaderboard, 'mypbspot':mypbspot, 'newplacement':newplacement}
 
 
