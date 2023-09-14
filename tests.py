@@ -287,7 +287,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Die4Ever', 1656622478, 26, num_runs=42, max_len=None)
 		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'TheAstropath ogniB', -1904543835, 30)
 
-		leaderboard = GroupLeaderboard(cursor, {}, None, 15)
+		leaderboard = GroupLeaderboard(cursor, {'PlayerName':'JC Denton'}, -51934675, 15)
 		self.assertEqual(len(leaderboard), 15, '15 runs displayed for anon')
 		for i in range(15):
 			self.assertEqual(leaderboard[i][6], i+1, 'anon leaderboard #' + str(i+1))

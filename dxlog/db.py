@@ -161,6 +161,17 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 	except Exception as ex:
 		err('log_beatgame failed', log_id, e)
 		logex(ex)
+		return
+	
+	try:
+		_QueryLeaderboard(cursor)
+		leaderboard = []
+		for (d) in cursor:
+			leaderboard.append(d)
+		with open('leaderboard.json') as out:
+			json.dump(leaderboard, out)
+	except:
+		pass
 
 
 def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
