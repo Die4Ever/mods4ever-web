@@ -100,7 +100,7 @@ def write_db(mod, version, ip, content:str, config, data):
 				if event["type"] == "BeatGame":
 					log_beatgame(cursor, log_id, mod, version, event, d)
 				if event['type'] == 'QueryLeaderboard':
-					ret.update(QueryLeaderboard(cursor, event, d.get('playthrough_id')))
+					ret.update(QueryLeaderboardGame(cursor, event, d.get('playthrough_id')))
 			tweet(config, d, events, mod, version)
 		else:
 			warn("IP " + ip + " is banned!")
@@ -163,13 +163,18 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		logex(ex)
 
 
-def _QueryLeaderboard(cursor, event, playthrough_id, max_len=15, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
+def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
 	cursor.execute("SELECT "
 		+ "name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
+		#+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version, "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
 		+ (" ORDER BY score DESC" if SortBy=='score' else " ORDER BY totaltime ASC"),
 		(int(version), int(maxdays)))
+
+
+def QueryLeaderboard(cursor, event, playthrough_id, max_len=15, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
+	_QueryLeaderboard(cursor, version, maxdays, SortBy)
 	return GroupLeaderboard(cursor, event, playthrough_id, max_len)
 
 def GetCutaway(leaderboard, slot):
@@ -180,7 +185,7 @@ def GetCutaway(leaderboard, slot):
 	end = max(end, start)
 	return (start, end)
 
-def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
+def _GroupLeaderboard(cursor, event, playthrough_id):
 	placement = 1
 	users = set()
 	leaderboard = []
@@ -211,7 +216,12 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 		arr = [ name, d['score'], d['totaltime'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
-	
+	return {'leaderboard':leaderboard, 'mypbspot':mypbspot, 'newplacement':newplacement}
+
+
+def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
+	d = _GroupLeaderboard(cursor, event, playthrough_id)
+	(leaderboard, mypbspot, newplacement) = (d['leaderboard'], d['mypbspot'], d['newplacement'])
 	if not max_len:
 		return leaderboard
 	
@@ -250,9 +260,8 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 	return ret
 
 
-def QueryLeaderboard(cursor, event, playthrough_id):
-	leaderboard = _QueryLeaderboard(cursor, event, playthrough_id)
-	# TODO: split the leaderboard to show your position
+def QueryLeaderboardGame(cursor, event, playthrough_id):
+	leaderboard = QueryLeaderboard(cursor, event, playthrough_id)
 	ret = {}
 	for i in range(min(15,len(leaderboard))):
 		ret['leaderboard-'+str(i)] = leaderboard[i]
@@ -260,7 +269,8 @@ def QueryLeaderboard(cursor, event, playthrough_id):
 
 
 def GetLeaderboardPlacement(cursor, event, playthrough_id):
-	leaderboard = _QueryLeaderboard(cursor, event, playthrough_id)
+	d = _QueryLeaderboard(cursor, event, playthrough_id)
+	leaderboard = d['leaderboard']
 	_GetLeaderboardPlacement(leaderboard, playthrough_id)
 
 
