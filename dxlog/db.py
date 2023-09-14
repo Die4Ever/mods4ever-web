@@ -163,16 +163,6 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		logex(ex)
 		return
 	
-	try:
-		_QueryLeaderboard(cursor)
-		leaderboard = []
-		for (d) in cursor:
-			leaderboard.append(d)
-		with open('leaderboard.json') as out:
-			json.dump(leaderboard, out)
-	except:
-		pass
-
 
 def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
 	cursor.execute("SELECT "
@@ -203,7 +193,9 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 	newplacement = None
 	mypbspot = None
 	show_next = False
+	outdata = []
 	for (d) in cursor:
+		outdata.append(d)
 		name = unrealscript_sanitize(d['name'])
 		if event.get('PlayerName') == name:
 			if mypbspot is None:
@@ -227,6 +219,9 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 		arr = [ name, d['score'], d['totaltime'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
+	
+	with open('leaderboard.json') as out:
+		json.dump(leaderboard, out)
 	return {'leaderboard':leaderboard, 'mypbspot':mypbspot, 'newplacement':newplacement}
 
 
