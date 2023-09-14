@@ -93,7 +93,7 @@ def write_db(mod, version, ip, content:str, config, data):
 		if ip not in config.get('banned_ips',[]):
 			events = d.get('events', [])
 			if len(events) > 0:
-				info('log_id: '+str(log_id)+', got events: '+repr(events))
+				info('log_id: '+str(log_id)+', got events: '+repr(events), repr(d))
 			for event in events:
 				if event['type'] == 'DEATH':
 					log_death(cursor, log_id, event)
