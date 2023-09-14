@@ -167,11 +167,11 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 	def test_leaderboard(self):
 		print('\n\ntest_leaderboard')
 		cursor = [
-			dict(name='Die4Ever', playthrough_id=1, score=9002, time=1000, seed=123, flagshash=123, setseed=1),
-			dict(name='Die4Ever', playthrough_id=123, score=9000, time=1000, seed=123, flagshash=123, setseed=1),
+			dict(name='Die4Ever', playthrough_id=1, score=9002, totaltime=1000, seed=123, flagshash=123, setseed=1),
+			dict(name='Die4Ever', playthrough_id=123, score=9000, totaltime=1000, seed=123, flagshash=123, setseed=1),
 		]
 		for i in range(100):
-			d = dict(name='Die4Ever', playthrough_id=456, score=8999, time=1000, seed=123, flagshash=123, setseed=1)
+			d = dict(name='Die4Ever', playthrough_id=456, score=8999, totaltime=1000, seed=123, flagshash=123, setseed=1)
 			d['playthrough_id'] += i
 			d['score'] -= i
 			if d['playthrough_id'] == 500:
@@ -203,7 +203,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 
 		cursor = []
 		for i in range(100):
-			d = dict(name='Die4Ever', playthrough_id=456, score=8999, time=1000, seed=123, flagshash=123, setseed=1)
+			d = dict(name='Die4Ever', playthrough_id=456, score=8999, totaltime=1000, seed=123, flagshash=123, setseed=1)
 			d['name'] = 'Die4Ever' + str(i%4)
 			d['playthrough_id'] = i
 			d['score'] = i
@@ -276,7 +276,7 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		]
 		cursor = []
 		for i in runs_dbdata:
-			d = dict(name=i[0], playthrough_id=i[2], score=i[1], time=1000, seed=123, flagshash=123, setseed=1)
+			d = dict(name=i[0], playthrough_id=i[2], score=i[1], totaltime=1000, seed=123, flagshash=123, setseed=1)
 			cursor.append(d)
 
 		(leaderboard, PBEntry, PlaythroughEntry) = self.check_run(cursor, 'Serious Jesus 2', -23381102, 1)

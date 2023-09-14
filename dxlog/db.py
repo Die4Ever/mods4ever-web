@@ -165,10 +165,10 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 
 def _QueryLeaderboard(cursor, event, playthrough_id, max_len=15, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
 	cursor.execute("SELECT "
-		+ "name, totaltime as time, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
+		+ "name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
-		+ (" ORDER BY score DESC" if SortBy=='score' else " ORDER BY time ASC"),
+		+ (" ORDER BY score DESC" if SortBy=='score' else " ORDER BY totaltime ASC"),
 		(int(version), int(maxdays)))
 	return GroupLeaderboard(cursor, event, playthrough_id, max_len)
 
@@ -208,7 +208,7 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 			place = '--'# not my best score
 		else:
 			placement += 1# yes my best score
-		arr = [ name, d['score'], d['time'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
+		arr = [ name, d['score'], d['totaltime'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
 		leaderboard.append(arr)
 		users.add(name)
 	

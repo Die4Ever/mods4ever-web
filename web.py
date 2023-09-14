@@ -29,6 +29,8 @@ def api_dxrando_leaderboard():
 
 @app.route('/dxrando/leaderboard')
 def dxrando_leaderboard():
+    SortBy = request.args.get('SortBy', 'score')
+    g.SortBy = SortBy if SortBy in ('score', 'totaltime') else 'score'
     return render_template('dxrando/leaderboard.jinja2')
 
 @app.route('/project/<path:path>')

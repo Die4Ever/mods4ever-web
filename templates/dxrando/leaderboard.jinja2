@@ -7,7 +7,7 @@
 {% block footer %}
 <script>
 $(function() {
-    var SortBy = 'score';
+    var SortBy = '{{ g.SortBy }}';
     $.getJSON( "/api/dxrando/leaderboard?SortBy="+SortBy, function( r ) {
         var el = $('.leaderboard');
         el.html('');
