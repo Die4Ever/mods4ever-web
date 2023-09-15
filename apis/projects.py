@@ -8,8 +8,8 @@ def get_projects():
             'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',
             'downloads': {
-                'Windows': 'DXRandoInstaller.zip',
-                'Linux': 'DXRandoInstaller-Linux.zip',
+                'Windows': 'DXRandoInstaller.exe',
+                'Linux': 'DXRandoInstaller-Linux',
             },
             'links': {
                 'Leaderboard': '/dxrando/leaderboard',
