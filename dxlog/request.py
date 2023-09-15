@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.5.2.11"
+	latest_version = "v2.5.3.11"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,17 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-09-14')
+	headers.append("v2.5.3 Various improvements and fixes!")
+	msgs.append(
+"""Lots more Walton Ware and bingo improvements
+Now over 250 bingo goals!
+Speedrun mode now has an in-game timer and splits viewer
+More installer improvements
+Fixed bug with nanokey/datacube placements for mirrored maps
+Improved autosave again
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2023-08-31')
 	headers.append("v2.5.2 Various improvements and fixes!")
@@ -79,26 +90,6 @@ Rando options menu
 - Tweaked scoring for flags, see the Wiki
 - Crowd Control 2.0 preparation
 And more!""")
-
-	dates.append('2023-05-16')
-	headers.append("v2.4 The Enemies Are On Patrol!")
-	msgs.append(
-"""Huge overhaul of enemy randomization:
-    - Randomized patrol routes
-    - Random chance to have a helmet or not, affecting damage resistance for their head
-    - Improved shuffling
-    - Faction-appropriate pairings (no more thugs with MJ12)
-    - New appearances
-New game modes:
-    - Zero Rando: great for first time Deus Ex players
-    - Randomizer Lite: subtle randomization without affecting the mood of the game
-    - Serious Sam: tons of enemies with tuned difficulty to compensate
-Option to use music from Unreal and Unreal Tournament
-Improved accessibility
-Less pixel hunting
-Important items will be easier to spot instead of having to pixel hunt for them
-Balance tweaks
-And much more!""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
