@@ -8,7 +8,7 @@ from dxlog.handler import handle_telem
 from apis import dxrando
 
 app = Flask(__name__,
-            static_url_path='', 
+            static_url_path='/public', 
             static_folder='public',# on the real server we use nginx
             template_folder='templates')
 
@@ -40,9 +40,22 @@ def project(path):
         return redirect('/', code=302)
     return render_template('project.jinja2')
 
-@app.route('/', defaults={'path': ''})
+
+@app.route('/')
 @app.route('/<path:path>')
-def catch_all(path):
+@app.route('/<path:path>/')
+def catch_all(path=None):
+    if path:
+        p = path.lower()
+        if 'discord' == p:
+            return redirect('https://discord.gg/ZBEfrEPS8e')
+        if 'lemmy' == p:
+            return redirect('https://lemmy.mods4ever.com/?dataType=Post&listingType=Local&page=1&sort=New')
+        if 'kbin' == p:
+            return redirect('https://kbin.social/m/meta@lemmy.mods4ever.com/t/193090/Mods4Ever-FAQ-and-Links')
+        if 'youtube' == p:
+            return redirect('https://www.youtube.com/playlist?list=PLZIQTa_kwZhBksj7UzcahPiRaHk87fWch')
+    
     g.projects = get_projects()
     return render_template('base.jinja2')
 
