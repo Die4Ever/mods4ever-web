@@ -18,6 +18,7 @@ iframe {
     cursor: pointer;
     user-select: none; /* Prevent text selection */
     padding: 0.5rem 2rem 0.5rem 0rem;
+    font-size: 130%;
 }
 
   /* Create the caret/arrow with a unicode, and style it */
@@ -45,7 +46,7 @@ iframe {
     margin-left: 1em;
 
     /* animation stuff */
-    font-size:0rem;
+    font-size: 0%;
     opacity: 0;
     max-height: 0rem;
     transition: max-height 200ms ease 200ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
@@ -60,7 +61,7 @@ iframe {
 /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
 .active {
     pointer-events: all;
-    font-size:1.2rem;
+    font-size: 100%;
     opacity: 1;
     max-height: 100rem;
     transition: max-height 200ms ease 0ms, opacity 400ms ease 100ms, font-size 400ms ease 0ms;
@@ -95,9 +96,10 @@ iframe {
     min-height: 100vh; /* make sure our background color at least reaches the bottom */
     max-width: 60rem;
     box-shadow: 0rem 0rem 1rem 0.5rem #141414; /* make sure same color as topnav */
+    font-size: 120%;
 }
 
-.projects > li { font-size: 1.5rem; list-style-type: none; }
+.projects > li { list-style-type: none; }
 
 /* SCREEN SIZES */
 @media screen and (max-width: 70rem) {
