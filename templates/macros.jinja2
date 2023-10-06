@@ -1,6 +1,6 @@
 
 {% macro project_html(projectkey, project) -%}
-<li><a class="caret" href="/project/{{ projectkey }}" id="{{ projectkey }}">{{ project.name }}</a>
+<li><a class="caret" href="/project/{{ projectkey }}" id="proj{{ projectkey }}">{{ project.name }}</a>
     <ul class="nested">
         {{ project_inner(project) }}
     </ul>

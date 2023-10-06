@@ -44,34 +44,49 @@ function pauseYoutube(el) {
     });
 }
 
+function toggleSection(el) {
+    var id = el[0].id;
+    var hash = '#'+ id.replace(/^proj/, '');
+    history.pushState({}, '', hash);
+
+    var li = el.parent();
+    var ul = li.parent();
+    var nested = li.find('.nested');
+    if(nested.hasClass('active')) {
+        nested.removeClass('active');
+        el.removeClass('caret-down');
+        pauseYoutube(nested.find("iframe"));
+    } else {
+        var actives = ul.find('> li > .active');
+        actives.removeClass('active');
+        pauseYoutube(actives.find("iframe"));
+        var carets = ul.find('> li > .caret-down');
+        carets.removeClass('caret-down');
+
+        nested.addClass('active');
+        el.addClass('caret-down');
+    }
+}
+
+function isMobile() {
+    return $('.content').css('max-width') === 'none';
+}
+
 $(function() {
     $('.caret').click(function(e) {
-        var id = $(this)[0].id;
-        history.pushState({}, '', '#'+id);
-        var li = $(this).parent();
-        var ul = li.parent();
-        var nested = li.find('.nested');
-        if(nested.hasClass('active')) {
-            nested.removeClass('active');
-            $(this).removeClass('caret-down');
-            pauseYoutube(nested.find("iframe"));
-        } else {
-            var actives = ul.find('> li > .active');
-            actives.removeClass('active');
-            pauseYoutube(actives.find("iframe"));
-            var carets = ul.find('> li > .caret-down');
-            carets.removeClass('caret-down');
-
-            nested.addClass('active');
-            $(this).addClass('caret-down');
+        if(isMobile()) {
+            return true;// use the regular link for mobile
         }
+        toggleSection($(this));
         return false;
     });
 
-    if(location.hash.length > 1) {
-        var el = $(location.hash);
-        if(el.hasClass('caret')) {
-            el.click();
+    var hash = location.hash;
+    if(hash) {
+        hash = hash.replace('#', '#proj');
+        var el = $(hash);
+        if(el && el.hasClass('caret')) {
+            toggleSection(el);
         }
     }
 });

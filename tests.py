@@ -1,7 +1,7 @@
 import autoinstaller
 from typeguard import typechecked, install_import_hook
 
-from dxlog.db import _GetLeaderboardPlacement# functions starting with an underscore aren't imported in *
+from dxlog.db import _GetLeaderboardPlacement, _GroupLeaderboard# functions starting with an underscore aren't imported in *
 install_import_hook('dxlog')
 from dxlog.base import *
 from dxlog.db import *
@@ -289,6 +289,13 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 
 		with open('leaderboardtest.json') as f:
 			cursor = json.load(f)
+			cursor = sorted(cursor, key=lambda d: d['score'], reverse=True)
+		d = _GroupLeaderboard(cursor, {'PlayerName':'JC Denton'}, -51934675)
+		print(d)
+		leaderboard = d['leaderboard']
+		for i in range(15):
+			self.assertEqual(leaderboard[i][6], i+1, 'anon leaderboard #' + str(i+1))
+		
 		leaderboard = GroupLeaderboard(cursor, {'PlayerName':'JC Denton'}, -51934675, 15)
 		self.assertEqual(len(leaderboard), 15, '15 runs displayed for anon')
 		#for i in range(15):
