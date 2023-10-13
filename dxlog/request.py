@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.5.3.11"
+	latest_version = "v2.5.4.7"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,16 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2023-10-12')
+	headers.append("v2.5.4 Walton Ware improvements and bug fixes!")
+	msgs.append(
+"""Lots more Walton Ware and bingo improvements
+Now at 310 bingo goals!
+Gave Hela a guaranteed Sewer key and randomized her location within the MJ12 bunker in the catacombs
+Many improvements to datacube and nanokey location rules
+Tweaked demolition skill balance and buffed attached grenades
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2023-09-14')
 	headers.append("v2.5.3 Various improvements and fixes!")
@@ -68,28 +78,6 @@ New installer program
 Randomized visors for enemies
     - Gives resistance to pepper spray and gas grenades
 And more! Read the full patch notes on Github""")
-
-	dates.append('2023-05-24')
-	headers.append("v2.4.1 Fixes, Balance Tweaks, and Remembering Recently Skipped Songs!")
-	msgs.append(
-"""A little more ammo for Stick With the Prod modes
-Serious Sam mode tweaked settings to increase ammo and medkits
-Rando options menu
-    - Option for disabling memes
-    - Remembering recently skipped songs
-        - This is still different from disabling the song since it's temporary
-        - Remembers the 10 most recently skipped songs for as long as the game is open
-    - Option for enemies throwing melee weapons when dying
-- Merging picked up melee weapons you already have (helps if you have the melee weapons option set to don't throw)
-- Medbots/Repairbots greatly reduced cooldowns
-- Detection of bad dynamic patrol routes, so enemies don't get stuck standing still, they will switch to wandering
-- M12 Vandenberg Command, added a ShopLight for climbing to the roof (#446)
-- AugMuscle now has randomized cost instead of strength
-- Shotguns reduced range and accuracy
-- Don't swap M03 Airfield boatguard with other enemies, because he has the east gate key
-- Tweaked scoring for flags, see the Wiki
-- Crowd Control 2.0 preparation
-And more!""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
