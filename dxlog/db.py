@@ -161,7 +161,6 @@ def write_leaderboard_data(cursor, log_id, d):
 		try:
 			if type(v) == list or type(v) == dict:
 				continue
-			warn('write_leaderboard_data', log_id, k, v)
 			cursor.execute(
 				'INSERT INTO leaderboard_data SET '
 				+ 'log_id=%s, name=%s, value=%s '
@@ -170,6 +169,7 @@ def write_leaderboard_data(cursor, log_id, d):
 				(log_id, k, v)
 			)
 		except Exception as e:
+			warn('write_leaderboard_data', log_id, k, v)
 			logex(e)
 
 
@@ -192,6 +192,9 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 			+ 'log_id=%s, name=%s,  totaltime=%s,  gametime=%s,           score=%s,   flagshash=%s,       setseed=%s,      stable_version=%s,              rando_difficulty=%s,   combat_difficulty=%s,   deaths=%s,   loads=%s,       saves=%s,       bingos=%s,           bingo_spots=%s, ending=%s,   newgameplus_loops=%s,   initial_version=%s',
 			(  log_id,    name,     e['realtime'], e['timewithoutmenus'], e['score'], d.get('flagshash'), e['bSetSeed'],   VersionStringIsStable(version), e['rando_difficulty'], e['combat_difficulty'], e['deaths'], e['LoadCount'], e['SaveCount'], e['NumberOfBingos'], bingo_spots,    e['ending'], e['newgameplus_loops'], e['initial_version'])
 		)
+
+		d = get_data(cursor, log_id, d)
+		write_leaderboard_data(cursor, log_id, d)
 
 		e['placement'] = GetLeaderboardPlacement(cursor, e, d.get('playthrough_id'))
 	except Exception as ex:
