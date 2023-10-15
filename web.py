@@ -24,9 +24,13 @@ def telem():
 
 @app.route('/api/dxrando/leaderboard')
 def api_dxrando_leaderboard():
-    SortBy = request.args.get('SortBy', 'score')
-    Grouped = request.args.get('Grouped', True)
-    return dxrando.leaderboard(SortBy=SortBy, Grouped=Grouped)
+    try:
+        SortBy = request.args.get('SortBy', 'score')
+        Grouped = request.args.get('Grouped', True)
+        return dxrando.leaderboard(SortBy=SortBy, Grouped=Grouped)
+    except Exception as e:
+        warn(e)
+        raise
 
 @app.route('/dxrando/leaderboard')
 def dxrando_leaderboard():

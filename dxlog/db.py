@@ -161,7 +161,7 @@ def write_leaderboard_data(cursor, log_id, d):
 		cursor.execute(
 			'INSERT INTO leaderboard_data SET '
 			+ 'log_id=%s, name=%s, value=%s '
-			+ 'ON DUPLICATE KEY UPDATE SET '
+			+ 'ON DUPLICATE KEY UPDATE '
 			+ 'value=VALUES(value) ',
 			(log_id, k, v)
 		)
