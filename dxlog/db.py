@@ -203,7 +203,7 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		return
 	
 
-def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score', Filters=None):
+def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score', Filters={}):
 	if SortBy == 'totaltime':
 		SortBy = " ORDER BY totaltime ASC"
 	else:
