@@ -1,6 +1,7 @@
 import mysql.connector
 import mysql.connector.errorcode
 from dxlog.base import *
+from dxlog.parsing import parse_content
 from dxlog.twitter import tweet
 from dxlog.deaths import *
 
@@ -60,6 +61,7 @@ def write_db(mod, version, ip, content:str, config, data):
 		return ret
 	
 	try:
+		data['ip'] = ip
 		d=data
 		cursor = db.cursor(dictionary=True)
 		d = get_playthrough(cursor, mod, ip, d)
@@ -123,10 +125,12 @@ def write_db(mod, version, ip, content:str, config, data):
 def get_playthrough(cursor, mod, ip, d):
 	if 'playthrough_id' in d and 'seed' in d and 'flagshash' in d:
 		return d
+	
 	if 'playthrough_id' not in d:
 		cursor.execute("SELECT playthrough_id, seed, flagshash FROM logs WHERE ip=%s ORDER BY id DESC LIMIT 1", (ip,))
 	else:
 		cursor.execute("SELECT playthrough_id, seed, flagshash FROM logs WHERE ip=%s AND playthrough_id=%s ORDER BY id DESC LIMIT 1", (ip,d['playthrough_id']))
+	
 	for (r) in cursor:
 		if 'playthrough_id' in r:
 			d['playthrough_id'] = r['playthrough_id']
@@ -135,6 +139,30 @@ def get_playthrough(cursor, mod, ip, d):
 		if 'flagshash' in r and 'flagshash' not in d:
 			d['flagshash'] = r['flagshash']
 	return d
+
+
+def get_data(cursor, log_id, d):
+	if 'ip' not in d:
+		cursor.execute("SELECT ip FROM logs WHERE id=%s ORDER BY id DESC LIMIT 1", (log_id,))
+		for (r) in cursor:
+			d['ip'] = r['ip']
+	
+	cursor.execute("SELECT message FROM logs JOIN logs_messages USING(id) WHERE ip=%s AND playthrough_id=%s AND firstword IS NOT NULL AND id <= %s ORDER BY id DESC LIMIT 1", (d['ip'], d['playthrough_id'], log_id))
+	for (r) in cursor:
+		if 'message' in r:
+			data = parse_content(r['message'])
+			data.update(d)
+			d = data
+	return d
+
+
+def write_leaderboard_data(cursor, log_id, d):
+	for (k,v) in d.items():
+		cursor.execute(
+			'INSERT INTO leaderboard_data SET '
+			+ 'log_id=%s, name=%s, value=%s',
+			(log_id, k, v)
+		)
 
 
 def log_beatgame(cursor, log_id, mod, version, e, d):
@@ -166,8 +194,8 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 
 def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
 	cursor.execute("SELECT "
-		+ "name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
-		#+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version, "
+		+ "log_id, name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id "
+		+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version, "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
 		+ (" ORDER BY score DESC" if SortBy=='score' else " ORDER BY totaltime ASC"),
@@ -214,8 +242,8 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 			place = '--'# not my best score
 		else:
 			placement += 1# yes my best score
-		arr = [ name, d['score'], d['totaltime'], d['seed'], d['flagshash'], d['setseed'], place, ToHex(d['playthrough_id']) ]
-		leaderboard.append(arr)
+		data = { **d, 'name': name, 'place': place }
+		leaderboard.append(data)
 		users.add(name)
 	return {'leaderboard':leaderboard, 'mypbspot':mypbspot, 'newplacement':newplacement}
 
@@ -265,7 +293,9 @@ def QueryLeaderboardGame(cursor, event, playthrough_id):
 	leaderboard = QueryLeaderboard(cursor, event, playthrough_id)
 	ret = {}
 	for i in range(min(15,len(leaderboard))):
-		ret['leaderboard-'+str(i)] = leaderboard[i]
+		d = leaderboard[i]
+		arr = [ d['name'], d['score'], d['totaltime'], d['seed'], d['flagshash'], d['setseed'], d['place'], ToHex(d['playthrough_id']) ]
+		ret['leaderboard-'+str(i)] = arr
 	return ret
 
 
@@ -277,16 +307,15 @@ def GetLeaderboardPlacement(cursor, event, playthrough_id):
 
 def _GetLeaderboardPlacement(leaderboard, playthrough_id):
 	prev_placement = 1
-	playthrough_id = ToHex(playthrough_id)
 	for run in leaderboard:
-		if run[7] == playthrough_id:
-			if run[6] != '--':
-				return run[6]
+		if run['playthrough_id'] == playthrough_id:
+			if run['place'] != '--':
+				return run['place']
 			else:
 				return prev_placement + 1
 		
-		if run[6] != '--':
-			prev_placement = run[6]
+		if run['place'] != '--':
+			prev_placement = run['place']
 	return None
 
 

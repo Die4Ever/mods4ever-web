@@ -4,6 +4,8 @@ import re
 parse_content_r1 = re.compile(r'^(?P<loglevel>\w+): (?P<map>[^\.]+)\.(?P<module>[^:]+?)\d+: ((?P<firstword>\w+) )?(?P<remaining>.*)$', flags=re.MULTILINE)
 parse_content_r2 = re.compile(r' (?P<key>\w+): (?P<value>[\-\w\d]+)')
 
+first_words = set(('AnyEntry', 'PostAnyEntry', 'PreFirstEntry', 'FirstEntry', 'PostFirstEntry', 'SaveFlags', 'LoadFlags'))
+
 def parse_content(content):
 	d = {}
 	for i in parse_content_r1.finditer(content):
@@ -11,7 +13,10 @@ def parse_content(content):
 			t = i.groupdict()
 			firstword = t.pop('firstword', None)
 			if firstword and 'firstword' not in d and t.get('module')=='DXRFlags':
-				d['firstword'] = firstword
+				if firstword in first_words:
+					d['firstword'] = firstword
+				else:
+					warn('unknown firstword', firstword)
 			# order is semi-important because we want to keep the first value found for each key
 			d = {**d, **t}
 			if d.get('remaining') is not None:

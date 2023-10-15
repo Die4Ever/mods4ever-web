@@ -1,7 +1,7 @@
 
 import json
 from dxlog.base import get_config
-from dxlog.db import QueryLeaderboard, GroupLeaderboard, db_connect
+from dxlog.db import QueryLeaderboard, GroupLeaderboard, db_connect, get_data
 
 def leaderboard(SortBy='score'):
     config = get_config()
@@ -14,9 +14,11 @@ def leaderboard(SortBy='score'):
             cursor = json.load(f)
         leaderboard = GroupLeaderboard(cursor, {}, None, 1000)
     
-    keys = ['name', 'score', 'totaltime', 'seed', 'flagshash', 'setseed', 'place', 'playthrough_id']
     ret = []
     for run in leaderboard:
-        run = zip(keys, run)
-        ret.append(dict(run))
+        if config and config.get('database') and cursor:
+            data = get_data(cursor, run['log_id'], run)
+            run.update(data)
+        run.pop('ip')
+        ret.append(run)
     return ret
