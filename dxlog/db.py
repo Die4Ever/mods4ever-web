@@ -216,7 +216,7 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy
 		Filters = ''
 	
 	cursor.execute("SELECT "
-		+ "log_id, leaderboard.name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
+		+ "leaderboard.log_id, leaderboard.name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
 		+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ Filters
