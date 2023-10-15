@@ -27,7 +27,8 @@ def api_dxrando_leaderboard():
     try:
         SortBy = request.args.get('SortBy', 'score')
         Grouped = request.args.get('Grouped', True)
-        return dxrando.leaderboard(SortBy=SortBy, Grouped=Grouped)
+        GameMode = request.args.get('GameMode', -1)
+        return dxrando.leaderboard(SortBy=SortBy, Grouped=Grouped, GameMode=GameMode)
     except Exception as e:
         logex(e)
         raise

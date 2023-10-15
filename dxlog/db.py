@@ -203,24 +203,27 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		return
 	
 
-def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
+def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score', Filters=None):
 	if SortBy == 'totaltime':
 		SortBy = " ORDER BY totaltime ASC"
 	else:
 		SortBy = " ORDER BY score DESC"
+
+	GameMode = int(Filters.get('GameMode', -1))
+	if GameMode >= 0:
+		Filters = ' INNER JOIN leaderboard_data ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="GameMode" AND leaderboard_data.value = ' +str(GameMode)+') '
+	else:
+		Filters = ''
 	
 	cursor.execute("SELECT "
-		+ "log_id, name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
+		+ "log_id, leaderboard.name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
 		+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
+		+ Filters
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
 		+ SortBy,
 		(int(version), int(maxdays)))
 
-
-def QueryLeaderboard(cursor, event, playthrough_id, max_len=15, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
-	_QueryLeaderboard(cursor, version, maxdays, SortBy)
-	return GroupLeaderboard(cursor, event, playthrough_id, max_len)
 
 def GetCutaway(leaderboard, slot):
 	start = slot - 2
@@ -306,7 +309,9 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 
 
 def QueryLeaderboardGame(cursor, event, playthrough_id):
-	leaderboard = QueryLeaderboard(cursor, event, playthrough_id)
+	_QueryLeaderboard(cursor)
+	leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+
 	ret = {}
 	for i in range(min(15,len(leaderboard))):
 		d = leaderboard[i]
