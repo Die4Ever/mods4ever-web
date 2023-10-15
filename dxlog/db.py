@@ -158,6 +158,8 @@ def get_data(cursor, log_id, d):
 
 def write_leaderboard_data(cursor, log_id, d):
 	for (k,v) in d.items():
+		if type(v) == list or type(v) == dict:
+			continue
 		warn('write_leaderboard_data', k, v)
 		cursor.execute(
 			'INSERT INTO leaderboard_data SET '
