@@ -1,3 +1,15 @@
+function LoadLeaderboard() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const SortBy = urlParams.get('SortBy');
+    const Grouped = urlParams.get('Grouped');
+
+    $.getJSON( "/api/dxrando/leaderboard?SortBy="+SortBy+"&Grouped="+Grouped, function( r ) {
+        var el = $('.leaderboard');
+        el.html('');
+        RenderLeaderboard(el, r);
+    });
+}
+
 function RenderLeaderboard(parent, leaderboard) {
     table = $('<table>');
     row = $('<tr>');

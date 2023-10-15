@@ -160,7 +160,9 @@ def write_leaderboard_data(cursor, log_id, d):
 	for (k,v) in d.items():
 		cursor.execute(
 			'INSERT INTO leaderboard_data SET '
-			+ 'log_id=%s, name=%s, value=%s',
+			+ 'log_id=%s, name=%s, value=%s '
+			+ 'ON DUPLICATE KEY UPDATE SET '
+			+ 'value=VALUES(value) ',
 			(log_id, k, v)
 		)
 
@@ -193,12 +195,17 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 	
 
 def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score'):
+	if SortBy == 'totaltime':
+		SortBy = " ORDER BY totaltime ASC"
+	else:
+		SortBy = " ORDER BY score DESC"
+	
 	cursor.execute("SELECT "
 		+ "log_id, name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
 		+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
-		+ (" ORDER BY score DESC" if SortBy=='score' else " ORDER BY totaltime ASC"),
+		+ SortBy,
 		(int(version), int(maxdays)))
 
 
