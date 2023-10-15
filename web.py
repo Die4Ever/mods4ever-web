@@ -29,7 +29,7 @@ def api_dxrando_leaderboard():
         Grouped = request.args.get('Grouped', True)
         return dxrando.leaderboard(SortBy=SortBy, Grouped=Grouped)
     except Exception as e:
-        warn(e)
+        logex(e)
         raise
 
 @app.route('/dxrando/leaderboard')
