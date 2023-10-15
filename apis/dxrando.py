@@ -1,7 +1,7 @@
 
 import json
 from dxlog.base import get_config, unrealscript_sanitize
-from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect, get_data, write_leaderboard_data
+from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 
 def leaderboard(SortBy='score', Grouped=True, GameMode=-1):
     config = get_config()

@@ -211,7 +211,7 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy
 
 	GameMode = int(Filters.get('GameMode', -1))
 	if GameMode >= 0:
-		Filters = ' INNER JOIN leaderboard_data ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="GameMode" AND leaderboard_data.value = ' +str(GameMode)+') '
+		Filters = ' INNER JOIN leaderboard_data ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="gamemode" AND leaderboard_data.value = ' +str(GameMode)+') '
 	else:
 		Filters = ''
 	
