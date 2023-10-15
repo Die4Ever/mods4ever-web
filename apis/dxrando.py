@@ -26,9 +26,8 @@ def leaderboard(SortBy='score', Grouped=True):
     ret = []
     for run in leaderboard:
         if config and config.get('database') and cursor:
-            data = get_data(cursor, run['log_id'], run)
-            run.update(data)
-            write_leaderboard_data(cursor, run['log_id'], data)
+            run = get_data(cursor, run['log_id'], run)
+            write_leaderboard_data(cursor, run['log_id'], run)
         run.pop('ip', None)
         ret.append(run)
     return ret

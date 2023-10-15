@@ -158,6 +158,7 @@ def get_data(cursor, log_id, d):
 
 def write_leaderboard_data(cursor, log_id, d):
 	for (k,v) in d.items():
+		warn('write_leaderboard_data', k, v)
 		cursor.execute(
 			'INSERT INTO leaderboard_data SET '
 			+ 'log_id=%s, name=%s, value=%s '
