@@ -1,14 +1,14 @@
 
 import json
 from dxlog.base import get_config, unrealscript_sanitize
-from dxlog.db import QueryLeaderboard, GroupLeaderboard, db_connect, get_data, write_leaderboard_data
+from dxlog.db import _QueryLeaderboard, QueryLeaderboard, GroupLeaderboard, db_connect, get_data, write_leaderboard_data
 
 def leaderboard(SortBy='score', Grouped=True):
     config = get_config()
     if config and config.get('database'):
         db = db_connect(config)
         cursor = db.cursor(dictionary=True)
-        leaderboard = QueryLeaderboard(cursor, {}, None, 1000, SortBy=SortBy)
+        _QueryLeaderboard(cursor, SortBy=SortBy)
     else:
         with open('leaderboardtest.json') as f:
             cursor = json.load(f)
