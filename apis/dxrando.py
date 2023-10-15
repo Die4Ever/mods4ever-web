@@ -30,4 +30,10 @@ def leaderboard(SortBy='score', Grouped=True):
             write_leaderboard_data(cursor, run['log_id'], run)
         run.pop('ip', None)
         ret.append(run)
+
+    if config and config.get('database'):
+        db.commit()
+        cursor.close()
+        db.close()
+
     return ret
