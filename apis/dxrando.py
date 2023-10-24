@@ -1,6 +1,6 @@
 
 import json
-from dxlog.base import get_config, unrealscript_sanitize
+from dxlog.base import ToHex, get_config, unrealscript_sanitize
 from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 
 def leaderboard(SortBy='score', Grouped=True, GameMode=-1):
@@ -27,6 +27,8 @@ def leaderboard(SortBy='score', Grouped=True, GameMode=-1):
     ret = []
     for run in leaderboard:
         run.pop('ip', None)
+        run['playthrough_id'] = ToHex(run.get('playthrough_id', 0))
+        run['flagshash'] = ToHex(run.get('flagshash', 0))
         ret.append(run)
 
     if config and config.get('database'):
