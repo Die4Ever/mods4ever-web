@@ -145,13 +145,14 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertIn('Happy birthday', msg)
 
-		day = (currentDate.day+2)%27 + 1 # make sure it isn't 0
-		date = currentDate.replace(day=day)# a different day that isn't today
+		otherDay = currentDate.day % 27 + 1 # make sure it isn't 0
+		date = currentDate.replace(day=otherDay)# a different day that isn't today
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
 
-		date = currentDate.replace(month=(currentDate.month+1)%12)# a different month that isn't the current month, but same day
+		nextMonth = currentDate.month % 12 + 1
+		date = currentDate.replace(month=nextMonth)# a different month that isn't the current month, but same day
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
