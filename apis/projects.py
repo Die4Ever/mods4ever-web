@@ -73,6 +73,9 @@ def get_projects():
             'name': 'Stream Detective',
             'repo': 'TheAstropath/StreamDetective',
             'community': 'stream_detective',
+            'links': {
+                'Stream Detective Deployments': 'https://lemmy.mods4ever.com/post/116',
+            },
         },
         'ScummVM': {
             'name': 'ScummVM Groovie (The 7th Guest, The 11th Hour...)',
