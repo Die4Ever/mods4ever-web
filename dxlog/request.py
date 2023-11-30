@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.5.4.7"
+	latest_version = "v2.5.5.6"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -16,10 +16,22 @@ def update_notification(mod, version, data):
 	headers = []
 	msgs = []
 
-	dates.append('2023-10-12')
-	headers.append("v2.5.4 Walton Ware improvements and bug fixes!")
+	dates.append('2023-11-30')
+	headers.append("v2.5.5 new WaltonWare Entrance Rando mode and more!")
 	msgs.append(
-"""Lots more Walton Ware and bingo improvements
+"""WaltonWare Entrance Rando mode is a combination of the 2 game modes for extra craziness!
+Sub base Jock immediately available in WaltonWare
+Kills and knockouts of characters are now distinguished (so knocking someone out won't count as a kill for bingo)
+Installer now has an option to apply fixes to vanilla as well, sort of like a "Zero Changes" mode as an alternative to "Zero Rando" mode for the purists.
+Added option to make flickering and strobing lights more chill (epilepsy-safe mode)
+Ninja JC mode now allows mini-crossbow and knife, this provides more variety without dominating the ninja playstyle
+Weapon mods can now be automatically applied to the weapon in your hand
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+
+	dates.append('2023-10-12')
+	headers.append("v2.5.4 WaltonWare improvements and bug fixes!")
+	msgs.append(
+"""Lots more WaltonWare and bingo improvements
 Now at 310 bingo goals!
 Gave Hela a guaranteed Sewer key and randomized her location within the MJ12 bunker in the catacombs
 Many improvements to datacube and nanokey location rules
@@ -29,7 +41,7 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 	dates.append('2023-09-14')
 	headers.append("v2.5.3 Various improvements and fixes!")
 	msgs.append(
-"""Lots more Walton Ware and bingo improvements
+"""Lots more WaltonWare and bingo improvements
 Now over 250 bingo goals!
 Speedrun mode now has an in-game timer and splits viewer
 More installer improvements
@@ -40,7 +52,7 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 	dates.append('2023-08-31')
 	headers.append("v2.5.2 Various improvements and fixes!")
 	msgs.append(
-"""Lots of Walton Ware and bingo improvements
+"""Lots of WaltonWare and bingo improvements
 Improved autosave
 New Game+ fixes
 Randomizer weapon mods types
@@ -53,10 +65,10 @@ Vision Enhancement augmentation can now see items through walls at level 1 inste
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2023-07-28')
-	headers.append("v2.5.1 Augmented Enemies, Walton Ware mode, and more!")
+	headers.append("v2.5.1 Augmented Enemies, WaltonWare mode, and more!")
 	msgs.append(
 """Augmented Enemies for an increased challenge!
-Walton Ware mode: a game mode focused on quickly doing bingos and New Game+
+WaltonWare mode: a game mode focused on quickly doing bingos and New Game+
 We're also now over 200 bingo events!
 New Speedrun mode: speedrun with fewer resets while still being able to enjoy higher difficulties.
 Crowd Control online and simulated together for the average streamer that doesn't have many viewers
@@ -64,19 +76,6 @@ Fixes to various mirrored maps, so make sure to tell the installer to download t
 Autofill passwords even in Zero Rando mode, great for Steam Deck players!
 We now prevent using lockpicks/multitools on doors/keypads you have the key/code for, great for people who don't read!
 New website Mods4Ever.com
-And more! Read the full patch notes on Github""")
-
-	dates.append('2023-06-22')
-	headers.append("v2.5 srorriM erA eroM nuF nahT noisiveleT")
-	msgs.append(
-"""Mirrored Maps!
-    - Play through the game with a random mix of mirrored maps, which will keep you on your toes even more than the randomizer has before!
-    - Choose what percentage of maps should be mirrored!
-Choose what map to start the game on
-New installer program
-    - Supports installing on top of vanilla, LDDP, GMDX, Revision, HX, or Vanilla? Madder.
-Randomized visors for enemies
-    - Gives resistance to pepper spray and gas grenades
 And more! Read the full patch notes on Github""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
