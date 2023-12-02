@@ -1,5 +1,6 @@
 
 import json
+import urllib
 from dxlog.base import ToHex, get_config, unrealscript_sanitize
 from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 
@@ -36,3 +37,27 @@ def leaderboard(SortBy='score', Grouped=True, GameMode=-1):
         db.close()
 
     return ret
+
+
+def read_binary_content(data:bytes) -> str:
+    try:
+        return data.decode('utf-8','ignore')
+    except Exception as e:
+        print(e)
+        return data.decode('iso_8859_1','ignore')
+    return data.decode()
+
+def saveContentToFile(content):
+    cleanContent = urllib.parse.unquote_plus(content)
+    cleanContent = cleanContent.lstrip("bingo=")
+    f = open("public/bingo.txt", 'w')
+    f.write(cleanContent)
+    f.close()
+
+def writebingo(data):
+    content = read_binary_content(data)
+    content = content.replace('\x00','').replace('\r','')
+    saveContentToFile(content)
+    response = {'status': "ok received "+str(len(data))+" bytes"}
+    print('writebingo', response)
+    return response

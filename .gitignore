@@ -1,6 +1,7 @@
 # our custom ignores
 config.json
 dxrando_logs
+public/bingo.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

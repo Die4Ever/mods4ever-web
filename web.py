@@ -22,6 +22,11 @@ def telem():
     params = request.args
     return handle_telem(data, ip, params)
 
+
+@app.route('/dxrando/writebingo', methods=["POST"])
+def writebingo():
+    return dxrando.writebingo(request.get_data())
+
 @app.route('/api/dxrando/leaderboard')
 def api_dxrando_leaderboard():
     try:
