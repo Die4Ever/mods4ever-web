@@ -325,8 +325,8 @@ def QueryLeaderboardGame(cursor, event, playthrough_id):
 
 
 def GetLeaderboardPlacement(cursor, event, playthrough_id):
-	d = _QueryLeaderboard(cursor, event, playthrough_id)
-	leaderboard = d['leaderboard']
+	_QueryLeaderboard(cursor)
+	leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
 	_GetLeaderboardPlacement(leaderboard, playthrough_id)
 
 
