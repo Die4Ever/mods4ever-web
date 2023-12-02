@@ -15,5 +15,6 @@
     "masto_client_key":"",
     "masto_client_secret":"",
     "masto_access_token":"",
-    "masto_base_url":""
+    "masto_base_url":"",
+    "adminpassword":"somepassword"
 }

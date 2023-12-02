@@ -25,6 +25,8 @@ def telem():
 
 @app.route('/dxrando/writebingo', methods=["POST"])
 def writebingo():
+    if request.args.get('adminpassword', '') != get_config().get('adminpassword'):
+        return {'error': 'bad password'}, 401
     return dxrando.writebingo(request.get_data())
 
 @app.route('/api/dxrando/leaderboard')
