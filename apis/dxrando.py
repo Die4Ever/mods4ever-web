@@ -1,5 +1,6 @@
 
 import json
+import sys
 import urllib
 from dxlog.base import ToHex, get_config, unrealscript_sanitize
 from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
@@ -43,7 +44,7 @@ def read_binary_content(data:bytes) -> str:
     try:
         return data.decode('utf-8','ignore')
     except Exception as e:
-        print(e)
+        print(e, file=sys.stderr)
         return data.decode('iso_8859_1','ignore')
     return data.decode()
 
@@ -59,5 +60,5 @@ def writebingo(data):
     content = content.replace('\x00','').replace('\r','')
     saveContentToFile(content)
     response = {'status': "ok received "+str(len(data))+" bytes"}
-    print('writebingo', response)
+    print('writebingo', response, file=sys.stderr)
     return response
