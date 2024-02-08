@@ -23,7 +23,6 @@ def update_notification(mod, version, data):
 New bingo goals and many bingo fixes.
 Laser mod now turns on automatically when you equip the weapon (optional in the Rando settings menu)
 Some maps now have goals rando notes (look in your Images tab), just click the Goal Locations or Goal Spoilers button.
-And many smaller improvements and fixes!
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2023-11-30')
