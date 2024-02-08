@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.5.5.6"
+	latest_version = "v2.5.6.6"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,16 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-02-07')
+	headers.append("v2.5.6 AugBots and more!")
+	msgs.append(
+"""New AugBot, similar to a MedBot but it cannot heal, only install augmentations.
+New bingo goals and many bingo fixes.
+Laser mod now turns on automatically when you equip the weapon (optional in the Rando settings menu)
+Some maps now have goals rando notes (look in your Images tab), just click the Goal Locations or Goal Spoilers button.
+And many smaller improvements and fixes!
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2023-11-30')
 	headers.append("v2.5.5 new WaltonWare Entrance Rando mode and more!")
@@ -63,20 +73,6 @@ Bug fixes for HX Randomizer co-op
 Reduced visor chances for enemies
 Vision Enhancement augmentation can now see items through walls at level 1 instead of needing level 2.
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
-	dates.append('2023-07-28')
-	headers.append("v2.5.1 Augmented Enemies, WaltonWare mode, and more!")
-	msgs.append(
-"""Augmented Enemies for an increased challenge!
-WaltonWare mode: a game mode focused on quickly doing bingos and New Game+
-We're also now over 200 bingo events!
-New Speedrun mode: speedrun with fewer resets while still being able to enjoy higher difficulties.
-Crowd Control online and simulated together for the average streamer that doesn't have many viewers
-Fixes to various mirrored maps, so make sure to tell the installer to download the new mirrored maps!
-Autofill passwords even in Zero Rando mode, great for Steam Deck players!
-We now prevent using lockpicks/multitools on doors/keypads you have the key/code for, great for people who don't read!
-New website Mods4Ever.com
-And more! Read the full patch notes on Github""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
