@@ -29,7 +29,11 @@ def load_profanity_filter():
 	profanity.load_censor_words(whitelist_words=[
 		'thug', 'hooker', 'junkie', 'god', 'hell', 'urinal', 'ass', 'asses',
 		'717', 'tit', 't1t', 'titi', 'titis', 'tits', 'titt', 'titts', 'teat', 'teats', 'teets', 'toots',
-		'teste', 'testee', 'testes', 'loin', 'omg', 'nad', 'pimp', 'dick', 'sniper'
+		'teste', 'testee', 'testes', 'loin', 'omg', 'nad', 'pimp', 'dick', 'sniper', 'dickhead', 'dumass',
+		'dumbass','dumbasses','damn','douche','douchebag','douchebags','douchey','drunk','bastard', 'dink',
+		'dinks','dong','dummy','fat','fatass','godamn','goddam','godamnit','goddamnit','goddamn','goddamned',
+		'jackass','lmao','lmfao','moron','murder','punkass','reefer','sadist','sadism','shit','shite','shithead',
+		'stoned','weirdo','nimrod'
 	])
 	
 	custom_badwords = get_config().get('custom_badwords',[])
