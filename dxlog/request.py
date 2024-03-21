@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.5.6.6"
+	latest_version = "v2.6.0.6"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,16 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-03-21')
+	headers.append("v2.6 Augs overhaul, more randomized goal locations, and much more!")
+	msgs.append(
+"""New option for automatic augmentations, so you don't have to micromanage your F-keys so hard.
+More goals with randomized locations such as the transmitter computer in NSF HQ, Jock and the raid spawn points in Return to NYC, and the Launch Control Computer in Vandenberg Silo.
+Reduced in-fighting issues.
+Saving during infolinks!
+Fixed enemies running out of ammo early.
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2024-02-07')
 	headers.append("v2.5.6 AugBots and more!")
@@ -56,21 +66,6 @@ Speedrun mode now has an in-game timer and splits viewer
 More installer improvements
 Fixed bug with nanokey/datacube placements for mirrored maps
 Improved autosave again
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
-	dates.append('2023-08-31')
-	headers.append("v2.5.2 Various improvements and fixes!")
-	msgs.append(
-"""Lots of WaltonWare and bingo improvements
-Improved autosave
-New Game+ fixes
-Randomizer weapon mods types
-Shield aug guys now take 10% damage from main resistances rather than none
-Revision goals randomization
-Bug fixes for Revision Randomizer
-Bug fixes for HX Randomizer co-op
-Reduced visor chances for enemies
-Vision Enhancement augmentation can now see items through walls at level 1 instead of needing level 2.
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
