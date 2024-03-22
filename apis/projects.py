@@ -90,6 +90,11 @@ def get_projects():
                 'Wiki': 'https://wiki.scummvm.org/',
             },
         },
+        'Unreal-Map-Flipper': {
+            'name': 'Unreal Map Flipper',
+            'description': 'Tool for transforming Unreal Engine 1 maps',
+            'repo': 'Die4Ever/unreal-map-flipper',
+        },
     }
 
     return d

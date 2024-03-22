@@ -1,6 +1,7 @@
 # flask --app web.py run --debug --port 10451
 # or just python3 web.py
 from flask import Flask, redirect, render_template, request, g
+import requests
 from apis.projects import get_projects
 
 from dxlog.base import *
@@ -43,6 +44,37 @@ def api_dxrando_leaderboard():
 @app.route('/dxrando/leaderboard')
 def dxrando_leaderboard():
     return render_template('dxrando/leaderboard.jinja2')
+
+@app.route('/project/<path:path>/downloads')
+def downloads(path):
+    g.project = get_projects().get(path)
+    if not g.project:
+        return redirect('/', code=302)
+    repo = g.project.get('repo')
+    if not repo:
+        return redirect('/', code=302)
+    data = requests.get('https://api.github.com/repos/' + repo + '/releases').content
+    data = json.loads(data)
+    out = []
+    prevTime = datetime.datetime.now(datetime.timezone.utc)
+    for release in data:
+        r = {}
+        published = release.get('published_at')
+        published = datetime.datetime.fromisoformat(published)
+        r = dict(name=release.get('name'), published=published)
+
+        total = 0
+        for asset in release.get('assets'):
+            count = int(asset.get('download_count'))
+            r[asset.get('name')] = count
+            total += count
+        r['total'] = total
+
+        delta:datetime.timedelta = prevTime - published
+        r['per_day'] = round(total / (delta.total_seconds()/86400), 1)
+        prevTime = published
+        out.append(r)
+    return out
 
 @app.route('/project/<path:path>')
 def project(path):
