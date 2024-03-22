@@ -62,7 +62,7 @@ def downloads(path):
         r = {}
         published = release.get('published_at')
         published = dateutil.parser.isoparse(published)
-        r = dict(name=release.get('name'), published=published)
+        r = dict(name=release.get('name'), published=published.isoformat())
 
         total = 0
         for asset in release.get('assets'):
@@ -75,7 +75,8 @@ def downloads(path):
         r['per_day'] = round(total / (delta.total_seconds()/86400), 1)
         prevTime = published
         out.append(r)
-    return out
+    out = json.dumps(out, indent='&nbsp;&nbsp;&nbsp;&nbsp;')
+    return out.replace('\n', '<br/>\n')
 
 @app.route('/project/<path:path>')
 def project(path):
