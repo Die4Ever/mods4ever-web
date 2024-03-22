@@ -2,6 +2,7 @@
 # or just python3 web.py
 from flask import Flask, redirect, render_template, request, g
 import requests
+import dateutil.parser
 from apis.projects import get_projects
 
 from dxlog.base import *
@@ -60,7 +61,7 @@ def downloads(path):
     for release in data:
         r = {}
         published = release.get('published_at')
-        published = datetime.datetime.fromisoformat(published)
+        published = dateutil.parser.isoparse(published)
         r = dict(name=release.get('name'), published=published)
 
         total = 0
