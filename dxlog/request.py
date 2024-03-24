@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.6.0.6"
+	latest_version = "v2.6.1.1"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,12 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-03-23')
+	headers.append("v2.6.1 IMPORTANT HOTFIX!")
+	msgs.append(
+"""Fixed issue with the door to the Silo Launch Control Computer door getting stuck.
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2024-03-21')
 	headers.append("v2.6 Augs overhaul, more randomized goal locations, and much more!")
@@ -57,23 +63,12 @@ Many improvements to datacube and nanokey location rules
 Tweaked demolition skill balance and buffed attached grenades
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
-	dates.append('2023-09-14')
-	headers.append("v2.5.3 Various improvements and fixes!")
-	msgs.append(
-"""Lots more WaltonWare and bingo improvements
-Now over 250 bingo goals!
-Speedrun mode now has an in-game timer and splits viewer
-More installer improvements
-Fixed bug with nanokey/datacube placements for mirrored maps
-Improved autosave again
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
 
 	assert len(desc) < 35
 	assert len(detail) < 35
-	assert len(headers) <= 5
+	assert len(headers) == 5
 	assert len(dates) == len(headers)
 	assert len(msgs) == len(headers)
 	assert short_version in headers[0]
