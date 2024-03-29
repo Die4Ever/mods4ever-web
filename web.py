@@ -73,7 +73,8 @@ def downloads(path):
 
         delta:datetime.timedelta = prevTime - published
         r['per_day'] = round(total / (delta.total_seconds()/86400), 1)
-        prevTime = published
+        if release.get('name') != 'Development Build':
+            prevTime = published
         out.append(r)
     out = json.dumps(out, indent='&nbsp;&nbsp;&nbsp;&nbsp;')
     return out.replace('\n', '<br/>\n')
