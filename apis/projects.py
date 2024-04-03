@@ -10,6 +10,8 @@ def get_projects():
             'downloads': {
                 'Windows': 'DXRandoInstaller.exe',
                 'Linux': 'DXRandoInstaller-Linux',
+                'Vanilla Fixer': 'DXRVanillaFixer.exe',
+                'Vanilla Fixer Linux': 'DXRVanillaFixer',
             },
             'links': {
                 'Leaderboard': '/dxrando/leaderboard',
