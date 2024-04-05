@@ -36,6 +36,11 @@ def get_projects():
                 'OldUnreal Unreal Tournament 99 patch': 'https://github.com/OldUnreal/UnrealTournamentPatches/releases',
             },
         },
+        'UT2K4CC': {
+            'name': 'Unreal Tournament 2004 Crowd Control',
+            'repo': 'TheAstropath/UT2K4CrowdControl',
+            'community': 'ut2k4_crowdcontrol',
+        },
         'BERando': {
             'name': 'Build Engine Randomizer (Duke Nukem 3D, Blood, etc)',
             'description': 'Build Engine Randomizer currently supports: Duke Nukem 3D, Ion Fury, Shadow Warrior (1997), Blood, or PowerSlave/Exhumed (and maybe more in the future!)',
