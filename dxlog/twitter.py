@@ -127,6 +127,8 @@ def damage_string(dmgtype):
 		return 'had their killswitch flipped'
 	elif dmgtype=='helicopter':
 		return 'was sliced to pieces by helicopter blades'
+	elif dmgtype=='crushed':
+		return 'was crushed'
 	else:
 		if dmgtype:
 			err('unknown dmgtype: '+dmgtype)
