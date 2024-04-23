@@ -19,8 +19,7 @@ def update_notification(mod, version, data):
 	dates.append('2024-04-23')
 	headers.append("v2.7 A Fresh Start For WaltonWare")
 	msgs.append(
-"""Fixed a bug that was causing skill/aug strengths to not be consistent.
-    - (Loading older saves will give you different results from before, but otherwise playable.)
+"""Fixed a bug that was causing skill/aug strengths to not be consistent. (Loading older saves will give you different skill/aug strengths from before, but otherwise playable.)
 New WaltonWare starting locations, previously we only had 13, now we have 40 of them!
 Added 14 more bingo goals.
 Vandenberg Silo improvements.
