@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.6.2.8"
+	latest_version = "v2.7.0.3"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,23 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-04-23')
+	headers.append("v2.7 A Fresh Start For WaltonWare")
+	msgs.append(
+"""Fixed a bug that was causing skill/aug strengths to not be consistent.
+    (Loading older saves will give you different results from before, but otherwise playable.)
+
+New WaltonWare starting locations, previously we only had 13, now we have 40 of them!
+Added 14 more bingo goals.
+Vandenberg Silo improvements.
+Zero Rando mode improvements.
+Fixes for Randomized Music.
+More aug tweaks.
+Enabled randomized bot weapons by default.
+OpenAugTree by WCCC (for Steam Deck or controller players)
+Allow animals to be knocked unconscious.
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2024-04-02')
 	headers.append("v2.6.2 Time for a New Perspective")
@@ -54,18 +71,6 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 New bingo goals and many bingo fixes.
 Laser mod now turns on automatically when you equip the weapon (optional in the Rando settings menu)
 Some maps now have goals rando notes (look in your Images tab), just click the Goal Locations or Goal Spoilers button.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
-	dates.append('2023-11-30')
-	headers.append("v2.5.5 new WaltonWare Entrance Rando mode and more!")
-	msgs.append(
-"""WaltonWare Entrance Rando mode is a combination of the 2 game modes for extra craziness!
-Sub base Jock immediately available in WaltonWare
-Kills and knockouts of characters are now distinguished (so knocking someone out won't count as a kill for bingo)
-Installer now has an option to apply fixes to vanilla as well, sort of like a "Zero Changes" mode as an alternative to "Zero Rando" mode for the purists.
-Added option to make flickering and strobing lights more chill (epilepsy-safe mode)
-Ninja JC mode now allows mini-crossbow and knife, this provides more variety without dominating the ninja playstyle
-Weapon mods can now be automatically applied to the weapon in your hand
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
