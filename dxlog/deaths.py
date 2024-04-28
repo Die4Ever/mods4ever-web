@@ -78,7 +78,7 @@ def select_deaths(cursor, mod, map):
 	cursor.execute("SELECT "
 		+ "deaths.id as deathid, modname, ip, name, killer, killerclass, damagetype, x, y, z, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age "
 		+ "FROM deaths JOIN logs on(deaths.log_id=logs.id) "
-		+ "WHERE (map=%s OR map=%s) "
+		+ "WHERE (map=%s OR map=%s) AND (created>NOW()-INTERVAL 1 YEAR) "
 		+ modcondition
 		+ " ORDER BY created DESC LIMIT 100", (map,map2))
 	
