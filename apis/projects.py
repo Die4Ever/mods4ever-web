@@ -10,13 +10,33 @@ def get_projects():
             'downloads': {
                 'Windows': 'DXRandoInstaller.exe',
                 'Linux': 'DXRandoInstaller-Linux',
-                'Vanilla Fixer': 'DXRVanillaFixer.exe',
-                'Vanilla Fixer Linux': 'DXRVanillaFixer-Linux',
             },
             'links': {
                 'Leaderboard': '/dxrando/leaderboard',
                 'DXRando Activity Bot': 'https://botsin.space/@DXRandoActivity',
                 'Wiki': 'https://github.com/Die4Ever/deus-ex-randomizer/wiki',
+            },
+        },
+        'DXRZeroRando': {
+            'name': 'Deus Ex Zero Rando',
+            'description': 'Many quality of life improvements and bug fixes. Based on Deus Ex Randomizer but without the randomization.',
+            #'youtube': 'umSnAApFbGQ',
+            'repo': 'Die4Ever/deus-ex-randomizer',
+            'community': 'deus_ex_randomizer',
+            'downloads': {
+                'Windows': 'DXRZeroRando.exe',
+                'Linux': 'DXRZeroRando-Linux',
+            },
+        },
+        'DXRVanillaFixer': {
+            'name': 'Deus Ex Vanilla Fixer',
+            'description': 'Automatically applies compatibility fixes without changing the game.',
+            #'youtube': 'umSnAApFbGQ',
+            'repo': 'Die4Ever/deus-ex-randomizer',
+            'community': 'deus_ex_randomizer',
+            'downloads': {
+                'Windows': 'DXRVanillaFixer.exe',
+                'Linux': 'DXRVanillaFixer-Linux',
             },
         },
         'RCTRando': {
