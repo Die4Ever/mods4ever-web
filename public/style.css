@@ -5,7 +5,7 @@ a { color: #ddd; text-decoration: none; }
 a:hover { color: #fff; border-color: #fff !important; }
 
 th, td { padding: 0 1rem; }
-li { padding: 0.5em 0; }
+li { padding: 0.75em 0; }
 
 iframe {
     max-width: 100%;
@@ -25,16 +25,18 @@ iframe {
 .caret::before {
     content: "\25B6";
     display: inline-block;
+    margin-left: 0rem;
     margin-right: 0.5rem;
     width: 2rem;
     transform: rotate(0deg);
-    transition: transform 400ms ease 0ms;
+    transition: transform 400ms ease 0ms, margin-left 400ms ease 0ms;
 }
 
 /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
 .caret-down::before {
     transform: rotate(90deg);
-    transition: transform 400ms ease 0ms;
+    margin-left: -0.5rem;
+    transition: transform 400ms ease 0ms, margin-left 400ms ease 0ms;
 }
 
 /* Hide the nested list */
@@ -43,6 +45,7 @@ iframe {
     display: block;
     border: 2px solid #333;
     border-width: 0px 0px 0px 2px;
+    margin-top: 0.5em;
     margin-left: 1em;
 
     /* animation stuff */
