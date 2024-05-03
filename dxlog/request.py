@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.7.0.3"
+	latest_version = "v2.7.1.5"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -16,6 +16,18 @@ def update_notification(mod, version, data):
 	headers = []
 	msgs = []
 
+	dates.append('2024-05-03')
+	headers.append("v2.7.1 Barrels O'Fun!")
+	msgs.append(
+"""Simplified barrels to combine multiple variants that did the same thing. Also added optional new textures to make it even clearer (look in the Rando menu).
+More goal locations mutual exclusions, to reduce the difference between best seed and worst seed for each mission.
+Nerfed automatic power recirculator slightly.
+Gas colliding with enemies is now more consistent.
+Weapons that fall out of enemy hands due to damage now have ammo.
+You now start with 6575 skill points, and Zero Rando defaults to Trained pistol with 5000 points remaining like vanilla does.
+Added option to automatically put away in-hand items when trying to pick up decorations.
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+	
 	dates.append('2024-04-23')
 	headers.append("v2.7 A Fresh Start For WaltonWare")
 	msgs.append(
@@ -60,15 +72,6 @@ More goals with randomized locations such as the transmitter computer in NSF HQ,
 Reduced in-fighting issues.
 Saving during infolinks!
 Fixed enemies running out of ammo early.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
-	dates.append('2024-02-07')
-	headers.append("v2.5.6 AugBots and more!")
-	msgs.append(
-"""New AugBot, similar to a MedBot but it cannot heal, only install augmentations.
-New bingo goals and many bingo fixes.
-Laser mod now turns on automatically when you equip the weapon (optional in the Rando settings menu)
-Some maps now have goals rando notes (look in your Images tab), just click the Goal Locations or Goal Spoilers button.
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
