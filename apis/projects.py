@@ -20,7 +20,7 @@ def get_projects():
         'DXRZeroRando': {
             'name': 'Deus Ex Zero Rando',
             'description': 'Many quality of life improvements and bug fixes. Based on Deus Ex Randomizer but without the randomization.',
-            #'youtube': 'umSnAApFbGQ',
+            'youtube': 'ksoj1QMoGIc',
             'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',
             'downloads': {
@@ -31,7 +31,7 @@ def get_projects():
         'DXRVanillaFixer': {
             'name': 'Deus Ex Vanilla Fixer',
             'description': 'Automatically applies compatibility fixes without changing the game.',
-            #'youtube': 'umSnAApFbGQ',
+            'youtube': 'ksoj1QMoGIc',
             'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',
             'downloads': {
