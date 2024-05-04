@@ -1,5 +1,9 @@
 /* GENERAL */
-body { background-color: #252525; color: #ddd; margin: 0; }
+body {
+    background-color: #252525;
+    color: #ddd; margin: 0;
+    text-size-adjust: none;
+}
 
 a { color: #ddd; text-decoration: none; }
 a:hover { color: #fff; border-color: #fff !important; }
@@ -14,6 +18,8 @@ iframe {
 }
 
 /* collapsed sections */
+.carets > li { list-style-type: none; }
+
 .caret {
     cursor: pointer;
     user-select: none; /* Prevent text selection */
@@ -27,7 +33,6 @@ iframe {
     display: inline-block;
     margin-left: 0rem;
     margin-right: 0.5rem;
-    width: 2rem;
     transform: rotate(0deg);
     transition: transform 400ms ease 0ms, margin-left 400ms ease 0ms;
 }
@@ -77,7 +82,12 @@ iframe {
 }
 
 /* SPECIFIC */
-.topnav { background: #141414; text-align: center; }
+.topnav {
+    background: #141414;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
 .topnav > a {
     display: inline-block;
     vertical-align: middle;
@@ -85,16 +95,18 @@ iframe {
     border: 1px solid #888;
     text-decoration: none;
 }
-.topnav img {
-    height: 1.3rem;
+.topnav img, .topnav .icon {
+    height: 1.5rem;
     padding-right: 0.5rem;
     vertical-align: middle;
     min-width: 1rem;
+    display: inline-block;
+    overflow: hidden;
 }
 
 .content {
     margin: auto;
-    padding: 1rem;
+    padding: 3rem;
     background: #000;
     min-height: 100vh; /* make sure our background color at least reaches the bottom */
     max-width: 60rem;
@@ -102,9 +114,9 @@ iframe {
     font-size: 120%;
 }
 
-.projects > li { list-style-type: none; }
 
 /* SCREEN SIZES */
-@media screen and (max-width: 70rem) {
+@media screen and (max-width: 70rem) { /* the .content has a max-width of 60rem, so we're avoiding borders slimmer than 10rem */
     .content { max-width: initial; }
+    body { font-size: 200%; }
 }
