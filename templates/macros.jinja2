@@ -19,11 +19,11 @@
         <iframe src="{{ url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     {% endif %}
 
-    <li><a href="https://github.com/{{ project.repo }}/#readme">README</a></li>
-
     {% for downloadname,downloadurl in project.get('downloads', {}).items() %}
         <li><a href="https://github.com/{{ project.repo }}/releases/latest/download/{{ downloadurl }}">Download {{ downloadname }}</a></li>
     {% endfor %}
+    
+    <li><a href="https://github.com/{{ project.repo }}/#readme">README</a></li>
 
     {% if project.get('downloads') %}
         <li><a href="https://github.com/{{ project.repo }}/releases/latest">Release Notes</a></li>
