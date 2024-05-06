@@ -96,9 +96,13 @@ def catch_all(path=None):
         if 'discord' == p:
             return redirect('https://discord.gg/ZBEfrEPS8e')
         if 'lemmy' == p:
-            return redirect('https://lemmy.mods4ever.com/?dataType=Post&listingType=Local&page=1&sort=New')
+            return redirect('https://lemmy.mods4ever.com/?listingType=Local&sort=New')
         if 'kbin' == p:
             return redirect('https://kbin.social/m/meta@lemmy.mods4ever.com/t/193090/Mods4Ever-FAQ-and-Links')
+        if 'mbin' == p:
+            return redirect('https://kbin.run/m/meta@lemmy.mods4ever.com/t/403048/Mods4Ever-FAQ-and-Links') # the domain name says kbin but they run mbin now
+        if 'mastodon' == p:
+            return redirect('https://mastodon.gamedev.place/@Die4ever')
         if 'youtube' == p:
             return redirect('https://www.youtube.com/playlist?list=PLZIQTa_kwZhBksj7UzcahPiRaHk87fWch')
     
