@@ -321,14 +321,28 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 	return ret
 
 
+def NonGroupedLeaderboard(cursor, event, playthrough_id, max_len=15):
+	# TODO: focus on current player spot
+	leaderboard = []
+	place = 1
+	for (d) in cursor:
+		name = unrealscript_sanitize(d['name'])
+		leaderboard.append({ **d, 'name': name, 'place': place })
+		place += 1
+		if place > max_len:
+			break
+	return leaderboard
+
+
 def QueryLeaderboardGame(cursor, event, playthrough_id):
 	if event.get('GameModeName') == 'Speedrun Mode':
 		_QueryLeaderboard(cursor, SortBy='totaltime', version=VersionToInt(2,6,0,0),
 			Filters={ 'GameMode': event.get('GameMode'), 'difficulty': event.get('difficulty') }
 		)
+		leaderboard = NonGroupedLeaderboard(cursor, event, playthrough_id)
 	else:
 		_QueryLeaderboard(cursor)
-	leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
+		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
 
 	ret = {}
 	for i in range(min(15,len(leaderboard))):
