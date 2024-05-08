@@ -214,10 +214,17 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy
 	except:
 		GameMode = -1
 	
+	try:
+		difficulty = int(Filters.get('difficulty', -1))
+	except:
+		difficulty = -1
+	
+	Filters = ''
+	FilterFormat = ' INNER JOIN leaderboard_data ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="{name}" AND leaderboard_data.value = {val}) '
 	if GameMode >= 0:
-		Filters = ' INNER JOIN leaderboard_data ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="gamemode" AND leaderboard_data.value = ' +str(GameMode)+') '
-	else:
-		Filters = ''
+		Filters += FilterFormat.format(name='gamemode', val=GameMode)
+	if difficulty >= 0:
+		Filters += FilterFormat.format(name='difficulty', val=difficulty)
 	
 	cursor.execute("SELECT "
 		+ "leaderboard.log_id, leaderboard.name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
@@ -313,7 +320,12 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 
 
 def QueryLeaderboardGame(cursor, event, playthrough_id):
-	_QueryLeaderboard(cursor)
+	if event.get('GameModeName') == 'Speedrun Mode':
+		_QueryLeaderboard(cursor, SortBy='totaltime',
+			Filters={ 'GameMode': event.get('GameMode'), 'difficulty': event.get('difficulty') }
+		)
+	else:
+		_QueryLeaderboard(cursor)
 	leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
 
 	ret = {}
