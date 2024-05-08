@@ -220,7 +220,7 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy
 		difficulty = -1
 	
 	Filters = ''
-	FilterFormat = ' INNER JOIN leaderboard_data as t_{name} ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="{name}" AND leaderboard_data.value = {val}) '
+	FilterFormat = ' INNER JOIN leaderboard_data as t_{name} ON(leaderboard.log_id = t_{name}.log_id AND t_{name}.name="{name}" AND t_{name}.value = {val}) '
 	if GameMode >= 0:
 		Filters += FilterFormat.format(name='gamemode', val=GameMode)
 	if difficulty >= 0:
