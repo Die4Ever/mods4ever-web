@@ -333,9 +333,7 @@ def NonGroupedLeaderboard(cursor, event, playthrough_id, max_len=15):
 		name = unrealscript_sanitize(d['name'])
 		leaderboard.append({ **d, 'name': name, 'place': place })
 		place += 1
-		if place > max_len:
-			break
-	return leaderboard
+	return leaderboard[:max_len]
 
 
 def QueryLeaderboardGame(cursor, event, playthrough_id):
