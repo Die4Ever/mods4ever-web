@@ -233,9 +233,6 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy
 		+ Filters
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
 		+ SortBy)
-	
-	info(query)
-	info(version, maxdays)
 
 	cursor.execute(query,
 		(int(version), int(maxdays)))
@@ -326,7 +323,7 @@ def GroupLeaderboard(cursor, event, playthrough_id, max_len=15):
 
 def QueryLeaderboardGame(cursor, event, playthrough_id):
 	if event.get('GameModeName') == 'Speedrun Mode':
-		_QueryLeaderboard(cursor, SortBy='totaltime',
+		_QueryLeaderboard(cursor, SortBy='totaltime', version=VersionToInt(2,6,0,0),
 			Filters={ 'GameMode': event.get('GameMode'), 'difficulty': event.get('difficulty') }
 		)
 	else:
