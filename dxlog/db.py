@@ -220,19 +220,24 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy
 		difficulty = -1
 	
 	Filters = ''
-	FilterFormat = ' INNER JOIN leaderboard_data ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="{name}" AND leaderboard_data.value = {val}) '
+	FilterFormat = ' INNER JOIN leaderboard_data as t_{name} ON(leaderboard.log_id = leaderboard_data.log_id AND leaderboard_data.name="{name}" AND leaderboard_data.value = {val}) '
 	if GameMode >= 0:
 		Filters += FilterFormat.format(name='gamemode', val=GameMode)
 	if difficulty >= 0:
 		Filters += FilterFormat.format(name='difficulty', val=difficulty)
 	
-	cursor.execute("SELECT "
+	query = ("SELECT "
 		+ "leaderboard.log_id, leaderboard.name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
 		+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ Filters
 		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
-		+ SortBy,
+		+ SortBy)
+	
+	info(query)
+	info(version, maxdays)
+
+	cursor.execute(query,
 		(int(version), int(maxdays)))
 
 
