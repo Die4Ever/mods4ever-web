@@ -97,12 +97,16 @@ def write_db(mod, version, ip, content:str, config, data):
 			if len(events) > 0:
 				info('log_id: '+str(log_id)+', got events: '+repr(events), repr(d))
 			for event in events:
-				if event['type'] == 'DEATH':
-					log_death(cursor, log_id, event)
-				if event["type"] == "BeatGame":
-					log_beatgame(cursor, log_id, mod, version, event, d)
-				if event['type'] == 'QueryLeaderboard':
-					ret.update(QueryLeaderboardGame(cursor, event, d.get('playthrough_id')))
+				try:
+					if event['type'] == 'DEATH':
+						log_death(cursor, log_id, event)
+					if event["type"] == "BeatGame":
+						log_beatgame(cursor, log_id, mod, version, event, d)
+					if event['type'] == 'QueryLeaderboard':
+						ret.update(QueryLeaderboardGame(cursor, event, d.get('playthrough_id')))
+				except Exception as e:
+					err("failed to handle event", event.get('type'), e)
+					logex(e)
 			tweet(config, d, events, mod, version)
 		else:
 			warn("IP " + ip + " is banned!")
