@@ -231,7 +231,7 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy
 		Filters += FilterFormat.format(name='difficulty', val=difficulty)
 	
 	query = ("SELECT "
-		+ "leaderboard.log_id, leaderboard.name, totaltime, score, leaderboard.flagshash, setseed, seed, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
+		+ "leaderboard.log_id, leaderboard.name, totaltime, score, leaderboard.flagshash, setseed, seed, date(created) as end_date, UNIX_TIMESTAMP()-UNIX_TIMESTAMP(created) as age, playthrough_id, "
 		+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ Filters
@@ -278,7 +278,8 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 			place = '--'# not my best score
 		else:
 			placement += 1# yes my best score
-		data = { **d, 'name': name, 'place': place }
+		namedate = name + ' (' + d['end_date'] + ')'
+		data = { **d, 'name': namedate, 'place': place }
 		leaderboard.append(data)
 		users.add(name)
 	return {'leaderboard':leaderboard, 'mypbspot':mypbspot, 'newplacement':newplacement}
@@ -331,6 +332,7 @@ def NonGroupedLeaderboard(cursor, event, playthrough_id, max_len=15):
 	place = 1
 	for (d) in cursor:
 		name = unrealscript_sanitize(d['name'])
+		name += ' (' + d['end_date'] + ')'
 		leaderboard.append({ **d, 'name': name, 'place': place })
 		place += 1
 	return leaderboard[:max_len]
