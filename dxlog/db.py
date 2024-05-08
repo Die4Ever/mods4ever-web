@@ -278,7 +278,10 @@ def _GroupLeaderboard(cursor, event, playthrough_id):
 			place = '--'# not my best score
 		else:
 			placement += 1# yes my best score
-		namedate = name + ' (' + d['end_date'] + ')'
+
+		namedate = name
+		if 'end_date' in d:
+			namedate += ' (' + d['end_date'] + ')'
 		data = { **d, 'name': namedate, 'place': place }
 		leaderboard.append(data)
 		users.add(name)
@@ -332,7 +335,8 @@ def NonGroupedLeaderboard(cursor, event, playthrough_id, max_len=15):
 	place = 1
 	for (d) in cursor:
 		name = unrealscript_sanitize(d['name'])
-		name += ' (' + d['end_date'] + ')'
+		if 'end_date' in d:
+			name += ' (' + d['end_date'] + ')'
 		leaderboard.append({ **d, 'name': name, 'place': place })
 		place += 1
 	return leaderboard[:max_len]
