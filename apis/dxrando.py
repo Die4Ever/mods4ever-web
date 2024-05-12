@@ -2,16 +2,18 @@
 import json
 import sys
 import urllib
-from dxlog.base import ToHex, get_config, unrealscript_sanitize
+from dxlog.base import ToHex, VersionStringToInt, get_config, unrealscript_sanitize
 from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 
-def leaderboard(SortBy='score', Grouped=True, GameMode=-1):
+def leaderboard(SortBy='score', Grouped=True, GameMode=-1, version='v2.3.0.0'):
     config = get_config()
     Filters = {'GameMode': GameMode}
+    if version:
+        version = VersionStringToInt(version)
     if config and config.get('database'):
         db = db_connect(config)
         cursor = db.cursor(dictionary=True)
-        _QueryLeaderboard(cursor, SortBy=SortBy, Filters=Filters)
+        _QueryLeaderboard(cursor, version=version, SortBy=SortBy, Filters=Filters)
     else:
         with open('leaderboardtest.json') as f:
             cursor = json.load(f)
