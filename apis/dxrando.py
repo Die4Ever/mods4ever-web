@@ -8,8 +8,10 @@ from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 def leaderboard(SortBy='score', Grouped=True, GameMode=-1, version='v2.3.0.0'):
     config = get_config()
     Filters = {'GameMode': GameMode}
-    if version:
+    try:
         version = VersionStringToInt(version)
+    except:
+        version = None
     if config and config.get('database'):
         db = db_connect(config)
         cursor = db.cursor(dictionary=True)
