@@ -2,7 +2,7 @@
 import json
 import sys
 import urllib
-from dxlog.base import ToHex, VersionStringToInt, get_config, unrealscript_sanitize
+from dxlog.base import ToHex, VersionStringToInt, VersionToInt, get_config, unrealscript_sanitize
 from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 
 def leaderboard(SortBy='score', Grouped=True, GameMode=-1, version='v2.3.0.0'):
@@ -10,7 +10,7 @@ def leaderboard(SortBy='score', Grouped=True, GameMode=-1, version='v2.3.0.0'):
     Filters = {'GameMode': GameMode}
     version = VersionStringToInt(version, silent=True)
     if not version:
-        version = None
+        version = VersionToInt(2,3,0,0)
     if config and config.get('database'):
         db = db_connect(config)
         cursor = db.cursor(dictionary=True)
