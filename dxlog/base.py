@@ -134,7 +134,7 @@ def VersionToInt(major, minor, patch, build):
 	return int(major)*1000000+int(minor)*10000+int(patch)*100+int(build)
 
 
-def SplitVersionString(version):
+def SplitVersionString(version, silent:bool=False):
 	try:
 		m = re.search(r'v(\d+)\.(\d+)\.(\d+)(\.(\d+))?( (\w+))?', version)
 		group5 = m.group(5)
@@ -142,18 +142,20 @@ def SplitVersionString(version):
 			group5 = "0"
 		return (m.group(1), m.group(2), m.group(3), group5, m.group(7))
 	except Exception as e:
-		print("SplitVersionString error parsing "+version)
-		logex(e)
+		if not silent:
+			print("SplitVersionString error parsing "+version)
+			logex(e)
 	return None
 
 
-def VersionStringToInt(version:str):
+def VersionStringToInt(version:str, silent:bool=False):
 	try:
-		m = SplitVersionString(version)
+		m = SplitVersionString(version, silent)
 		return VersionToInt(m[0], m[1], m[2], m[3])
 	except Exception as e:
-		print("VersionStringToInt error parsing "+version)
-		logex(e)
+		if not silent:
+			print("VersionStringToInt error parsing "+version)
+			logex(e)
 	return 0
 
 def VersionStringIsStable(version:str):
