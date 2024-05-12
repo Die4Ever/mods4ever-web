@@ -119,4 +119,9 @@ iframe {
 @media screen and (max-width: 70rem) { /* the .content has a max-width of 60rem, so we're avoiding borders slimmer than 10rem */
     .content { max-width: initial; }
     body { font-size: 200%; }
+
+    /* tables for leaderboard */
+    th { display: inline-block; }
+    tr { margin-bottom: 2rem; display: block; }
+    td { display: block; }
 }
