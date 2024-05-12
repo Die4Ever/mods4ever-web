@@ -1,10 +1,14 @@
 function LoadLeaderboard() {
     const urlParams = new URLSearchParams(window.location.search);
-    const SortBy = urlParams.get('SortBy');
-    const Grouped = urlParams.get('Grouped');
-    const GameMode = urlParams.get('GameMode');
+    args = {};
+    urlParams.forEach(function(val, key) {
+        args[key.toLowerCase()] = val;
+    });
+    const SortBy = args['sortby'];
+    const Grouped = args['grouped'];
+    const GameMode = args['gamemode'];
 
-    $.getJSON( "/api/dxrando/leaderboard?SortBy="+SortBy+"&Grouped="+Grouped+"&GameMode="+GameMode, function( r ) {
+    $.getJSON( "/api/dxrando/leaderboard?sortby="+SortBy+"&grouped="+Grouped+"&gamemode="+GameMode, function( r ) {
         var el = $('.leaderboard');
         el.html('');
         RenderLeaderboard(el, r);

@@ -34,9 +34,12 @@ def writebingo():
 @app.route('/api/dxrando/leaderboard')
 def api_dxrando_leaderboard():
     try:
-        SortBy = request.args.get('sortby', 'score')
-        Grouped = request.args.get('grouped', True)
-        GameMode = request.args.get('gamemode', -1)
+        args = {}
+        for (k,v) in request.args.items():
+            args[k.lower()] = v
+        SortBy = args.get('sortby', 'score')
+        Grouped = args.get('grouped', True)
+        GameMode = args.get('gamemode', -1)
         return dxrando.leaderboard(SortBy=SortBy, Grouped=Grouped, GameMode=GameMode)
     except Exception as e:
         logex(e)
