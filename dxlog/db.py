@@ -107,7 +107,12 @@ def write_db(mod, version, ip, content:str, config, data):
 				except Exception as e:
 					err("failed to handle event", event.get('type'), e)
 					logex(e)
-			tweet(config, d, events, mod, version)
+			try:
+				tweet(config, d, events, mod, version)
+			except Exception as e:
+				err("failed to toot")
+				err(repr(events))
+				logex(e)
 		else:
 			warn("IP " + ip + " is banned!")
 		
