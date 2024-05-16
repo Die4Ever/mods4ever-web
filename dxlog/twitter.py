@@ -6,6 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from dxlog.base import *
 from dxlog.AugScreenDraw import *
+from dxlog.InvScreenDraw import *
 from mastodon import Mastodon
 
 DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
