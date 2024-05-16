@@ -1,3 +1,4 @@
+import copy
 import requests
 import tweepy
 import time
@@ -473,6 +474,7 @@ flag_to_character_names = {
 def gen_event_msg(event,d,mod,version):
 	msg = None
 	
+	event = copy.deepcopy(event)
 	info("Generating message for event: "+str(event))
 	
 	if "type" not in event:
@@ -480,8 +482,7 @@ def gen_event_msg(event,d,mod,version):
 		return None
 
 	for k in event:
-		if not k.startswith("bingo-") and not k.startswith("Aug-"): #Don't sanitize bingo or aug info, that will be processed first
-			event[k] = twitter_sanitize(event[k])
+		event[k] = twitter_sanitize(event[k])
 	seed = twitter_sanitize(d.get('seed'))
 	flagshash = ToHex(d.get('flagshash'))
 	mod = twitter_sanitize(mod)
