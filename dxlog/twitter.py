@@ -64,6 +64,18 @@ def tweet(config, playthrough_data, events, mod, version):
 			if augScreen:
 				altText=augDrawer.getAugScreenAltText()
 				attachments.append([augScreen,altText])
+		if "Inv-0" in event: 
+			try:
+				invDrawer = InventoryScreenDrawer(event)
+				invScreen = invDrawer.getImageInMemory()
+			except Exception as e:
+				err('Failed to generate inventory image:', e, e.args)
+				logex(e)
+			if config.get("prevent_tweet",False):
+				invDrawer.saveImage()
+			if augScreen:
+				altText=invDrawer.getInvScreenAltText()
+				attachments.append([invScreen,altText])
 		if msg!=None:
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
