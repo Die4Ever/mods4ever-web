@@ -101,9 +101,6 @@ def write_db(mod, version, ip, content:str, config, data):
 					if event['type'] == 'DEATH':
 						log_death(cursor, log_id, event)
 					if event["type"] == "BeatGame":
-						info('got BeatGame event')
-						info(content)
-						info(repr(event))
 						log_beatgame(cursor, log_id, mod, version, event, d)
 					if event['type'] == 'QueryLeaderboard':
 						ret.update(QueryLeaderboardGame(cursor, event, d.get('playthrough_id')))
