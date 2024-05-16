@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import json
 import os.path
+from dxlog.base import *
 
 SquareSize=53
 BaseXOffset=20
@@ -35,6 +36,7 @@ class InventoryScreenDrawer:
 
 
     def drawInventory(self,inv):
+        err("drawInventory drawing: "+str(inv))
         invClass = inv.get("class")
         x = inv.get("x",-1)
         y = inv.get("y",-1)
@@ -87,12 +89,14 @@ class InventoryScreenDrawer:
             invId = "Inv-"+str(i)
             if invId in inputJson:
                 self.inventory.append(inputJson[invId])
+                err("Added inventory to list: "+str(inputJson[invId]))
 
         self.credits=inputJson.get("credits",0)
 
 
     def drawAllInventory(self):
         for inv in self.inventory:
+            err("Drawing inventory: "+str(inv))
             self.drawInventory(inv)
 
 
