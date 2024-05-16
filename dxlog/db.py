@@ -115,7 +115,6 @@ def write_db(mod, version, ip, content:str, config, data):
 		if d.get('firstword'):
 			ret.update(select_deaths(cursor, mod, d.get('map')))
 	except Exception as e:
-		print("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		err("failed to write to db, db values: ", d.get('firstword'), mod, version, ip, content, d.get('map'), d.get('seed'), d.get('flagshash'), d.get('playthrough_id'))
 		logex(e)
 		err(content)

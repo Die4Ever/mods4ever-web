@@ -79,21 +79,22 @@ def unrealscript_sanitize(s):
 error_log = logdir + "error_log"
 def write_error_log(prefix:str, msg:str, *args):
 	try:
+		print(prefix, msg, *args)
 		print(prefix, msg, *args, file=sys.stderr)
 	except:
 		pass
 	
 	try:
 		with open(error_log, "a") as file:
-				print(prefix, msg, *args, file=file)
+			print(prefix, msg, *args, file=file)
 	except Exception as e:
 		try:
 			with open(error_log, "a") as file:
-					print('ERROR IN write_error_log!', file=file)
-					logex(e)
-					print(msg, file=file)
-					for s in [*args]:
-						print(s, file=file)
+				print('ERROR IN write_error_log!', file=file)
+				logex(e)
+				print(msg, file=file)
+				for s in [*args]:
+					print(s, file=file)
 		except:
 			pass
 
