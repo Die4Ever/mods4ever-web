@@ -3,6 +3,7 @@ from io import BytesIO
 import json
 import os.path
 from dxlog.base import *
+from typeguard import typechecked
 
 SquareSize=53
 BaseXOffset=20
@@ -22,9 +23,10 @@ LABEL_FONT_SIZE = 24
 COUNT_TEXT_OFFSET_X=6
 COUNT_TEXT_OFFSET_Y=42
 
+@typechecked
 class InventoryScreenDrawer:
 
-    def getInvImage(self,InvClass):
+    def getInvImage(self,InvClass:str):
         imageLoc = self.IconsFolder+InvClass+".png"
         if not os.path.exists(imageLoc):
             return None
@@ -35,9 +37,9 @@ class InventoryScreenDrawer:
         return self.scaleImage(im,ImageScale)
 
 
-    def drawInventory(self,inv):
-        err("drawInventory drawing: "+str(inv))
-        invClass = inv.get("class")
+    def drawInventory(self,inv:dict):
+        err("drawInventory drawing: "+repr(inv))
+        invClass: str = inv.get("class")
         x = inv.get("x",-1)
         y = inv.get("y",-1)
         count = inv.get("count",0)
@@ -88,15 +90,19 @@ class InventoryScreenDrawer:
         for i in range(0,50): #only 30 slots in inventory right now, but just to be safe
             invId = "Inv-"+str(i)
             if invId in inputJson:
-                self.inventory.append(inputJson[invId])
-                err("Added inventory to list: "+str(inputJson[invId]))
+                inv: dict = inputJson[invId]
+                assert isinstance(inv, dict)
+                self.inventory.append(inv)
+                err("Added inventory to list: "+repr(inputJson[invId]))
 
+        info(repr(self.inventory))
         self.credits=inputJson.get("credits",0)
 
 
     def drawAllInventory(self):
         for inv in self.inventory:
-            err("Drawing inventory: "+str(inv))
+            err("Drawing inventory: "+repr(inv))
+            assert isinstance(inv, dict)
             self.drawInventory(inv)
 
 
@@ -115,6 +121,7 @@ class InventoryScreenDrawer:
     def getInvScreenAltText(self):
         alt="An inventory screen containing:\n"
         for inv in self.inventory:
+            assert isinstance(inv, dict)
             alt+=inv.get("name","")
             if (inv.get("count",0)>1):
                 alt+=" (Count: "+str(inv.get("count"))+")"
@@ -127,7 +134,7 @@ class InventoryScreenDrawer:
         self.image = Image.open(self.ImageFolder+"InventoryScreen.png")
         self.image.convert("RGBA")
         self.image = self.scaleImage(self.image,ImageScale)
-        self.inventory = []
+        self.inventory: list[dict] = []
         self.credits=0
 
         self.handleInvJson(jsonIn)
