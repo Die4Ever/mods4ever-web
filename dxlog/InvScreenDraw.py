@@ -90,6 +90,9 @@ class InventoryScreenDrawer:
         for i in range(0,50): #only 30 slots in inventory right now, but just to be safe
             invId = "Inv-"+str(i)
             if invId in inputJson:
+                err(invId)
+                err(repr(inputJson))
+                err(repr(inputJson[invId]))
                 inv: dict = inputJson[invId]
                 assert isinstance(inv, dict)
                 self.inventory.append(inv)
