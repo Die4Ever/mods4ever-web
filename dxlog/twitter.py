@@ -71,6 +71,7 @@ def tweet(config, playthrough_data, events, mod, version):
 				invScreen = invDrawer.getImageInMemory()
 			except Exception as e:
 				err('Failed to generate inventory image:', e, e.args)
+				err("Event being drawn" + str(event))
 				logex(e)
 			if config.get("prevent_tweet",False):
 				invDrawer.saveImage()
