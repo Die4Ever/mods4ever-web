@@ -73,7 +73,7 @@ def tweet(config, playthrough_data, events, mod, version):
 				logex(e)
 			if config.get("prevent_tweet",False):
 				invDrawer.saveImage()
-			if augScreen:
+			if invScreen:
 				altText=invDrawer.getInvScreenAltText()
 				attachments.append([invScreen,altText])
 		if msg!=None:
