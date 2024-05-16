@@ -127,7 +127,7 @@ def err(msg, *args):
 	write_error_log("ERROR:", msg, *args)
 
 def logex(e):
-	write_error_log("ERROR:", traceback.format_exc(100))
+	write_error_log("ERROR:", e, traceback.format_exc(100))
 
 
 # copied from DXRando
