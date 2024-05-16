@@ -43,6 +43,7 @@ def tweet(config, playthrough_data, events, mod, version):
 		msg = gen_event_msg(event, playthrough_data, mod, version)
 		bingoBoard = None
 		augScreen = None
+		invScreen = None
 		altText=""
 		attachments = []
 		if "bingo-0-0" in event:
