@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v2.7.1.5"
+	latest_version = "v2.7.2.3"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,16 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-05-20')
+	headers.append("v2.7.2 The Silo's Secret Slide!")
+	msgs.append(
+"""Fixed M12 vandenberg command, vanilla Jock and Tong location had Tong inside the helicopter which was a softlock
+Added datacube to the Lucky Money with the password to the security computer, for opening the freezer door
+M02 battery park replaced vents start with shanty town
+Moved Silo Machine Shop Computer location from on the desk to on the wall
+Fixed weapon's ammo amount when dropped or taken away (M05 grenades)
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2024-05-03')
 	headers.append("v2.7.1 Barrels O'Fun!")
@@ -57,21 +67,10 @@ Rubber Baton for Stick With the Prod Plus, Grenades Only, and Explosives Only
 More aug improvements
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
-
 	dates.append('2024-03-23')
 	headers.append("v2.6.1 IMPORTANT HOTFIX!")
 	msgs.append(
 """Fixed issue with the door to the Silo Launch Control Computer door getting stuck.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
-	dates.append('2024-03-21')
-	headers.append("v2.6 Augs overhaul, more randomized goal locations, and much more!")
-	msgs.append(
-"""New option for automatic augmentations, so you don't have to micromanage your F-keys so hard.
-More goals with randomized locations such as the transmitter computer in NSF HQ, Jock and the raid spawn points in Return to NYC, and the Launch Control Computer in Vandenberg Silo.
-Reduced in-fighting issues.
-Saving during infolinks!
-Fixed enemies running out of ammo early.
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
