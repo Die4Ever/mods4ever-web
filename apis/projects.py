@@ -12,7 +12,8 @@ def get_projects():
                 'Linux': 'DXRandoInstaller-Linux',
             },
             'links': {
-                'Leaderboard': '/dxrando/leaderboard',
+                'Speedrun Leaderboard': 'https://www.speedrun.com/Deus_Ex_Randomizer',
+                'Score Leaderboard': '/dxrando/leaderboard',
                 'DXRando Activity Bot': 'https://botsin.space/@DXRandoActivity',
                 'Wiki': 'https://github.com/Die4Ever/deus-ex-randomizer/wiki',
             },
