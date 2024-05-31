@@ -159,8 +159,12 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)
 
-		nextMonth = currentDate.month % 12 + 1
-		date = currentDate.replace(month=nextMonth)# a different month that isn't the current month, but same day
+		# a different month that isn't the current month, but same day, must be a month with 31 days
+		if currentDate.month == 3:
+			otherMonth = 5
+		else:
+			otherMonth = 3
+		date = currentDate.replace(month=otherMonth)
 		d['extra'] = date.strftime('%B %d')
 		msg = gen_event_msg(d, d2, 'vanilla', 'v2.1.0.1 Beta')
 		self.assertNotIn('Happy birthday', msg)

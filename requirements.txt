@@ -1,7 +1,7 @@
 mysql-connector-python
 tweepy
 better_profanity
-Pillow
+Pillow>=10.0.0
 Mastodon.py
 typeguard>=3.0.0
 flask

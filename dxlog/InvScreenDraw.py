@@ -109,7 +109,8 @@ class InventoryScreenDrawer:
 
 
     def scaleImage(self,image,scale):
-        image = image.resize((image.size[0]*scale,image.size[1]*scale),Image.Resampling.NEAREST)
+        resample = Image.Resampling.NEAREST
+        image = image.resize((image.size[0]*scale,image.size[1]*scale), resample)
         return image
 
     def getInvScreenAltText(self):

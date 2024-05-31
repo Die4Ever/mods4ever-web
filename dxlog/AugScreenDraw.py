@@ -108,7 +108,8 @@ class AugScreenDrawer:
         augImage = self.getAugImage(augName)
         if (augImage != None):
             augImage = augImage.crop((0,0,52,52))
-            augImage = augImage.resize(BoxSize)
+            resample = Image.Resampling.NEAREST
+            augImage = augImage.resize(BoxSize, resample)
             augImage = self.makeAugImageTransparent(augImage,InactiveAugColor)
             coord = self.getAugCoord(location,index)
             self.image.paste(augImage,coord,augImage)
