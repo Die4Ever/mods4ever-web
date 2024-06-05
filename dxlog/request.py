@@ -8,8 +8,8 @@ def update_notification(mod, version, data):
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
 	else:
 		short_version = 'v' + parts[0] + '.' + parts[1]
-	notification = 'New ' + short_version + '!'
-	desc = "Please update!"
+	notification = 'Please download update!'
+	desc = 'New ' + short_version + '!'
 	detail = ""
 
 	dates = []
@@ -82,7 +82,11 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 	assert len(dates) == len(headers)
 	assert len(msgs) == len(headers)
 	assert short_version in headers[0]
-	assert short_version in notification
+	assert short_version in desc
+
+	latest_version_int = VersionStringToInt(latest_version)
+	assert latest_version_int > 0
+
 	for header in headers:
 		assert len(header) < 200
 	
@@ -91,7 +95,7 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 	if data.get('firstword') != 'PreFirstEntry':
 		return response
 	
-	if VersionStringToInt(version) < VersionStringToInt(latest_version):
+	if VersionStringToInt(version) < latest_version_int:
 		response['notification'] = notification
 		response['message'] = desc
 		response['message'] += "|n" + detail
