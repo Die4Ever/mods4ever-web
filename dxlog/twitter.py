@@ -234,9 +234,9 @@ def BeatGameMsg(event):
 		if event["carriedItem"]=="DeusEx.TerroristCommanderCarcass":
 			msg+="Leo Gold was there too.\n"
 	
-	msg+= "\nTime: "+gametime_to_string(event["time"])
 	if 'realtime' in event:
-		msg += ', Real Time: '+gametime_to_string(event["realtime"])
+		msg += "\nRetries Time: " + gametime_to_string(event["realtime"] - event["time"])
+		msg += ', Total Time: ' + gametime_to_string(event["realtime"])
 	if 'score' in event:
 		msg += '\nScore: ' + str(event['score'])
 		if event.get('placement'):
