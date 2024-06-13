@@ -235,7 +235,7 @@ def BeatGameMsg(event):
 			msg+="Leo Gold was there too.\n"
 	
 	if 'realtime' in event:
-		msg += "\nRetries Time: " + gametime_to_string(event["realtime"] - event["time"])
+		msg += "\nRetries Time: " + gametime_to_string(int(event["realtime"]) - int(event["time"]))
 		msg += ', Total Time: ' + gametime_to_string(event["realtime"])
 	if 'score' in event:
 		msg += '\nScore: ' + str(event['score'])
