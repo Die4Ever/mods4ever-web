@@ -16,8 +16,12 @@ DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
 def tweet(config, playthrough_data, events, mod, version):
 	if len(events) == 0:
 		return
-	if os.name != 'nt' and not os.fork():
-		return
+	
+	isFork = False
+	if os.name != 'nt':
+		isFork = not os.fork() # os.fork() returns 0 for the child, the parent gets the child's PID
+		if not isFork:
+			return
 	
 	twitActive = all((config["twit_bearer_token"], config["twit_consumer_key"], config["twit_consumer_secret"], config["twit_access_token"], config["twit_access_token_secret"]))
 	mastoActive = all((config["masto_client_key"], config["masto_client_secret"], config["masto_access_token"], config["masto_base_url"]))
@@ -89,6 +93,8 @@ def tweet(config, playthrough_data, events, mod, version):
 					send_tweet(twitApiV1,twitApiV2,msg,attachments)
 				if mastoActive:
 					send_masto_toot(mastodon,msg,attachments)
+	if isFork:
+		exit(0)
 
 def generateBingoBoardAttachment(event,saveImg):
 	boardImg = None
