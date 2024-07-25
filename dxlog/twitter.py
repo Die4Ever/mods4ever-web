@@ -16,6 +16,8 @@ DEFAULT_FONT_NAME="CourierPrimeCode.ttf"
 def tweet(config, playthrough_data, events, mod, version):
 	if len(events) == 0:
 		return
+	if os.name != 'nt' and not os.fork():
+		return
 	
 	twitActive = all((config["twit_bearer_token"], config["twit_consumer_key"], config["twit_consumer_secret"], config["twit_access_token"], config["twit_access_token_secret"]))
 	mastoActive = all((config["masto_client_key"], config["masto_client_secret"], config["masto_access_token"], config["masto_base_url"]))
