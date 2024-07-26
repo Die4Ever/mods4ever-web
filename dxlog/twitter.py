@@ -18,10 +18,10 @@ def tweet(config, playthrough_data, events, mod, version):
 		return
 	
 	isFork = False
-	if os.name != 'nt':
-		isFork = not os.fork() # os.fork() returns 0 for the child, the parent gets the child's PID
-		if not isFork:
-			return
+	# if os.name != 'nt':
+	# 	isFork = not os.fork() # os.fork() returns 0 for the child, the parent gets the child's PID
+	# 	if not isFork:
+	# 		return
 	
 	twitActive = all((config["twit_bearer_token"], config["twit_consumer_key"], config["twit_consumer_secret"], config["twit_access_token"], config["twit_access_token_secret"]))
 	mastoActive = all((config["masto_client_key"], config["masto_client_secret"], config["masto_access_token"], config["masto_base_url"]))
