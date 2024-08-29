@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.0.0.6"
+	latest_version = "v3.1.0.11"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -16,6 +16,14 @@ def update_notification(mod, version, data):
 	headers = []
 	msgs = []
 
+	dates.append('2024-08-29')
+	headers.append("v3.1 Area 51: Now With Added Confusion!")
+	msgs.append(
+"""Area 51 goal locations are now randomized.
+Many balance tweaks.
+Cats now purr when you pet them!
+And MUCH more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+	
 	dates.append('2024-06-13')
 	headers.append("v3.0 You Can Pet the Dog!")
 	msgs.append(
@@ -60,20 +68,6 @@ More aug tweaks.
 Enabled randomized bot weapons by default.
 OpenAugTree by WCCC (for Steam Deck or controller players)
 Allow animals to be knocked unconscious.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
-	dates.append('2024-04-02')
-	headers.append("v2.6.2 Time for a New Perspective")
-	msgs.append(
-"""Options for third person camera or fixed camera
-Fixed M04 street doors not opening after talking to Paul
-Fixed M03 airfield helibase, chance for the key to not be available if the enemy is not there
-Randomize MaxAmmo, and maxCopies for stackable items
-Laser triggers now ignore in flight projectiles (such as throwing an EMP grenade at them), and the weapons that enemies are carrying
-Reduced lower-bound door/keypad strength adjustments, to try to increase variety
-Explosives Only loadout
-Rubber Baton for Stick With the Prod Plus, Grenades Only, and Explosives Only
-More aug improvements
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"

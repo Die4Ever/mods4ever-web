@@ -211,7 +211,7 @@ def log_beatgame(cursor, log_id, mod, version, e, d):
 		return
 	
 
-def _QueryLeaderboard(cursor, version=VersionToInt(2,3,0,0), maxdays=365, SortBy='score', Filters={}):
+def _QueryLeaderboard(cursor, version=VersionToInt(2,6,0,0), maxdays=365, SortBy='score', Filters={}):
 	if SortBy == 'totaltime':
 		SortBy = " ORDER BY totaltime ASC"
 	else:
@@ -348,7 +348,7 @@ def NonGroupedLeaderboard(cursor, event, playthrough_id, max_len=15):
 
 def QueryLeaderboardGame(cursor, event, playthrough_id):
 	if event.get('GameModeName') == 'Speedrun Mode':
-		_QueryLeaderboard(cursor, SortBy='totaltime', version=VersionToInt(2,6,0,0),
+		_QueryLeaderboard(cursor, SortBy='totaltime', version=VersionToInt(3,1,0,3),
 			Filters={ 'GameMode': event.get('GameMode'), 'difficulty': event.get('difficulty') }
 		)
 		leaderboard = NonGroupedLeaderboard(cursor, event, playthrough_id)
