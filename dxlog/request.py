@@ -16,6 +16,14 @@ def update_notification(mod, version, data):
 	headers = []
 	msgs = []
 
+	dates.append('2024-09-06')
+	headers.append("v3.1.1 Hotfix")
+	msgs.append(
+"""Fixed an issue in Vandenberg Command with the comms door sometimes not opening after killing the enemy bots.
+Fixed rounding issues with timers for armors.
+Color options for Tech Goggles/Vision Enhancement.
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+	
 	dates.append('2024-08-29')
 	headers.append("v3.1 Area 51: Now With Added Confusion!")
 	msgs.append(
@@ -55,21 +63,6 @@ You now start with 6575 skill points, and Zero Rando defaults to Trained pistol 
 Added option to automatically put away in-hand items when trying to pick up decorations.
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 	
-	dates.append('2024-04-23')
-	headers.append("v2.7 A Fresh Start For WaltonWare")
-	msgs.append(
-"""Fixed a bug that was causing skill/aug strengths to not be consistent. (Loading older saves will give you different skill/aug strengths from before, but otherwise playable.)
-New WaltonWare starting locations, previously we only had 13, now we have 40 of them!
-Added 14 more bingo goals.
-Vandenberg Silo improvements.
-Zero Rando mode improvements.
-Fixes for Randomized Music.
-More aug tweaks.
-Enabled randomized bot weapons by default.
-OpenAugTree by WCCC (for Steam Deck or controller players)
-Allow animals to be knocked unconscious.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
 
