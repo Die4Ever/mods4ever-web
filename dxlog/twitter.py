@@ -364,6 +364,8 @@ def FlagEventMsg(event,mod):
 		return player+' has completed the training. The real test comes next: active duty.\n'
 	elif flag=='09_NYC_DOCKYARD--796967769':
 		return player+' got Jenny\'s number: ' + event['extra'].strip() + '\n'
+	elif flag=='AllSongsPlayed':
+		return player+' played every song on the piano!\n'
 	elif flag=='06_Datacube05':
 		d = event['extra'].strip()
 		ret = 'Hello Maggie! I swear I will never forget your birthday again! ' + d + ' is marked on my calendar forever! -- ' + player + '\n'
