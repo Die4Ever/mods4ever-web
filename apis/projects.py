@@ -122,6 +122,7 @@ def get_projects():
             'name': 'Unreal Map Flipper',
             'description': 'Tool for transforming Unreal Engine 1 maps',
             'repo': 'Die4Ever/unreal-map-flipper',
+            'community': 'deus_ex_randomizer',
         },
     }
 
