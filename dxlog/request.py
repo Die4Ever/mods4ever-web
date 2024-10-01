@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.1.0.11"
+	latest_version = "v3.2.0.3"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,12 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-10-01')
+	headers.append("v3.2 Happy Halloween!")
+	msgs.append(
+"""Many new game modes for Halloween! Check out our new trailer video or just download and play!
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	dates.append('2024-09-06')
 	headers.append("v3.1.1 Hotfix")
@@ -51,18 +57,6 @@ Moved Silo Machine Shop Computer location from on the desk to on the wall
 Fixed weapon's ammo amount when dropped or taken away (M05 grenades)
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
-	dates.append('2024-05-03')
-	headers.append("v2.7.1 Barrels O'Fun!")
-	msgs.append(
-"""Simplified barrels to combine multiple variants that did the same thing. Also added optional new textures to make it even clearer (look in the Rando menu).
-More goal locations mutual exclusions, to reduce the difference between best seed and worst seed for each mission.
-Nerfed automatic power recirculator slightly.
-Gas colliding with enemies is now more consistent.
-Weapons that fall out of enemy hands due to damage now have ammo.
-You now start with 6575 skill points, and Zero Rando defaults to Trained pistol with 5000 points remaining like vanilla does.
-Added option to automatically put away in-hand items when trying to pick up decorations.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-	
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
 
