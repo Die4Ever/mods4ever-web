@@ -31,7 +31,7 @@ def get_projects():
         },
         'DXRVanillaFixer': {
             'name': 'Deus Ex Vanilla Fixer',
-            'description': 'Automatically applies compatibility fixes without changing the gameplay at all.',
+            'description': 'Makes the game run correctly on modern computers without otherwise changing it at all.',
             'youtube': 'ksoj1QMoGIc',
             'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',

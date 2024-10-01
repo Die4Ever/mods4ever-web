@@ -17,6 +17,13 @@ def update_notification(mod, version, data):
 	msgs = []
 
 	dates.append('2024-10-01')
+	headers.append("v3.2.1 Halloween Hotfix!")
+	msgs.append(
+"""Fixes for cosmetics outside of Halloween modes, especially the lighting.
+New special light aug tweaks for Halloween Modes!
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+	
+	dates.append('2024-10-01')
 	headers.append("v3.2 Happy Halloween!")
 	msgs.append(
 """Many new game modes for Halloween! Check out our new trailer video or just download and play!
@@ -45,16 +52,6 @@ And MUCH more! Read the full patch notes on Github, also check out our new websi
 Loot Refusal options for looting carcasses.
 Reworked Synthetic Heart and Spy Drone augmentations
 Turn off any glow on datacubes once you've read them, which helps finding datacubes that are close together.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-	
-	dates.append('2024-05-20')
-	headers.append("v2.7.2 The Silo's Secret Slide!")
-	msgs.append(
-"""Fixed M12 vandenberg command, vanilla Jock and Tong location had Tong inside the helicopter which was a softlock
-Added datacube to the Lucky Money with the password to the security computer, for opening the freezer door
-M02 battery park replaced vents start with shanty town
-Moved Silo Machine Shop Computer location from on the desk to on the wall
-Fixed weapon's ammo amount when dropped or taken away (M05 grenades)
 And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
