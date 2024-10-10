@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.2.1.0"
+	latest_version = "v3.2.2.2"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,7 +15,16 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
-
+	
+	dates.append('2024-10-09')
+	headers.append("v3.2.2 Halloween Mode Tweaks")
+	msgs.append(
+"""When playing with Fixed Saves (such as in Halloween mode) there is now 1 Memory Containment Unit in each map, instead of being just an 80% chance
+Jail no longer takes away your Memory Containment Units
+Mr. H can now swim
+Fixed regen not getting boosted past level 4 when using Synthetic Heart
+And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+	
 	dates.append('2024-10-01')
 	headers.append("v3.2.1 Halloween Hotfix!")
 	msgs.append(
@@ -44,15 +53,6 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 Many balance tweaks.
 Cats now purr when you pet them!
 And MUCH more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
-	
-	dates.append('2024-06-13')
-	headers.append("v3.0 You Can Pet the Dog!")
-	msgs.append(
-"""You can now pet the dog! And other animals too. With bingo goals.
-Loot Refusal options for looting carcasses.
-Reworked Synthetic Heart and Spy Drone augmentations
-Turn off any glow on datacubes once you've read them, which helps finding datacubes that are close together.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
 
 	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
 	visit = "Would you like to visit "+url+" now?"
