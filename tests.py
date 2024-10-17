@@ -1,4 +1,4 @@
-import autoinstaller
+#import autoinstaller
 from typeguard import typechecked, install_import_hook
 
 from dxlog.db import _GetLeaderboardPlacement, _GroupLeaderboard# functions starting with an underscore aren't imported in *

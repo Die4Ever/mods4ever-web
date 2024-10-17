@@ -14,7 +14,7 @@ def get_projects():
             'links': {
                 'Speedrun Leaderboard': 'https://www.speedrun.com/dxrando',
                 'Score Leaderboard': '/dxrando/leaderboard',
-                'DXRando Activity Bot': 'https://botsin.space/@DXRandoActivity',
+                'DXRando Activity Bot': 'https://mastodon.social/@DXRandoActivity',
                 'Wiki': 'https://github.com/Die4Ever/deus-ex-randomizer/wiki',
             },
         },
