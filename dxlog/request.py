@@ -23,20 +23,20 @@ def update_notification(mod, version, data):
 Jail no longer takes away your Memory Containment Units
 Mr. H can now swim
 Fixed regen not getting boosted past level 4 when using Synthetic Heart
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 	
 	dates.append('2024-10-01')
 	headers.append("v3.2.1 Halloween Hotfix!")
 	msgs.append(
 """Fixes for cosmetics outside of Halloween modes, especially the lighting.
 New special light aug tweaks for Halloween Modes!
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 	
 	dates.append('2024-10-01')
 	headers.append("v3.2 Happy Halloween!")
 	msgs.append(
 """Many new game modes for Halloween! Check out our new trailer video or just download and play!
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	dates.append('2024-09-06')
 	headers.append("v3.1.1 Hotfix")
@@ -44,7 +44,7 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 """Fixed an issue in Vandenberg Command with the comms door sometimes not opening after killing the enemy bots.
 Fixed rounding issues with timers for armors.
 Color options for Tech Goggles/Vision Enhancement.
-And more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 	
 	dates.append('2024-08-29')
 	headers.append("v3.1 Area 51: Now With Added Confusion!")
@@ -52,9 +52,9 @@ And more! Read the full patch notes on Github, also check out our new website Mo
 """Area 51 goal locations are now randomized.
 Many balance tweaks.
 Cats now purr when you pet them!
-And MUCH more! Read the full patch notes on Github, also check out our new website Mods4Ever.com""")
+And MUCH more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
-	url = "https://github.com/Die4Ever/deus-ex-randomizer/releases/latest"
+	url = "https://mods4ever.com"
 	visit = "Would you like to visit "+url+" now?"
 
 	assert len(desc) < 35

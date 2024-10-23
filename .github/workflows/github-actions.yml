@@ -14,7 +14,7 @@ jobs:
       - run: cd ${{ github.workspace }}
       - run: mkdir dxrando_logs
       - run: cp config.example.json config.json
-      - run: pip3 install --user --break-system-packages -r requirements.txt 2>&1
+      - run: pip3 install --break-system-packages -r requirements.txt 2>&1
       - run: python -m compileall -q .
       - run: python3 tests.py
       - run: python3 log.py

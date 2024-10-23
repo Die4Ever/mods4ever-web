@@ -20,10 +20,10 @@
     {% endif %}
 
     {% for downloadname,downloadurl in project.get('downloads', {}).items() %}
-        <li><a href="https://github.com/{{ project.repo }}/releases/latest/download/{{ downloadurl }}">Download {{ downloadname }}</a></li>
+        <li><a href="https://github.com/{{ project.repo }}/releases/latest/download/{{ downloadurl }}">DOWNLOAD: {{ downloadname }}</a></li>
     {% endfor %}
 
-    <li><a href="https://github.com/{{ project.repo }}/#readme">README</a></li>
+    <li><a href="https://github.com/{{ project.repo }}/#readme">Readme</a></li>
 
     {% if project.get('downloads') %}
         <li><a href="https://github.com/{{ project.repo }}/releases/latest">Release Notes</a></li>
