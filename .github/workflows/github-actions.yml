@@ -10,7 +10,7 @@ jobs:
     steps:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - run: cd ${{ github.workspace }}
       - run: mkdir dxrando_logs
       - run: cp config.example.json config.json
