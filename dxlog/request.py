@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.2.2.2"
+	latest_version = "v3.2.3.4"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,15 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-10-24')
+	headers.append("v3.2.3 It Takes Two")
+	msgs.append(
+"""Extreme Limited Fixed Saves mode, uses 2 Memory Containment Units per save instead of 1. Must also be near a computer like in the other Fixed Saves modes. Pairs well with Halloween Mode for a new challenge!
+Reduced Mr. H's health. You still can't kill him, but if you deal enough damage to him then he will run away.
+New home for the DXRando Activity bot https://mastodon.social/@DXRandoActivity
+And more! Download from Mods4Ever.com or read the full patch notes on Github.
+We've seen some confusion with Limited Fixed Saves. When you have a Memory Containment Unit in your inventory (or 2 for the new Extreme version) you only need to have the box highlight on the computer and then you can use the normal Save Game menu or Quicksave button. The only freebie autosave you get is at the very start of the game. Make sure to save before going to Battery Park! Sometimes you might want to backtrack to save. Remember that if you die not all is lost, because you now have a better plan!""")
 	
 	dates.append('2024-10-09')
 	headers.append("v3.2.2 Halloween Mode Tweaks")
@@ -45,14 +54,6 @@ And more! Download from Mods4Ever.com or read the full patch notes on Github."""
 Fixed rounding issues with timers for armors.
 Color options for Tech Goggles/Vision Enhancement.
 And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
-	
-	dates.append('2024-08-29')
-	headers.append("v3.1 Area 51: Now With Added Confusion!")
-	msgs.append(
-"""Area 51 goal locations are now randomized.
-Many balance tweaks.
-Cats now purr when you pet them!
-And MUCH more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	url = "https://mods4ever.com"
 	visit = "Would you like to visit "+url+" now?"
