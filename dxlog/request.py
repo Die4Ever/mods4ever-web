@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.2.3.4"
+	latest_version = "v3.2.4.2"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,15 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-10-29')
+	headers.append("v3.2.4 Halloween Bug Fixes")
+	msgs.append(
+"""Fixed Mr. H from counting in the M04 raid enemy counter
+Fixed zombie Howards preventing Silo from completing
+Some fixes for endgame cutscenes and NG+
+And more! Download from Mods4Ever.com or read the full patch notes on Github.
+We've seen some confusion with Limited Fixed Saves. When you have a Memory Containment Unit in your inventory (or 2 for the new Extreme version) you only need to have the box highlight on the computer and then you can use the normal Save Game menu or Quicksave button. The only freebie autosave you get is at the very start of the game. Make sure to save before going to Battery Park! Sometimes you might want to backtrack to save. Remember that if you die not all is lost, because you now have a better plan!""")
 
 	dates.append('2024-10-24')
 	headers.append("v3.2.3 It Takes Two")
@@ -45,14 +54,6 @@ And more! Download from Mods4Ever.com or read the full patch notes on Github."""
 	headers.append("v3.2 Happy Halloween!")
 	msgs.append(
 """Many new game modes for Halloween! Check out our new trailer video or just download and play!
-And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
-
-	dates.append('2024-09-06')
-	headers.append("v3.1.1 Hotfix")
-	msgs.append(
-"""Fixed an issue in Vandenberg Command with the comms door sometimes not opening after killing the enemy bots.
-Fixed rounding issues with timers for armors.
-Color options for Tech Goggles/Vision Enhancement.
 And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	url = "https://mods4ever.com"
