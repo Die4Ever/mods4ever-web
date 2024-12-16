@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.2.4.2"
+	latest_version = "v3.3.0.6"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,15 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2024-12-11')
+	headers.append("v3.3 Mr. Page's Mean Bingo Machine")
+	msgs.append(
+"""Mr. Page's Mean Bingo Machine: A new mode where you play through the whole game, but must complete a set number of bingo lines before being allowed to progress to the next mission. Once you get to the next mission, you are given a new bingo board!
+One Item Mode: Our new dumbest game mode! All items in a map will be replaced with a single type of item (eg. all flares, all biocells, or all beers)
+Augs can now receive randomized slots (so speed can be an eye aug) (look in the Advanced New Game menu)
+Deus Ex: Revision support is massively improved as a whole
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	dates.append('2024-10-29')
 	headers.append("v3.2.4 Halloween Bug Fixes")
@@ -48,12 +57,6 @@ And more! Download from Mods4Ever.com or read the full patch notes on Github."""
 	msgs.append(
 """Fixes for cosmetics outside of Halloween modes, especially the lighting.
 New special light aug tweaks for Halloween Modes!
-And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
-	
-	dates.append('2024-10-01')
-	headers.append("v3.2 Happy Halloween!")
-	msgs.append(
-"""Many new game modes for Halloween! Check out our new trailer video or just download and play!
 And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	url = "https://mods4ever.com"
