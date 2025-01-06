@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.3.0.6"
+	latest_version = "v3.3.1.2"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,14 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2025-01-06')
+	headers.append("v3.3.1 Bug Fixes")
+	msgs.append(
+"""You must now pet Starr instead of simply visiting her for bingo
+Fixed bug where game would end if you completed a bingo line without a Bingo Win setting configured
+Deus Ex: Revision support improved more (may have some oddities with old saves until reaching a new map)
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	dates.append('2024-12-11')
 	headers.append("v3.3 Mr. Page's Mean Bingo Machine")
@@ -50,13 +58,6 @@ We've seen some confusion with Limited Fixed Saves. When you have a Memory Conta
 Jail no longer takes away your Memory Containment Units
 Mr. H can now swim
 Fixed regen not getting boosted past level 4 when using Synthetic Heart
-And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
-	
-	dates.append('2024-10-01')
-	headers.append("v3.2.1 Halloween Hotfix!")
-	msgs.append(
-"""Fixes for cosmetics outside of Halloween modes, especially the lighting.
-New special light aug tweaks for Halloween Modes!
 And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	url = "https://mods4ever.com"
