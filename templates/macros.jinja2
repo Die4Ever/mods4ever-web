@@ -23,20 +23,24 @@
         <li><a href="https://github.com/{{ project.repo }}/releases/latest/download/{{ downloadurl }}">DOWNLOAD: {{ downloadname }}</a></li>
     {% endfor %}
 
-    <li><a href="https://github.com/{{ project.repo }}/#readme">Readme</a></li>
+    {% if project.get('repo') %}
+        <li><a href="https://github.com/{{ project.repo }}/#readme">Readme</a></li>
+    {% endif %}
 
     {% if project.get('downloads') %}
         <li><a href="https://github.com/{{ project.repo }}/releases/latest">Release Notes</a></li>
-    {% else %}
+    {% elif project.get('repo') %}
         <li><a href="https://github.com/{{ project.repo }}/releases/latest">Latest Release</a></li>
     {% endif %}
 
-    <li>
-        <a href="https://lemmy.mods4ever.com/c/{{ project.community }}" title="Decentralized and open source version of Reddit">Lemmy</a> ||
-        <a href="https://fedia.io/m/{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Reddit">Mbin</a> ||
-        <a href="https://mastodon.social/@{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Twitter">Mastodon</a>
-    </li>
-    
+    {% if project.get('community') %}
+        <li>
+            <a href="https://lemmy.mods4ever.com/c/{{ project.community }}" title="Decentralized and open source version of Reddit">Lemmy</a> ||
+            <a href="https://fedia.io/m/{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Reddit">Mbin</a> ||
+            <a href="https://mastodon.social/@{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Twitter">Mastodon</a>
+        </li>
+    {% endif %}
+
     {% for linkname,linkurl in project.get('links', {}).items() %}
         <li><a href="{{ linkurl }}">{{ linkname }}</a></li>
     {% endfor %}

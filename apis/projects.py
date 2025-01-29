@@ -99,6 +99,7 @@ def get_projects():
         },
         'StreamDetective': {
             'name': 'Stream Detective',
+            'description': 'A bot to find Twitch streams matching complex filters.',
             'repo': 'TheAstropath/StreamDetective',
             'community': 'stream_detective',
             'links': {
@@ -123,6 +124,15 @@ def get_projects():
             'description': 'Tool for transforming Unreal Engine 1 maps',
             'repo': 'Die4Ever/unreal-map-flipper',
             'community': 'deus_ex_randomizer',
+        },
+        'Rando-List': {
+            'name': 'The BIG List of Video Game Randomizers',
+            'description': 'I helped converting this to an open source project.',
+            #'repo': 'video-game-randomizers/rando-list',
+            'links': {
+                'The BIG List of Video Game Randomizers': 'https://randomizers.debigare.com/',
+                'GitHub Readme': 'https://github.com/video-game-randomizers/rando-list/#readme',
+            },
         },
     }
 

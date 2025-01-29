@@ -114,6 +114,14 @@ iframe {
     font-size: 120%;
 }
 
+.socials {
+    text-align: center;
+    margin: 30px;
+}
+
+.socials a {
+    padding: 20px;
+}
 
 /* SCREEN SIZES */
 @media screen and (max-width: 70rem) { /* the .content has a max-width of 60rem, so we're avoiding borders slimmer than 10rem */
