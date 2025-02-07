@@ -33,11 +33,15 @@ def get_projects():
             'name': 'Deus Ex Vanilla Fixer',
             'description': 'Makes the game run correctly on modern computers without otherwise changing it at all.',
             'youtube': 'VO417rARDno',
-            'repo': 'Die4Ever/deus-ex-randomizer',
+            #'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',
-            'downloads': {
-                'Windows': 'DXRVanillaFixer.exe',
-                'Linux': 'DXRVanillaFixer-Linux',
+            #'downloads': {
+            #    'Windows': 'DXRVanillaFixer.exe',
+            #    'Linux': 'DXRVanillaFixer-Linux',
+            #},
+            'links': {
+                'DOWNLOAD: Windows': 'https://github.com/Die4Ever/deus-ex-randomizer/releases/latest/download/DXRVanillaFixer.exe',
+                'DOWNLOAD: Linux': 'https://github.com/Die4Ever/deus-ex-randomizer/releases/latest/download/DXRVanillaFixer-Linux',
             },
         },
         'RCTRando': {

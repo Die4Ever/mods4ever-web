@@ -33,6 +33,10 @@
         <li><a href="https://github.com/{{ project.repo }}/releases/latest">Latest Release</a></li>
     {% endif %}
 
+    {% for linkname,linkurl in project.get('links', {}).items() %}
+        <li><a href="{{ linkurl }}">{{ linkname }}</a></li>
+    {% endfor %}
+
     {% if project.get('community') %}
         <li>
             <a href="https://lemmy.mods4ever.com/c/{{ project.community }}" title="Decentralized and open source version of Reddit">Lemmy</a> ||
@@ -40,8 +44,4 @@
             <a href="https://mastodon.social/@{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Twitter">Mastodon</a>
         </li>
     {% endif %}
-
-    {% for linkname,linkurl in project.get('links', {}).items() %}
-        <li><a href="{{ linkurl }}">{{ linkname }}</a></li>
-    {% endfor %}
 {%- endmacro %}
