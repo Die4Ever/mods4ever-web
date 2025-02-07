@@ -32,7 +32,7 @@ def get_projects():
         'DXRVanillaFixer': {
             'name': 'Deus Ex Vanilla Fixer',
             'description': 'Makes the game run correctly on modern computers without otherwise changing it at all.',
-            'youtube': 'ksoj1QMoGIc',
+            'youtube': 'VO417rARDno',
             'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',
             'downloads': {
