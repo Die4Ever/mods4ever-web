@@ -76,7 +76,10 @@ def downloads(path):
         r['total'] = total
 
         delta:datetime.timedelta = prevTime - published
-        r['per_day'] = round(total / (delta.total_seconds()/86400), 1)
+        num_days = delta.total_seconds()/86400
+        r['num_days'] = round(num_days, 1)
+        r['per_day'] = round(total / num_days, 1)
+        r['per_week'] = round(total / max(num_days / 7, 1))
         if release.get('name') != 'Development Build':
             prevTime = published
         out.append(r)
