@@ -1,4 +1,5 @@
 # flask --app web.py run --debug --port 10451
+# or for IPv6: flask --app web.py run --debug --host "::" --port 10451
 # or just python3 web.py
 from flask import Flask, redirect, render_template, request, g
 import requests
