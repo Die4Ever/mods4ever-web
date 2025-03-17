@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import json
+import os
 import os.path
 from dxlog.base import *
 from typeguard import typechecked
@@ -27,7 +28,7 @@ COUNT_TEXT_OFFSET_Y=42
 class InventoryScreenDrawer:
 
     def getInvImage(self,InvClass:str):
-        imageLoc = self.IconsFolder+InvClass+".png"
+        imageLoc = self.getInvImageLocation(InvClass)
         if not os.path.exists(imageLoc):
             return None
 
@@ -122,9 +123,19 @@ class InventoryScreenDrawer:
             alt+="\n"
         return alt
 
+    def getInvImageLocation(self,InvClass):
+        return self.IconsFolder+self.InvImageLookup.get(InvClass.lower(),"INVALIDFILENAME.png")
+
+    def initInvImageLookupTable(self):
+        self.InvImageLookup=dict()
+        for f in os.listdir(self.IconsFolder):
+            self.InvImageLookup[f.split(".")[0].lower()]=f
+        #print(self.InvImageLookup)
+
     def __init__(self,jsonIn,imageDir="""InventoryImages/""",iconDir="""InventoryImages/Icons/"""):
         self.ImageFolder = imageDir
         self.IconsFolder = iconDir
+        self.initInvImageLookupTable()
         self.image = Image.open(self.ImageFolder+"InventoryScreen.png")
         self.image.convert("RGBA")
         self.image = self.scaleImage(self.image,ImageScale)
