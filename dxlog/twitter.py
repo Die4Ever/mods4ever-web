@@ -444,6 +444,25 @@ def ExtinguishFireMsg(event):
 	
 	return msg
 
+def MerchantMsg(event):
+
+	purchase = event.get('Purchase')
+	failure = event.get('Failure')
+
+	if failure!=None or purchase==None:
+		return None
+
+	msg = event['PlayerName']+" bought "+event['PurchaseArticle']+" "+event['PurchaseName']+" from "+event['MerchantName']+" for just "+event['PurchasePrice']+" credits!"
+
+	#mapname should always be there, but just in case...
+	if 'mapname' in event:
+		msg += '\n\n'+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')'
+	else:
+		msg+="\n\nMap: "+event['map']
+
+	#msg+="\nPosition: " + location_to_string(event['location'])
+
+	return msg
 
 
 mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'Vanilla? Madder.' }
@@ -550,7 +569,12 @@ def gen_event_msg(event,d,mod,version):
 		msg = ExtinguishFireMsg(event)
 		if not msg:
 			return None
-		
+
+	elif typename=='MerchantInfo':
+		msg = MerchantMsg(event)
+		if not msg:
+			return None
+
 	elif typename=='QueryLeaderboard':
 		return None
 
