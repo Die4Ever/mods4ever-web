@@ -2,7 +2,7 @@ from dxlog.base import *
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.3.1.2"
+	latest_version = "v3.4.0.8"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -15,6 +15,18 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
+
+	dates.append('2025-03-19')
+	headers.append("v3.4 We Welcome All")
+	msgs.append(
+"""Normal Randomizer game mode has been renamed to Full Randomizer, and the new Normal Randomizer mode is the new default
+Zero Rando now disables many more balance changes, making it a great way to play Deus Ex for the first time
+Multiple, rotating quicksave slots
+Slowed down WaltonWare difficulty increases
+New menu to change current game settings
+New loadouts and improvements to old ones
+Tweaks to The Merchant items and pricing, now selling more relevant items with more appropriate prices
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
 
 	dates.append('2025-01-06')
 	headers.append("v3.3.1 Bug Fixes")
@@ -51,15 +63,6 @@ New home for the DXRando Activity bot https://mastodon.social/@DXRandoActivity
 And more! Download from Mods4Ever.com or read the full patch notes on Github.
 We've seen some confusion with Limited Fixed Saves. When you have a Memory Containment Unit in your inventory (or 2 for the new Extreme version) you only need to have the box highlight on the computer and then you can use the normal Save Game menu or Quicksave button. The only freebie autosave you get is at the very start of the game. Make sure to save before going to Battery Park! Sometimes you might want to backtrack to save. Remember that if you die not all is lost, because you now have a better plan!""")
 	
-	dates.append('2024-10-09')
-	headers.append("v3.2.2 Halloween Mode Tweaks")
-	msgs.append(
-"""When playing with Fixed Saves (such as in Halloween mode) there is now 1 Memory Containment Unit in each map, instead of being just an 80% chance
-Jail no longer takes away your Memory Containment Units
-Mr. H can now swim
-Fixed regen not getting boosted past level 4 when using Synthetic Heart
-And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
-
 	url = "https://mods4ever.com"
 	visit = "Would you like to visit "+url+" now?"
 
