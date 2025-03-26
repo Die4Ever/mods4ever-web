@@ -16,6 +16,16 @@ def update_notification(mod, version, data):
 	headers = []
 	msgs = []
 
+	dates.append('2025-03-26')
+	headers.append("v3.4.1 Hotfix")
+	msgs.append(
+"""TNT in Battery Park subway is no longer shuffled with goals rando disabled
+Disabled randomizing the guy with the East Gate key in M03 Airfield if goals rando is disabled
+Fixed In-Game Settings menu for some of the flags at the bottom
+Fixed medbot/repairbot stat rando consistency
+Fixed Smuggler's call button in Revision
+And more! Download from Mods4Ever.com or read the full patch notes on Github.""")
+
 	dates.append('2025-03-19')
 	headers.append("v3.4 We Welcome All")
 	msgs.append(
@@ -54,15 +64,6 @@ Some fixes for endgame cutscenes and NG+
 And more! Download from Mods4Ever.com or read the full patch notes on Github.
 We've seen some confusion with Limited Fixed Saves. When you have a Memory Containment Unit in your inventory (or 2 for the new Extreme version) you only need to have the box highlight on the computer and then you can use the normal Save Game menu or Quicksave button. The only freebie autosave you get is at the very start of the game. Make sure to save before going to Battery Park! Sometimes you might want to backtrack to save. Remember that if you die not all is lost, because you now have a better plan!""")
 
-	dates.append('2024-10-24')
-	headers.append("v3.2.3 It Takes Two")
-	msgs.append(
-"""Extreme Limited Fixed Saves mode, uses 2 Memory Containment Units per save instead of 1. Must also be near a computer like in the other Fixed Saves modes. Pairs well with Halloween Mode for a new challenge!
-Reduced Mr. H's health. You still can't kill him, but if you deal enough damage to him then he will run away.
-New home for the DXRando Activity bot https://mastodon.social/@DXRandoActivity
-And more! Download from Mods4Ever.com or read the full patch notes on Github.
-We've seen some confusion with Limited Fixed Saves. When you have a Memory Containment Unit in your inventory (or 2 for the new Extreme version) you only need to have the box highlight on the computer and then you can use the normal Save Game menu or Quicksave button. The only freebie autosave you get is at the very start of the game. Make sure to save before going to Battery Park! Sometimes you might want to backtrack to save. Remember that if you die not all is lost, because you now have a better plan!""")
-	
 	url = "https://mods4ever.com"
 	visit = "Would you like to visit "+url+" now?"
 
