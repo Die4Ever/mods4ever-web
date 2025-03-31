@@ -1,4 +1,5 @@
 from dxlog.base import *
+import random
 
 def update_notification(mod, version, data):
 	response = {}
@@ -91,6 +92,9 @@ We've seen some confusion with Limited Fixed Saves. When you have a Memory Conta
 		response['message'] = desc
 		response['message'] += "|n" + detail
 		response['message'] += "|n" + visit
+	if VersionStringToInt(version) < VersionStringToInt('v3.0.0.6'):
+		notifs = ['YOU ARE SO FAR BEHIND ON UPDATES!', 'PLEASE DOWNLOAD THE UPDATE!', "DON'T YOU WANT TO PET THE DOG?"]
+		response['notification'] = random.choice(notifs)
 	
 	for i in range(len(headers)):
 		response['newsdate' + str(i)] = dates[i]
