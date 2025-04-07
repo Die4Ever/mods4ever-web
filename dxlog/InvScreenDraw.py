@@ -124,7 +124,18 @@ class InventoryScreenDrawer:
         return alt
 
     def getInvImageLocation(self,InvClass):
-        return self.IconsFolder+self.InvImageLookup.get(InvClass.lower(),"INVALIDFILENAME.png")
+        invClassName=InvClass.lower()
+
+        #In case someone actually manages to beat the game in HX,
+        #strip the HX off the start of the name so it matches the vanilla names
+        if (invClassName.startswith("hx")):
+            invClassName=invClassName[2:]
+
+        #Remap any items that don't have icons
+        if invClassName=="weaponrubberbaton":
+            invClassName = "weaponbaton"
+
+        return self.IconsFolder+self.InvImageLookup.get(invClassName,"INVALIDFILENAME.png")
 
     def initInvImageLookupTable(self):
         self.InvImageLookup=dict()

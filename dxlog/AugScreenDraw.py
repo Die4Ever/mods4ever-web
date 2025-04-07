@@ -37,8 +37,12 @@ class AugScreenDrawer:
             augName = "AugDatalink"
         elif augName=="AugTracking":
             augName = "AugTarget"
-        elif augName=="AugNinja":
-            augName = "AugStealth"
+        elif augName=="AugInfraVision":
+            augName = "AugVision"
+        elif augName=="AugMotionSensor":
+            augName = "AugVision"
+        elif augName=="AugVisionShort":
+            augName = "AugVision"
         imageLoc = self.ImageFolder+augName+".png"
         if not os.path.exists(imageLoc):
             return None
