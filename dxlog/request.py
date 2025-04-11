@@ -19,7 +19,6 @@ def update_notification(mod, version, data):
 	msgs = []
 
 	for news in dxrando_news():
-		print(news)
 		dates.append(news.date)
 		headers.append(news.header)
 		msg = ''
