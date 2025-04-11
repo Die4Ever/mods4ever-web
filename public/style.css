@@ -113,6 +113,8 @@ iframe {
     box-shadow: 0rem 0rem 1rem 0.5rem #141414; /* make sure same color as topnav */
     font-size: 120%;
 }
+.content a:not(.caret) { color: #9ab3ff; font-weight: bold; }
+.content a:hover { color: #fff; font-weight: bolder; }
 
 .socials {
     text-align: center;
