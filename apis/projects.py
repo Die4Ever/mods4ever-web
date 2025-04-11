@@ -1,3 +1,4 @@
+from apis.dxrando import dxrando_news
 
 def get_projects():
     d = {
@@ -17,6 +18,7 @@ def get_projects():
                 #'DXRando Activity Bot': 'https://mastodon.social/@DXRandoActivity',
                 'Wiki': 'https://github.com/Die4Ever/deus-ex-randomizer/wiki',
             },
+            'news': dxrando_news
         },
         'DXRZeroRando': {
             'name': 'Deus Ex Zero Rando',

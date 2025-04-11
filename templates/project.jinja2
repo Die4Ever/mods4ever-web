@@ -2,9 +2,13 @@
 
 {% block content %}
 
-{% from 'macros.jinja2' import project_inner %}
+{% from 'macros.jinja2' import project_inner, project_news %}
 <h1>{{ g.project.name }}</h1>
 {{ project_inner(g.project) }}
+
+{% if g.project.get('news') %}
+    {{ project_news(g.project) }}
+{% endif %}
 
 <h2><a href="/">More Projects Here</a></h2>
 {% endblock %}

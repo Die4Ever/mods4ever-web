@@ -3,6 +3,9 @@
 <li><a class="caret" href="/project/{{ projectkey }}" id="proj{{ projectkey }}">{{ project.name }}</a>
     <ul class="nested">
         {{ project_inner(project) }}
+        {% if project.get('news') %}
+            <li><a href="/project/{{ projectkey }}" id="proj{{ projectkey }}">News</a></li>
+        {% endif %}
     </ul>
 </li>
 {%- endmacro %}
@@ -44,4 +47,19 @@
             <a href="https://mastodon.social/@{{ project.community }}@lemmy.mods4ever.com" title="Decentralized and open source version of Twitter">Mastodon</a>
         </li>
     {% endif %}
+{%- endmacro %}
+
+{% macro project_news(project) -%}
+    {% for news in project.news() %}
+        <div>
+            <h3>{{ news.date }} - {{news.header}}</h3>
+            <ul>
+            {% for change in news.changes %}
+                <li>{{ change }}</li>
+            {% endfor %}
+            </ul>
+            And more! Download links above or read the full <a href="https://github.com/{{ project.repo }}/releases">Release Notes on Github</a>.
+        </div>
+        <br/>
+    {% endfor %}
 {%- endmacro %}

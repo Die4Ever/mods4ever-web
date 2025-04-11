@@ -2,6 +2,7 @@
 import json
 import sys
 import urllib
+from apis import NewsItem
 from dxlog.base import ToHex, VersionStringToInt, VersionToInt, get_config, unrealscript_sanitize
 from dxlog.db import _QueryLeaderboard, GroupLeaderboard, db_connect
 
@@ -65,3 +66,47 @@ def writebingo(data):
     response = {'status': "ok received "+str(len(data))+" bytes"}
     print('writebingo', response, file=sys.stderr)
     return response
+
+
+def dxrando_news():
+    news = []
+    
+    news.append(NewsItem('2025-03-26', "v3.4.1 Hotfix",
+    [   "TNT in Battery Park subway is no longer shuffled with goals rando disabled",
+        "Disabled randomizing the guy with the East Gate key in M03 Airfield if goals rando is disabled",
+        "Fixed In-Game Settings menu for some of the flags at the bottom",
+        "Fixed medbot/repairbot stat rando consistency",
+        "Fixed Smuggler's call button in Revision",
+    ]))
+
+    news.append(NewsItem('2025-03-19', "v3.4 We Welcome All",
+    [   "Normal Randomizer game mode has been renamed to Full Randomizer, and the new Normal Randomizer mode is the new default",
+        "Zero Rando now disables many more balance changes, making it a great way to play Deus Ex for the first time",
+        "Multiple, rotating quicksave slots",
+        "Slowed down WaltonWare difficulty increases",
+        "New menu to change current game settings",
+        "New loadouts and improvements to old ones",
+        "Tweaks to The Merchant items and pricing, now selling more relevant items with more appropriate prices",
+    ]))
+
+    news.append(NewsItem('2025-01-06', "v3.3.1 Bug Fixes",
+    [   "You must now pet Starr instead of simply visiting her for bingo",
+        "Fixed bug where game would end if you completed a bingo line without a Bingo Win setting configured",
+        "Deus Ex: Revision support improved more (may have some oddities with old saves until reaching a new map)",
+    ]))
+
+    news.append(NewsItem('2024-12-11', "v3.3 Mr. Page's Mean Bingo Machine",
+    [   "Mr. Page's Mean Bingo Machine: A new mode where you play through the whole game, but must complete a set number of bingo lines before being allowed to progress to the next mission. Once you get to the next mission, you are given a new bingo board!",
+        "One Item Mode: Our new dumbest game mode! All items in a map will be replaced with a single type of item (eg. all flares, all biocells, or all beers)",
+        "Augs can now receive randomized slots (so speed can be an eye aug) (look in the Advanced New Game menu)",
+        "Deus Ex: Revision support is massively improved as a whole",
+    ]))
+
+    news.append(NewsItem('2024-10-29', "v3.2.4 Halloween Bug Fixes",
+    [   "Fixed Mr. H from counting in the M04 raid enemy counter",
+        "Fixed zombie Howards preventing Silo from completing",
+        "Some fixes for endgame cutscenes and NG+",
+        "We've seen some confusion with Limited Fixed Saves. When you have a Memory Containment Unit in your inventory (or 2 for the new Extreme version) you only need to have the box highlight on the computer and then you can use the normal Save Game menu or Quicksave button. The only freebie autosave you get is at the very start of the game. Make sure to save before going to Battery Park! Sometimes you might want to backtrack to save. Remember that if you die not all is lost, because you now have a better plan!",
+    ]))
+    
+    return news
