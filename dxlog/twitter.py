@@ -464,6 +464,21 @@ def MerchantMsg(event):
 
 	return msg
 
+def TimedRaceMsg(event):
+	raceName = event.get('raceName')
+	finishTime = event.get('finishTime')
+	targetTime = event.get('targetTime')
+
+	if (raceName==None or finishTime==None or targetTime==None):
+		return None
+
+	finishTime = float(finishTime)
+
+	msg = event['PlayerName']+" finished "+raceName+" in "+format(finishTime,'.3f')+" seconds!\n"
+
+	return msg
+
+
 
 mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'Vanilla? Madder.' }
 flag_to_character_names = {
@@ -572,6 +587,11 @@ def gen_event_msg(event,d,mod,version):
 
 	elif typename=='MerchantInfo':
 		msg = MerchantMsg(event)
+		if not msg:
+			return None
+		
+	elif typename=='TimedRace':
+		msg = TimedRaceMsg(event)
 		if not msg:
 			return None
 
