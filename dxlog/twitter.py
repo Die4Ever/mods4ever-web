@@ -472,9 +472,48 @@ def TimedRaceMsg(event):
 	if (raceName==None or finishTime==None or targetTime==None):
 		return None
 
-	finishTime = float(finishTime)
+	finishTime = round(float(finishTime),3) #Round off everything past milliseconds
+	remTime = finishTime
 
-	msg = event['PlayerName']+" finished "+raceName+" in "+format(finishTime,'.3f')+" seconds!\n"
+	days = int(int(remTime)/86400)
+	remTime = remTime - (days * 86400)
+
+	hours = int(int (remTime)/3600)
+	remTime = remTime - (hours * 3600)
+
+	minutes = int(int(remTime)/60)
+	remTime = remTime - (minutes * 60)
+
+	seconds = remTime
+
+	timeSegs=[]
+	if (days>0):
+		timeStr = str(days)+" day"
+		if (days>1):
+			timeStr=timeStr+"s"
+		timeSegs.append(timeStr)
+
+	if (hours>0):
+		timeStr = str(hours)+" hour"
+		if (hours>1):
+			timeStr=timeStr+"s"
+		timeSegs.append(timeStr)
+
+	if (minutes>0):
+		timeStr = str(minutes)+" minute"
+		if (minutes>1):
+			timeStr=timeStr+"s"
+		timeSegs.append(timeStr)
+
+	if (seconds>0):
+		timeStr = format(seconds,'.3f')+" second"
+		if (seconds!=1.0):
+			timeStr=timeStr+"s"
+		timeSegs.append(timeStr)
+
+	finishTimeStr = ", ".join(timeSegs)
+
+	msg = event['PlayerName']+" finished "+raceName+" in "+finishTimeStr+"!\n"
 
 	return msg
 
