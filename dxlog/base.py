@@ -33,7 +33,7 @@ def load_profanity_filter():
 		'dumbass','dumbasses','damn','douche','douchebag','douchebags','douchey','drunk','bastard', 'dink',
 		'dinks','dong','dummy','fat','fatass','godamn','goddam','godamnit','goddamnit','goddamn','goddamned',
 		'jackass','lmao','lmfao','moron','murder','punkass','reefer','sadist','sadism','shit','shite','shithead',
-		'stoned','weirdo','nimrod'
+		'stoned','weirdo','nimrod', 'kill', 'nudes'
 	])
 	
 	custom_badwords = get_config().get('custom_badwords',[])

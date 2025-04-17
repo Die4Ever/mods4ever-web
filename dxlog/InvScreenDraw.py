@@ -51,6 +51,7 @@ class InventoryScreenDrawer:
         coord=self.getInventoryCoord(x,y)
 
         invImage=self.getInvImage(invClass)
+        invClass = profanity.censor(invClass) #censor it, in case we have to write the text into the image
 
         if(invImage!=None):
             self.image.paste(invImage,coord,invImage)
@@ -93,7 +94,7 @@ class InventoryScreenDrawer:
                 inv: dict = inputJson[invId]
                 self.inventory.append(inv)
 
-        self.credits=inputJson.get("credits",0)
+        self.credits=int(inputJson.get("credits",0))
 
 
     def drawAllInventory(self):
@@ -121,7 +122,7 @@ class InventoryScreenDrawer:
             if (inv.get("count",0)>1):
                 alt+=" (Count: "+str(inv.get("count"))+")"
             alt+="\n"
-        return alt
+        return profanity.censor(alt)
 
     def getInvImageLocation(self,InvClass):
         invClassName=InvClass.lower()

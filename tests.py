@@ -62,6 +62,9 @@ INFO: 00_Intro.DXRTelemetry5: health: 100, HealthLegLeft: 100, HealthLegRight: 1
 	def test_profanity(self):
 		load_profanity_filter()
 		self.not_censored('Pimp')
+		self.not_censored('Kill')
+		self.not_censored('Nudes')
+		self.not_censored('Beat the meat')
 		self.not_censored('.71, 7.8')
 		for i in range(1000):#range(100000):
 			self.not_censored(i/10)

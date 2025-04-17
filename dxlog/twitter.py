@@ -625,12 +625,19 @@ def gen_event_msg(event,d,mod,version):
 		return None
 
 	for k in event:
+		sanitizeDictElems=False
 		if "Aug-" in k:
-			pass #Don't sanitize
+			sanitizeDictElems=True
 		elif "Inv-" in k:
-			pass #Don't sanitize
+			sanitizeDictElems=True
 		else:
 			event[k] = twitter_sanitize(event[k])
+
+		if sanitizeDictElems:
+			for e in event[k]:
+				event[k][e] = twitter_sanitize(event[k][e])
+
+
 	seed = twitter_sanitize(d.get('seed'))
 	flagshash = ToHex(d.get('flagshash'))
 	mod = twitter_sanitize(mod)
@@ -865,6 +872,8 @@ class BingoBoardDrawer:
 		x = coords[0][0]+border
 		y = coords[0][1]+border
 		squareSize = self.dimension/5 - (2*border) 
+
+		text = profanity.censor(text)
 
 		lines = text.split('\n')
 		true_lines = []

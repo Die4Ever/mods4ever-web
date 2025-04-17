@@ -123,7 +123,7 @@ class AugScreenDrawer:
             draw = ImageDraw.Draw(self.image)
             coords = self.getAugCoord(location, index)
             coords = (coords[0] + 5, coords[1] + 90)
-            draw.text(coords, augName, font=font)
+            draw.text(coords, self.getAugName(augName), font=font)
             
             
         self.setSkillLevel(location,skillLevel+1,index)
@@ -206,9 +206,12 @@ class AugScreenDrawer:
         augs["AugNinja"]="Ninja"
         augs["AugSkullGun"]="Skull Gun"
         augs["AugTracking"]="Tracking"
+        augs["AugInfraVision"]="Infravision"
+        augs["AugMotionSensor"]="Motion Sensor"
+        augs["AugVisionShort"]="Short-Range Vision Enhancement"
 
         if className not in augs:
-            return className
+            return profanity.censor(className) #Just in case
         else:
             return augs[className]
 
@@ -217,7 +220,7 @@ class AugScreenDrawer:
         for hotkey in self.augs.keys():
             if(hotkey<=12):
                 alt+="F"+str(hotkey)+" - "+self.getAugName(self.augs[hotkey]["name"])+" (Level "+str(self.augs[hotkey]["level"]+1)+")\n"
-        return alt
+        return profanity.censor(alt)
         
 
     def __init__(self, jsonIn, imageDir="AugDrawImages/", isFemale=False):
