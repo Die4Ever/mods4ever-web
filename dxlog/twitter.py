@@ -54,37 +54,40 @@ def tweet(config, playthrough_data, events, mod, version):
 		altText=""
 		attachments = []
 		if "bingo-0-0" in event:
-			saveImg = False
-			if "prevent_tweet" in config:
-				saveImg = config["prevent_tweet"]
-			bingoBoard = generateBingoBoardAttachment(event,saveImg)
-			if bingoBoard:
-				attachments.append(bingoBoard)
+			if (ShouldDrawBingo(event)):
+				saveImg = False
+				if "prevent_tweet" in config:
+					saveImg = config["prevent_tweet"]
+				bingoBoard = generateBingoBoardAttachment(event,saveImg)
+				if bingoBoard:
+					attachments.append(bingoBoard)
 		if "Aug-12" in event: #Aug-12 should always be the light
-			try:
-				augDrawer = AugScreenDrawer(event, isFemale=event["PlayerIsFemale"])
-				augScreen = augDrawer.getImageInMemory()
-			except Exception as e:
-				err('Failed to generate augmentations image:', e, e.args)
-				logex(e)
-			if config.get("prevent_tweet",False):
-				augDrawer.saveImage()
-			if augScreen:
-				altText=augDrawer.getAugScreenAltText()
-				attachments.append([augScreen,altText])
-		if "Inv-0" in event: 
-			try:
-				invDrawer = InventoryScreenDrawer(event)
-				invScreen = invDrawer.getImageInMemory()
-			except Exception as e:
-				err('Failed to generate inventory image:', e, e.args)
-				err("Event being drawn" + str(event))
-				logex(e)
-			if config.get("prevent_tweet",False):
-				invDrawer.saveImage()
-			if invScreen:
-				altText=invDrawer.getInvScreenAltText()
-				attachments.append([invScreen,altText])
+			if (ShouldDrawAugs(event)):
+				try:
+					augDrawer = AugScreenDrawer(event, isFemale=event["PlayerIsFemale"])
+					augScreen = augDrawer.getImageInMemory()
+				except Exception as e:
+					err('Failed to generate augmentations image:', e, e.args)
+					logex(e)
+				if config.get("prevent_tweet",False):
+					augDrawer.saveImage()
+				if augScreen:
+					altText=augDrawer.getAugScreenAltText()
+					attachments.append([augScreen,altText])
+		if "Inv-0" in event:
+			if (ShouldDrawInventory(event)):
+				try:
+					invDrawer = InventoryScreenDrawer(event)
+					invScreen = invDrawer.getImageInMemory()
+				except Exception as e:
+					err('Failed to generate inventory image:', e, e.args)
+					err("Event being drawn" + str(event))
+					logex(e)
+				if config.get("prevent_tweet",False):
+					invDrawer.saveImage()
+				if invScreen:
+					altText=invDrawer.getInvScreenAltText()
+					attachments.append([invScreen,altText])
 		if msg!=None:
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
@@ -98,7 +101,7 @@ def tweet(config, playthrough_data, events, mod, version):
 
 def generateBingoBoardAttachment(event,saveImg):
 	boardImg = None
-	altText = "It's a bingo board" #TODO: Generate real alt-text for the bingo board!
+	altText = "It's a bingo board" #Will be replaced further down, by generateAltText
 	try:
 		board = BingoBoardDrawer(event,DEFAULT_DIMENSION,DEFAULT_FONT_SIZE)
 		if board.isBoardFilled():
@@ -113,6 +116,15 @@ def generateBingoBoardAttachment(event,saveImg):
 		logex(e)
 		return None
 	return [boardImg,altText]
+
+def ShouldDrawInventory(event):
+	return event.get('DrawInventory',"True")=="True"
+
+def ShouldDrawAugs(event):
+	return event.get('DrawAugs',"True")=="True"
+
+def ShouldDrawBingo(event):
+	return event.get('DrawBingo',"True")=="True"
 
 def damage_string(dmgtype):
 	if dmgtype=="shot":
@@ -389,6 +401,8 @@ def FlagEventMsg(event,mod):
 			return player+" brought Leo Gold to the bottom of the OceanLab, which has to withstand unbelievable bars of pressure\n"
 		else:
 			info('Leo Gold got brought to some other bar that I do not know about: '+event['map'])
+	elif flag=='Area51ScratchOMatic':
+		return Area51ElevatorMsg(event,player)
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
@@ -517,6 +531,52 @@ def TimedRaceMsg(event):
 
 	return msg
 
+def Area51ElevatorMsg(event,player):
+	msg=""
+	medkits=0
+
+
+	comment = int(event.get('comment',-99))
+	curHealth = int(event.get('curHealth',-99999))
+	healthDiff = int(event.get('healthDiff',-99999))
+	for i in range(0,50): #only 30 slots in inventory right now, but just to be safe
+		invId = "Inv-"+str(i)
+		if invId in event:
+			inv: dict = event[invId]
+			if inv["class"].lower()=="medkit" and "count" in inv:
+				try:
+					medkits=int(inv["count"])
+				except:
+					medkits=0
+
+	if (curHealth <= 0): #Something went horribly wrong
+		return ""
+
+	if comment==0:
+		msg = "Barely a scratch, "+player+".  You're a little faster on your feet then your daddy was.\n\n"
+	elif comment==1:
+		msg = "Looks like you're bleeding, "+player+", and those were only the grunts.  This is going to be easy...\n\n"
+	elif comment==2:
+		msg = "Looking pretty beat up, "+player+".  Bet you go down with the next shot.\n\n"
+	else:
+		info('Area 51 Elevator Message, unknown Bob comment: '+str(comment))
+		return "" #Unknown comment, just ignore this, I guess
+
+	msg += player+" survived the Area 51 Sector 2 elevator ambush with "+str(curHealth)+"% health remaining"
+
+	if (healthDiff > 0): #Only worth mentioning if they lost health
+		msg += ", having lost "+str(healthDiff)+"% health in the process!  "
+	else:
+		msg += ".  "
+
+	if (medkits==0):
+		msg += "Now they have no medkits left!\n"
+	elif (medkits==1):
+		msg += "They only have "+str(medkits)+" medkit remaining!\n"
+	elif (medkits>0):
+		msg += "They have "+str(medkits)+" medkits remaining!\n"
+
+	return msg
 
 
 mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'Vanilla? Madder.' }
@@ -565,13 +625,18 @@ def gen_event_msg(event,d,mod,version):
 		return None
 
 	for k in event:
-		event[k] = twitter_sanitize(event[k])
+		if "Aug-" in k:
+			pass #Don't sanitize
+		elif "Inv-" in k:
+			pass #Don't sanitize
+		else:
+			event[k] = twitter_sanitize(event[k])
 	seed = twitter_sanitize(d.get('seed'))
 	flagshash = ToHex(d.get('flagshash'))
 	mod = twitter_sanitize(mod)
 	version = twitter_version_to_string(version)
 	typename = event['type']
-	
+
 	# player died
 	if typename=='DEATH':
 		msg = gen_death_msg(True, event, event['location'])
