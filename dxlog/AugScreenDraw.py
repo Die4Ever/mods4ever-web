@@ -209,6 +209,8 @@ class AugScreenDrawer:
         augs["AugInfraVision"]="Infravision"
         augs["AugMotionSensor"]="Motion Sensor"
         augs["AugVisionShort"]="Short-Range Vision Enhancement"
+        augs["AugOnlySpeed"]="Running Enhancement"
+        augs["AugJump"]="Jump Enhancement"
 
         if className not in augs:
             return profanity.censor(className) #Just in case
