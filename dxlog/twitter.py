@@ -611,7 +611,12 @@ flag_to_character_names = {
 	'JosephManderley_Dead': 'Joseph Manderley',
 	'PrivateLloyd_Dead': 'Private Lloyd',
 	'Starr_Dead': 'Starr',
-	'MaggieChow_Dead': 'Maggie Chow'
+	'MaggieChow_Dead': 'Maggie Chow',
+	'SamCarter_Dead': 'Sam Carter',
+	'PhilipMead_Dead': 'Philip Mead',
+	'RachelMead_Dead': 'Rachel Mead',
+	'JaimeReyes_Dead': 'Jaime Reyes',
+	'AlexJacobson_Dead': 'Alex Jacobson'
 }
 
 def gen_event_msg(event,d,mod,version):
