@@ -216,6 +216,9 @@ def gen_death_msg(isPlayer, event, location):
 	if not isPlayer and 'PlayerName' in event and event['PlayerName'] != killer:
 		safePlayerName = censor_name(event['PlayerName'])
 		msg += " under "+safePlayerName+"'s watch"
+
+	if isPlayer and 'HordeWaveNum' in event:
+		msg += "\n\nThey died on wave "+event['HordeWaveNum']+" of Horde Mode."
 	
 	if location:
 		msg+="\n\nPosition: " + location_to_string(location)
@@ -403,6 +406,12 @@ def FlagEventMsg(event,mod):
 			info('Leo Gold got brought to some other bar that I do not know about: '+event['map'])
 	elif flag=='Area51ScratchOMatic':
 		return Area51ElevatorMsg(event,player)
+	elif flag=='HordeWaveComplete':
+		if 'HordeWaveNum' not in event:
+			return ""
+		if int(event['HordeWaveNum']) % 5 != 0:
+			return ""
+		return player+" completed wave "+event['HordeWaveNum']+" of Horde Mode!  They have "+event['HordeHealth']+"% health remaining and "+event['HordeEnergy']+"% energy\n"
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
