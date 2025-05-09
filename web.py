@@ -34,8 +34,11 @@ def writebingo():
     if content_length is None:
         return {'error': 'Content-Length header missing'}, 411  # 411 Length Required
     if content_length > 15*1024:
-        return {'error': 'Content-Length too long'}, 401
-    return dxrando.writebingo(request.get_data())
+        return {'error': 'Content-Length too long'}, 413 # 413 Content Too Large
+    data = request.get_data()
+    if len(data) > 15*1024:
+        return {'error': 'Content-Length too long'}, 413 # 413 Content Too Large
+    return dxrando.writebingo(data)
 
 @app.route('/api/dxrando/leaderboard')
 def api_dxrando_leaderboard():

@@ -53,18 +53,18 @@ def read_binary_content(data:bytes) -> str:
     return data.decode()
 
 def saveContentToFile(content):
-    cleanContent = urllib.parse.unquote_plus(content)
-    cleanContent = cleanContent.lstrip("bingo=")
     f = open("public/bingo.txt", 'w')
-    f.write(cleanContent)
+    f.write(content)
     f.close()
 
 def writebingo(data):
+    print(repr(data))
     content = read_binary_content(data)
     content = content.replace('\x00','').replace('\r','')
     try:
+        print(repr(content))
         content = json.loads(content)
-        content = json.dumps(content)
+        content = json.dumps(content, indent=4)
     except Exception as e:
         return {'error': 'invalid json'}, 400
     saveContentToFile(content)
