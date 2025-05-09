@@ -30,6 +30,11 @@ def telem():
 def writebingo():
     if request.args.get('adminpassword', '') != get_config().get('adminpassword'):
         return {'error': 'bad password'}, 401
+    content_length = request.content_length
+    if content_length is None:
+        return {'error': 'Content-Length header missing'}, 411  # 411 Length Required
+    if content_length > 15*1024:
+        return {'error': 'Content-Length too long'}, 401
     return dxrando.writebingo(request.get_data())
 
 @app.route('/api/dxrando/leaderboard')

@@ -62,6 +62,11 @@ def saveContentToFile(content):
 def writebingo(data):
     content = read_binary_content(data)
     content = content.replace('\x00','').replace('\r','')
+    try:
+        content = json.loads(content)
+        content = json.dumps(content)
+    except Exception as e:
+        return {'error': 'invalid json'}, 400
     saveContentToFile(content)
     response = {'status': "ok received "+str(len(data))+" bytes"}
     print('writebingo', response, file=sys.stderr)
