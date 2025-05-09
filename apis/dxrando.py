@@ -58,11 +58,9 @@ def saveContentToFile(content):
     f.close()
 
 def writebingo(data):
-    print(repr(data))
     content = read_binary_content(data)
     content = content.replace('\x00','').replace('\r','')
     try:
-        print(repr(content))
         content = json.loads(content)
         content = json.dumps(content, indent=4)
     except Exception as e:
