@@ -17,14 +17,17 @@ def update_notification(mod, version, data):
 	dates = []
 	headers = []
 	msgs = []
-
-	for news in dxrando_news():
-		dates.append(news.date)
-		headers.append(news.header)
+	news = dxrando_news()[:5]
+	for n in news:
+		dates.append(n.date)
+		headers.append(n.header)
 		msg = ''
-		for change in news.changes:
+		for change in n.changes:
 			msg += '~ ' + change + '|n|n'
-		msg += 'And more! Download from Mods4Ever.com or read the full patch notes on Github.'
+		if n.isVersionUpdate:
+			msg += 'And more! Download from Mods4Ever.com or read the full patch notes on Github.'
+		else:
+			msg = msg[:-4]
 		msgs.append(msg)
 
 	url = "https://mods4ever.com"
@@ -35,8 +38,9 @@ def update_notification(mod, version, data):
 	assert len(headers) == 5
 	assert len(dates) == len(headers)
 	assert len(msgs) == len(headers)
-	assert short_version in headers[0]
-	assert short_version in desc
+	if news[0].isVersionUpdate:
+		assert short_version in headers[0]
+		assert short_version in desc
 
 	latest_version_int = VersionStringToInt(latest_version)
 	assert latest_version_int > 0
