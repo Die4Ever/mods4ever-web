@@ -609,6 +609,7 @@ flag_to_character_names = {
 	'Labrat_Bum_Dead': 'Labrat Bum',
 	'DXRNPCs1_Dead': 'The Merchant',
 	'lemerchant_Dead': 'Le Merchant',
+	'TrainingMerchant_Dead': 'Training Merchant',
 	'Harold_Dead': 'Harold',
 	'Josh_Dead': 'Josh',
 	'Billy_Dead': 'Billy',
