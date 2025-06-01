@@ -103,7 +103,7 @@ def write_db(mod, version, ip, content:str, config, data):
 					if event["type"] == "BeatGame":
 						log_beatgame(cursor, log_id, mod, version, event, d)
 					if event['type'] == 'QueryLeaderboard':
-						ret.update(QueryLeaderboardGame(cursor, event, d.get('playthrough_id')))
+						ret.update(QueryLeaderboardGame(cursor, event, d.get('playthrough_id'), version))
 				except Exception as e:
 					err("failed to handle event", event.get('type'), e)
 					logex(e)
@@ -346,14 +346,17 @@ def NonGroupedLeaderboard(cursor, event, playthrough_id, max_len=15):
 	return leaderboard[:max_len]
 
 
-def QueryLeaderboardGame(cursor, event, playthrough_id):
+def QueryLeaderboardGame(cursor, event, playthrough_id, version):
+	min_version = VersionToInt(3,1,0,3)
+	if VersionStringToInt(version) >= VersionToInt(3, 5, 0, 10):
+		min_version = VersionToInt(3,5,0,10)
 	if event.get('GameModeName') == 'Speedrun Mode':
-		_QueryLeaderboard(cursor, SortBy='totaltime', version=VersionToInt(3,1,0,3),
+		_QueryLeaderboard(cursor, SortBy='totaltime', version=min_version,
 			Filters={ 'GameMode': event.get('GameMode'), 'difficulty': event.get('difficulty') }
 		)
 		leaderboard = NonGroupedLeaderboard(cursor, event, playthrough_id)
 	else:
-		_QueryLeaderboard(cursor)
+		_QueryLeaderboard(cursor, version=min_version)
 		leaderboard = GroupLeaderboard(cursor, event, playthrough_id)
 
 	ret = {}

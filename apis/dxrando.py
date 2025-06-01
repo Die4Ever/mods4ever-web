@@ -73,6 +73,16 @@ def writebingo(data):
 
 def dxrando_news():
     news = []
+
+    news.append(NewsItem('2025-06-01', "v3.5 This One's Got Legs",
+    [   "Unless you use the 'Speed Enhancement' loadout, you will now start with the new Running Enhancement aug instead.",
+        "Many new goals rando locations, including Gordon Quick's location.",
+        "New 'The Three Leg Augs' loadout with new augs.",
+        "New 'My Vision Is Augmented' loadout with new augs.",
+        "New 'Speedrun Training' game mode.",
+        "New 'Strong Augs' game mode.",
+        "New speedrun timer option for WaltonWare, for use on speedrun.com/dxrando",
+    ]))
     
     news.append(NewsItem('2025-03-26', "v3.4.1 Hotfix",
     [   "TNT in Battery Park subway is no longer shuffled with goals rando disabled",
