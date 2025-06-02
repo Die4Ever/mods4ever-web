@@ -4,7 +4,7 @@ import random
 
 def update_notification(mod, version, data):
 	response = {}
-	latest_version = "v3.5.0.10"
+	latest_version = "v3.5.1.2"
 	parts = SplitVersionString(latest_version)
 	if parts[2] != '0':
 		short_version = 'v' + parts[0] + '.' + parts[1] + '.' + parts[2]# not part 3 (build number)
@@ -24,8 +24,10 @@ def update_notification(mod, version, data):
 		msg = ''
 		for change in n.changes:
 			msg += '~ ' + change + '|n|n'
-		if n.isVersionUpdate:
+		if n.isVersionUpdate and n.andMore:
 			msg += 'And more! Download from Mods4Ever.com or read the full patch notes on Github.'
+		elif n.isVersionUpdate:
+			msg += 'Download from Mods4Ever.com or read the full patch notes on Github.'
 		else:
 			msg = msg[:-4]
 		msgs.append(msg)

@@ -74,6 +74,11 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2025-06-02', "v3.5.1 Bingo Hotfix",
+    [   "Fixed issue with dolphin jumps breaking some other bingo goals.",
+        "We're looking for speedrunners!  If you can beat the game in under 3 hours, or do more than 4 WaltonWare loops in 1 hour, contact us!",
+    ], andMore=False))
+
     news.append(NewsItem('2025-06-01', "v3.5 This One's Got Legs",
     [   "Unless you use the 'Speed Enhancement' loadout, you will now start with the new Running Enhancement aug instead.",
         "Many new goals rando locations, including Gordon Quick's location.",
@@ -82,7 +87,6 @@ def dxrando_news():
         "New 'Speedrun Training' game mode.",
         "New 'Strong Augs' game mode.",
         "New speedrun timer option for WaltonWare, for use on speedrun.com/dxrando",
-        "If you can beat the game in under 3 hours, or do more than 4 WaltonWare loops in 1 hour, contact us!",
     ]))
     
     news.append(NewsItem('2025-03-26', "v3.4.1 Hotfix",
