@@ -82,6 +82,7 @@ def dxrando_news():
         "New 'Speedrun Training' game mode.",
         "New 'Strong Augs' game mode.",
         "New speedrun timer option for WaltonWare, for use on speedrun.com/dxrando",
+        "If you can beat the game in under 3 hours, or do more than 4 WaltonWare loops in 1 hour, contact us!",
     ]))
     
     news.append(NewsItem('2025-03-26', "v3.4.1 Hotfix",

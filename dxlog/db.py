@@ -239,7 +239,7 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,6,0,0), maxdays=365, SortBy
 		+ "rando_difficulty, combat_difficulty, deaths, loads, saves, bingos, bingo_spots, newgameplus_loops, initial_version, setseed, stable_version "
 		+ "FROM leaderboard JOIN logs ON(leaderboard.log_id=logs.id) "
 		+ Filters
-		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY "
+		+ "WHERE initial_version >= %s AND created >= NOW()-INTERVAL %s DAY AND gametime > 0"
 		+ SortBy)
 
 	cursor.execute(query,
