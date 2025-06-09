@@ -491,6 +491,8 @@ def TimedRaceMsg(event):
 	raceName = event.get('raceName')
 	finishTime = event.get('finishTime')
 	targetTime = event.get('targetTime')
+	lostHealth = int(event.get('lostHealth',0))
+	lostEnergy = float(event.get('lostEnergy',0))
 
 	if (raceName==None or finishTime==None or targetTime==None):
 		return None
@@ -537,6 +539,12 @@ def TimedRaceMsg(event):
 	finishTimeStr = ", ".join(timeSegs)
 
 	msg = event['PlayerName']+" finished "+raceName+" in "+finishTimeStr+"!\n"
+
+	if (lostHealth>0):
+		msg = msg + "\n" + "Health Lost: "+str(lostHealth)+"%"+"\n"
+
+	if (lostEnergy>0):
+		msg = msg + "\n" + "Bioelectric Energy Used: "+str(round(lostEnergy,1))+"\n"
 
 	return msg
 
