@@ -381,6 +381,12 @@ def FlagEventMsg(event,mod):
 		return player+' got Jenny\'s number: ' + event['extra'].strip() + '\n'
 	elif flag=='AllSongsPlayed':
 		return player+' played every song on the piano!\n'
+	elif flag=='PoolTableComplete':
+		msg = player+' managed to sink all the balls on a pool table in '+FloatTimeToString(event.get('CompleteTime',0))+'!\n'
+		if 'mapname' in event:
+			msg += '\n'+event['mapname'] + ' (Mission: ' + str(event['mission']).zfill(2) + ')\n'
+		return msg
+
 	elif flag=='06_Datacube05':
 		d = event['extra'].strip()
 		ret = 'Hello Maggie! I swear I will never forget your birthday again! ' + d + ' is marked on my calendar forever! -- ' + player + '\n'
@@ -487,17 +493,8 @@ def MerchantMsg(event):
 
 	return msg
 
-def TimedRaceMsg(event):
-	raceName = event.get('raceName')
-	finishTime = event.get('finishTime')
-	targetTime = event.get('targetTime')
-	lostHealth = int(event.get('lostHealth',0))
-	lostEnergy = float(event.get('lostEnergy',0))
-
-	if (raceName==None or finishTime==None or targetTime==None):
-		return None
-
-	finishTime = round(float(finishTime),3) #Round off everything past milliseconds
+def FloatTimeToString(inTime):
+	finishTime = round(float(inTime),3) #Round off everything past milliseconds
 	remTime = finishTime
 
 	days = int(int(remTime)/86400)
@@ -537,6 +534,21 @@ def TimedRaceMsg(event):
 		timeSegs.append(timeStr)
 
 	finishTimeStr = ", ".join(timeSegs)
+
+	return finishTimeStr
+
+
+def TimedRaceMsg(event):
+	raceName = event.get('raceName')
+	finishTime = event.get('finishTime')
+	targetTime = event.get('targetTime')
+	lostHealth = int(event.get('lostHealth',0))
+	lostEnergy = float(event.get('lostEnergy',0))
+
+	if (raceName==None or finishTime==None or targetTime==None):
+		return None
+
+	finishTimeStr = FloatTimeToString(finishTime)
 
 	msg = event['PlayerName']+" finished "+raceName+" in "+finishTimeStr+"!\n"
 
