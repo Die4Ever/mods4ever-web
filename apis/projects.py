@@ -4,7 +4,7 @@ def get_projects():
     d = {
         'DXRando': {
             'name': 'Deus Ex Randomizer',
-            'description': 'This is a mod for the original Deus Ex that takes everything and shuffles it all around to make it like a new game every time but with the same great story. The goal is to increase the replayability and strategy. Also includes extra wacky game modes like WaltonWare, Halloween modes, and entrance randomizer modes.',
+            'description': 'This is a mod for the original Deus Ex that takes everything and shuffles it all around to make it like a new game every time but with the same great story. The goal is to increase the replayability and strategy. There is logic in place to ensure the game is always beatable. Also includes extra wacky game modes like WaltonWare, Halloween modes, and entrance randomizer modes.',
             'youtube': 'V3mTcG6xeq4',
             'repo': 'Die4Ever/deus-ex-randomizer',
             'community': 'deus_ex_randomizer',

@@ -76,6 +76,7 @@ def dxrando_news():
 
     news.append(NewsItem('2025-06-02', "v3.5.1 Bingo Hotfix",
     [   "Fixed issue with dolphin jumps breaking some other bingo goals.",
+        "June 22nd will be an all Deus Ex day on Sum of Besties.",
         "We're looking for speedrunners!  If you can beat the game in under 3 hours, or do more than 4 WaltonWare loops in 1 hour, contact us!",
     ], andMore=False))
 
