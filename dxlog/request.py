@@ -32,8 +32,12 @@ def update_notification(mod, version, data):
 			msg = msg[:-4]
 		msgs.append(msg)
 
+	latest_version_int = VersionStringToInt(latest_version)
+	assert latest_version_int > 0
+
 	url = "https://mods4ever.com"
 	visit = "Would you like to visit "+url+" now?"
+	url += '/?utm_source=game&utm_medium=onlineupdate&utm_version=' + str(VersionStringToInt(version)) + '&utm_campaign=' + str(latest_version_int)
 
 	assert len(desc) < 35
 	assert len(detail) < 35
@@ -43,9 +47,6 @@ def update_notification(mod, version, data):
 	if news[0].isVersionUpdate:
 		assert short_version in headers[0]
 		assert short_version in desc
-
-	latest_version_int = VersionStringToInt(latest_version)
-	assert latest_version_int > 0
 
 	for header in headers:
 		assert len(header) < 200
