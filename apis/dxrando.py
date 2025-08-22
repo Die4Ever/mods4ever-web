@@ -74,6 +74,14 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2025-08-21', "v3.6 Time to Get Serious",
+    [   "New game mode Serious Rando: disables memes and silly goal locations.",
+        "New game mode WaltonWare Hardcore: saving is disabled, and there is no healing!",
+        "Options for auto enabling auto augs when installed.",
+        "Pool tables are much improved.",
+        "Added scaling and blackout options for scopes and binoculars, with a cool automatic 'Fit to Screen' option that doesn't rely on fixed size textures and adapts to any screen resolution/ratio.",
+    ]))
+
     news.append(NewsItem('2025-06-02', "v3.5.1 Bingo Hotfix",
     [   "Fixed issue with dolphin jumps breaking some other bingo goals.",
         "June 22nd will be an all Deus Ex day on Sum of Besties.",
@@ -121,11 +129,4 @@ def dxrando_news():
         "Deus Ex: Revision support is massively improved as a whole",
     ]))
 
-    news.append(NewsItem('2024-10-29', "v3.2.4 Halloween Bug Fixes",
-    [   "Fixed Mr. H from counting in the M04 raid enemy counter",
-        "Fixed zombie Howards preventing Silo from completing",
-        "Some fixes for endgame cutscenes and NG+",
-        "We've seen some confusion with Limited Fixed Saves. When you have a Memory Containment Unit in your inventory (or 2 for the new Extreme version) you only need to have the box highlight on the computer and then you can use the normal Save Game menu or Quicksave button. The only freebie autosave you get is at the very start of the game. Make sure to save before going to Battery Park! Sometimes you might want to backtrack to save. Remember that if you die not all is lost, because you now have a better plan!",
-    ]))
-    
     return news
