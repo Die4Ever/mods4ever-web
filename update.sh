@@ -13,7 +13,7 @@ echo 'about to kill old process'
 PIDS=$(pgrep --uid=$UID -af 'python.*\s+web.py') || echo "old process not found"
 if [[ -n "$PIDS" ]]; then
   echo "Stopping old server processes: $PIDS"
-  pkill --uid=$UID -af 'python.*\s+web.py'
+  pkill --uid=$UID -fe 'python.*\s+web.py'
 fi
 
 echo 'starting server'
