@@ -9,7 +9,12 @@ fi
 git pull
 python3 tests.py
 echo 'about to kill old process'
-pgrep -af 'python.*\s+web.py' || echo "old process not found"
-pkill -f 'python.*\s+web.py' || echo "old process not found"
+# Look for running processes for this user
+PIDS=$(pgrep --uid=$UID -af 'python.*\s+web.py') || echo "old process not found"
+if [[ -n "$PIDS" ]]; then
+  echo "Stopping old server processes: $PIDS"
+  pkill --uid=$UID -af 'python.*\s+web.py'
+fi
+
 echo 'starting server'
 python3 web.py 2>/dev/null &
