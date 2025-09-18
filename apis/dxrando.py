@@ -74,6 +74,12 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2025-09-18', "v3.6.1 Welcome Back, Walt!",
+    [   "Fixed Area 51 Sectors 2 and 3 goals rando locations not working",
+        "The Ballistic Protection aug now uses slightly less energy (when Augs Balance Changes are enabled), and has a shorter auto linger time (when Semi-Automatic Augs are enabled)",
+        "On WaltonWare Gas Station, Ocean Lab, and Silo starts you can backtrack to Carla in Vandenberg (at the vanilla start, on the roof of the Command Center) to get the Vandenberg map",
+    ]))
+
     news.append(NewsItem('2025-08-21', "v3.6 Time to Get Serious",
     [   "New game mode Serious Rando: disables memes and silly goal locations.",
         "New game mode WaltonWare Hardcore: saving is disabled, and there is no healing!",
