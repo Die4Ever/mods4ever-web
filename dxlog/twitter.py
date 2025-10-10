@@ -824,6 +824,8 @@ def send_masto_toot(mastoApi,msg,attachments):
 		err("Encountered an issue when attempting to toot: "+str(e)+" "+str(e.args))
 
 def twitter_version_to_string(version):
+	if version == 'v3.6.6.6': # Halloween version, don't shorten it
+		return version
 	m = SplitVersionString(version)
 	if not m:
 		return None
