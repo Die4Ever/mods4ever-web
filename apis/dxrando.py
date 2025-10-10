@@ -74,6 +74,12 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2025-10-10', "v3.6.6.6 Happy Halloween 2025!",
+    [   "Added new Stalker types! Read the wiki for hints on how to deal with them.",
+        "New game mode: Mr. Page's Horrifying Bingo Machine",
+        "Fixed and/or Limited Saves modes now get emergency autosaves for crashes and when exiting the game, same as WaltonWare Hardcore",
+    ]))
+
     news.append(NewsItem('2025-09-18', "v3.6.1 Welcome Back, Walt!",
     [   "Fixed Area 51 Sectors 2 and 3 goals rando locations not working",
         "The Ballistic Protection aug now uses slightly less energy (when Augs Balance Changes are enabled), and has a shorter auto linger time (when Semi-Automatic Augs are enabled)",
