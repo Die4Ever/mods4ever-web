@@ -608,7 +608,7 @@ def Area51ElevatorMsg(event,player):
 	return msg
 
 
-mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'GMDXAERandomizer': 'GMDX: Augmented Edition', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'Vanilla? Madder.' }
+mod_names = { 'DeusEx': '', 'GMDXRandomizer': 'GMDX', 'GMDXAERandomizer': 'GMDX: Augmented Edition', 'RevRandomizer': 'Revision', 'HXRandomizer': 'HX', 'VMDRandomizer': 'Vanilla? Madder.', 'VMD2Randomizer': 'Vanilla? Madder.' }
 flag_to_character_names = {
 	'TerroristCommander_Dead': 'Terrorist Commander',
 	'TiffanySavage_Dead': 'Tiffany Savage',
