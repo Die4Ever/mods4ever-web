@@ -40,6 +40,17 @@ def writebingo():
         return {'error': 'Content-Length too long'}, 413 # 413 Content Too Large
     return dxrando.writebingo(data)
 
+
+@app.route('/authstream', methods=['GET', 'POST'])
+def authstream():
+    stream_key = request.args.get('name') or request.form.get('name')
+    if stream_key == get_config().get('adminpassword'):
+        return "OK"
+    else:
+        print(f"Rejected stream key: {stream_key}")
+        return "Invalid stream key", 403
+
+
 @app.route('/api/dxrando/leaderboard')
 def api_dxrando_leaderboard():
     try:
