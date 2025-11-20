@@ -19,7 +19,7 @@
         {% set url = "https://www.youtube.com/embed/" + project.youtube %}
         {% set url = url + ('&' if '?' in project.youtube else '?') %}
         {% set url = url + "list=PLZIQTa_kwZhBksj7UzcahPiRaHk87fWch&enablejsapi=1" %}
-        <iframe src="{{ url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe src="{{ url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerPolicy="strict-origin-when-cross-origin"></iframe>
     {% endif %}
 
     {% for downloadname,downloadurl in project.get('downloads', {}).items() %}
