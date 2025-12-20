@@ -74,6 +74,11 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2025-12-19', "v3.6.7 All I Want For Christmas Is Bug Fixes",
+    [   "The sewer exit leaving the inside of the Mission 9 dry dock now has a keypad instead of a button in modes outside of Entrance Randomizer. The keypad uses Jenny's number, so the code can be found in the dockyards.",
+        "The location of Jock is now randomized when leaving the graveyard at the end of Mission 9.",
+    ]))
+
     news.append(NewsItem('2025-10-10', "v3.6.6.6 Happy Halloween 2025!",
     [   "Added new Stalker types! Read the wiki for hints on how to deal with them.",
         "New game mode: Mr. Page's Horrifying Bingo Machine",
