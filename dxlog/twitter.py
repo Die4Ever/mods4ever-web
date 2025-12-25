@@ -418,6 +418,8 @@ def FlagEventMsg(event,mod):
 		if int(event['HordeWaveNum']) % 5 != 0:
 			return ""
 		return player+" completed wave "+event['HordeWaveNum']+" of Horde Mode!  They have "+event['HordeHealth']+"% health remaining and "+event['HordeEnergy']+"% energy\n"
+	elif flag=='WhatAreYouDoingHere':
+		return event['PlayerName']+'!  What are you doing here?  The Triad leaders are waiting in the temple.\n'
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
