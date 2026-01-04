@@ -87,7 +87,7 @@ class AugScreenDrawer:
     #The given color will tint the image to the specified color
     def makeAugImageTransparent(self,image,color):
         image = image.convert("RGBA")
-        data = image.getdata()
+        data = image.get_flattened_data()
 
         newData = []
         for pixel in data:
