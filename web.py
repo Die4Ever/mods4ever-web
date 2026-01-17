@@ -45,7 +45,7 @@ def writebingo():
 def authstream():
     stream_key = request.args.get('name') or request.form.get('name')
     if stream_key == get_config().get('adminpassword'):
-        return "OK"
+        return "OK", 200
     else:
         print(f"Rejected stream key: {stream_key}")
         return "Invalid stream key", 403
