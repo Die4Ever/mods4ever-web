@@ -42,7 +42,7 @@ def load_profanity_filter():
 
 path = os.path.dirname(os.path.realpath(dirname(__file__)))
 logdir = path + "/dxrando_logs/"
-#location_split = re.compile(r'\s*,\s*')
+location_split = re.compile(r'\s*,\s*')
 
 _config = None
 def get_config():
