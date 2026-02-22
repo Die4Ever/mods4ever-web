@@ -128,6 +128,8 @@ def catch_all(path=None):
             return redirect('https://kbin.social/m/meta@lemmy.mods4ever.com/t/193090/Mods4Ever-FAQ-and-Links')
         if 'mbin' == p:
             return redirect('https://kbin.run/m/meta@lemmy.mods4ever.com/t/403048/Mods4Ever-FAQ-and-Links') # the domain name says kbin but they run mbin now
+        if 'piefed' == p:
+            return redirect('https://retrofed.com/communities?search=&home_select=any&subscribe_select=any&topic_id=0&feed_id=0&language_id=0&instance=lemmy.mods4ever.com')
         if 'mastodon' == p:
             return redirect('https://mastodon.gamedev.place/@Die4ever')
         if 'youtube' == p:

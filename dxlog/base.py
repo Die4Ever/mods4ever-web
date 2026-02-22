@@ -14,7 +14,7 @@ import traceback
 import math
 import json
 #from csv import excel_tab
-import cgitb
+#import cgitb
 import time
 import datetime
 import ctypes
@@ -42,7 +42,7 @@ def load_profanity_filter():
 
 path = os.path.dirname(os.path.realpath(dirname(__file__)))
 logdir = path + "/dxrando_logs/"
-location_split = re.compile('\s*,\s*')
+#location_split = re.compile(r'\s*,\s*')
 
 _config = None
 def get_config():
@@ -70,9 +70,9 @@ def write_log(mod, version, ip, content, response):
 
 
 def unrealscript_sanitize(s):
-	allow = "-_[]\{\}()`~!@#$%^&*\+=|;:<>,."
-	s = re.sub('[^\w\d %s]' % allow, '', str(s))
-	s = re.sub('\s+', ' ', s)
+	allow = r"-_[]\{\}()`~!@#$%^&*\+=|;:<>,."
+	s = re.sub(r'[^\w\d %s]' % allow, '', str(s))
+	s = re.sub(r'\s+', ' ', s)
 	return s
 
 
