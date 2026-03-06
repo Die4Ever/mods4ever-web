@@ -74,6 +74,12 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2026-03-06', "v3.7 BetterPasswords",
+    [   "New password randomization styles! By default, passwords will now be randomized by picking a few words from word lists instead of purely random letters and numbers.",
+        "New options for color blind players.",
+        "Many bug fixes!",
+    ]))
+
     news.append(NewsItem('2025-12-19', "v3.6.7 All I Want For Christmas Is Bug Fixes",
     [   "The sewer exit leaving the inside of the Mission 9 dry dock now has a keypad instead of a button in modes outside of Entrance Randomizer. The keypad uses Jenny's number, so the code can be found in the dockyards.",
         "The location of Jock is now randomized when leaving the graveyard at the end of Mission 9.",
