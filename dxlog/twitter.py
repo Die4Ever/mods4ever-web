@@ -420,6 +420,8 @@ def FlagEventMsg(event,mod):
 		return player+" completed wave "+event['HordeWaveNum']+" of Horde Mode!  They have "+event['HordeHealth']+"% health remaining and "+event['HordeEnergy']+"% energy\n"
 	elif flag=='WhatAreYouDoingHere':
 		return event['PlayerName']+'!  What are you doing here?  The Triad leaders are waiting in the temple.\n'
+	elif flag=='M08SmugglerNotWarned':
+		return event['PlayerName']+' lied directly to Smuggler\'s face and told him he didn\'t need to worry about the authorities.\n'
 	else:
 		info('Flag event, unknown flag name: '+flag)
 	return None
