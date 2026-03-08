@@ -553,8 +553,8 @@ def TimedRaceMsg(event):
 		return None
 
 	finishTimeStr = FloatTimeToString(finishTime)
-
-	msg = event['PlayerName']+" finished "+raceName+" in "+finishTimeStr+"!\n"
+	player = censor_name(event.get('PlayerName', ''))
+	msg = player +" finished "+raceName+" in "+finishTimeStr+"!\n" #here
 
 	if (lostHealth>0):
 		msg = msg + "\n" + "Health Lost: "+str(lostHealth)+"%"+"\n"
