@@ -8,6 +8,9 @@ BoxSize=(208,208)
 InactiveAugColor=(255,255,30)
 ActiveAugColor=(30,255,30)
 
+AugLevelColor=(255,255,255,255)
+MaxAugLevelColor=(113,113,113,255)
+
 CranialCoord=(286,179)
 EyesCoord=(907,179)
 ArmsCoord=(134,482)
@@ -95,11 +98,19 @@ class AugScreenDrawer:
         image.putdata(newData)
         return image
 
-    def setSkillLevel(self,location,skillLevel,index=0,color=(255,255,255,255)):
+    def setSkillLevel(self,location,skillLevel,skillMax,index=0):
+        #print("Setting aug in "+location+" with level "+str(skillLevel)+" and max "+str(skillMax))
         for i in range(0,skillLevel):
-            ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),color)
+            ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),AugLevelColor)
 
-    def drawAug(self,augName,location,skillLevel,index=0):
+        if (skillMax >= 4):
+            return
+
+        for i in range(skillMax,4):
+            ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),MaxAugLevelColor)
+
+
+    def drawAug(self,augName,location,skillLevel,skillMax,index=0):
         if (index==-1):
             return
         
@@ -120,7 +131,7 @@ class AugScreenDrawer:
             draw.text(coords, self.getAugName(augName), font=font)
             
             
-        self.setSkillLevel(location,skillLevel+1,index)
+        self.setSkillLevel(location,skillLevel+1,skillMax+1,index)
 
     def saveImage(self):
         self.image=self.image.convert('RGB')
@@ -139,6 +150,21 @@ class AugScreenDrawer:
             augId = "Aug-"+str(i)
             if augId in inputJson:
                 self.augs[i]=inputJson[augId]
+                if "max" not in self.augs[i]:
+                    self.augs[i]["max"] = self.DefaultAugMax(self.augs[i]["name"])
+
+    #Aug max levels to use if not present in the message (ie. versions before we started including it)
+    def DefaultAugMax(self,augName):
+        #Remember that this is from 0-3, not 1-4
+        if (augName=="AugIFF"):
+            return 0
+        elif (augName=="AugDatalink"):
+            return 0
+        elif (augName=="AugLight"):
+            return 1
+
+        return 3
+
     def getLocationAndIndexFromHotkey(self,hotKey):
         #Deus Ex hotkeys map to different positions
         if hotKey==3:
@@ -172,7 +198,7 @@ class AugScreenDrawer:
         info("Aug list: "+str(self.augs))
         for hotKey in self.augs.keys():
             locIndex = self.getLocationAndIndexFromHotkey(hotKey)
-            self.drawAug(self.augs[hotKey]["name"],locIndex[0],self.augs[hotKey]["level"],locIndex[1])
+            self.drawAug(self.augs[hotKey]["name"],locIndex[0],self.augs[hotKey]["level"],self.augs[hotKey]["max"],locIndex[1])
 
     def getAugName(self,className):
         augs=dict()
