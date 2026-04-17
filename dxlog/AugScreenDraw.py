@@ -109,6 +109,39 @@ class AugScreenDrawer:
         for i in range(skillMax,4):
             ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),MaxAugLevelColor)
 
+    def drawAugLocOverlay(self,location):
+        if (location=="Default"):
+            return
+        
+        genderDir="Male/"
+        if (self.isFemale):
+            genderDir="Female/"
+
+        overlayImageLoc = self.ImageFolder+"LocOverlay/"+genderDir+location+".png"
+
+        try:
+            im = Image.open(overlayImageLoc)
+        except:
+            return
+        
+        loc=(0,0)
+        if location=="Cranial":
+            loc=(626,202)
+        elif location=="Eyes":
+            loc=(702,274)
+        elif location=="Arms":
+            loc=(478,462)
+        elif location=="Legs":
+            loc=(718,910)
+        elif location=="Subdermal":
+            loc=(394,662)
+        elif location=="Torso":
+            loc=(686,454)
+        else:
+            print("Didn't recognize location "+location)
+            return
+
+        self.image.paste(im,loc,im)
 
     def drawAug(self,augName,location,skillLevel,skillMax,index=0):
         if (index==-1):
@@ -132,6 +165,8 @@ class AugScreenDrawer:
             
             
         self.setSkillLevel(location,skillLevel+1,skillMax+1,index)
+
+        self.drawAugLocOverlay(location)
 
     def saveImage(self):
         self.image=self.image.convert('RGB')
@@ -249,8 +284,10 @@ class AugScreenDrawer:
         self.ImageFolder = imageDir
         if isFemale=="True":
             baseImage = "AugScreenFemale.png"
+            self.isFemale=True
         else:
             baseImage = "AugScreenMale.png"
+            self.isFemale=False
         self.image = Image.open(self.ImageFolder+baseImage)
         self.augs = {}
         self.handleAugJson(jsonIn)
