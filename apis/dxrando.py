@@ -74,6 +74,15 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2026-05-07', "v3.7.1 Packaged Fun",
+    [   "New game mode: Mr. Page's Nice Bingo Machine!  This is a combination of Normal Randomizer and the Mean Bingo Machine, making it a great starting point for people to learn bingo.",
+        "The new game screen now shows recommended presets",
+        "Added buttons for Save Settings and Restore Settings on the Advanced New Game screen",
+        "You can pet the robots! (Except for Medical and Repair Bots)",
+        "New bingo goals",
+        "Many bug fixes and minor changes!",
+    ]))
+
     news.append(NewsItem('2026-03-06', "v3.7 BetterPasswords",
     [   "New password randomization styles! By default, passwords will now be randomized by picking a few words from word lists instead of purely random letters and numbers.",
         "New options for color blind players.",
