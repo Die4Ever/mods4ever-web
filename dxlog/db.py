@@ -215,7 +215,7 @@ def _QueryLeaderboard(cursor, version=VersionToInt(2,6,0,0), maxdays=365, SortBy
 	if SortBy == 'totaltime':
 		SortBy = " ORDER BY totaltime ASC"
 	else:
-		SortBy = " ORDER BY score DESC"
+		SortBy = " AND score BETWEEN 0 and 1000000000 ORDER BY score DESC"
 
 	try:
 		GameMode = int(Filters.get('GameMode', -1))
