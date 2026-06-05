@@ -124,9 +124,7 @@ class InventoryScreenDrawer:
             alt+="\n"
         return profanity.censor(alt)
 
-    def getInvImageLocation(self,InvClass):
-        invClassName=InvClass.lower()
-
+    def remapInvImage(self,invClassName):
         #In case someone actually manages to beat the game in HX,
         #strip the HX off the start of the name so it matches the vanilla names
         if (invClassName.startswith("hx")):
@@ -136,6 +134,23 @@ class InventoryScreenDrawer:
         if invClassName=="weaponrubberbaton":
             invClassName = "weaponbaton"
 
+        if ("gmdx" in self.mod.lower()):
+            if invClassName=="gmdxgepgun":
+                invClassName="weapongepgungmdx"
+            elif invClassName=="weapongepgun":
+                invClassName="weapongepgungmdx"
+            elif invClassName=="weaponflamethrower":
+                invClassName="weaponflamethrowergmdx"
+            elif invClassName=="weaponplasmarifle":
+                invClassName="weaponplasmariflegmdx"
+
+        return invClassName
+
+    def getInvImageLocation(self,InvClass):
+        invClassName=InvClass.lower()
+
+        invClassName = self.remapInvImage(invClassName)
+
         return self.IconsFolder+self.InvImageLookup.get(invClassName,"INVALIDFILENAME.png")
 
     def initInvImageLookupTable(self):
@@ -144,7 +159,7 @@ class InventoryScreenDrawer:
             self.InvImageLookup[f.split(".")[0].lower()]=f
         #print(self.InvImageLookup)
 
-    def __init__(self,jsonIn,imageDir="""InventoryImages/""",iconDir="""InventoryImages/Icons/"""):
+    def __init__(self,jsonIn,mod="",imageDir="""InventoryImages/""",iconDir="""InventoryImages/Icons/"""):
         self.ImageFolder = imageDir
         self.IconsFolder = iconDir
         self.initInvImageLookupTable()
@@ -153,6 +168,7 @@ class InventoryScreenDrawer:
         self.image = self.scaleImage(self.image,ImageScale)
         self.inventory: list[dict] = []
         self.credits=0
+        self.mod = mod
 
         self.handleInvJson(jsonIn)
 

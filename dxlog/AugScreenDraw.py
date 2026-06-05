@@ -34,12 +34,54 @@ DEFAULT_FONT_SIZE = 28
 class AugScreenDrawer:
     def getSkillPoint(self, base,level):
         return (base[0]+(SkillSpacing*level),base[1])
+    
+    def remapAugImage(self,augName):
 
-    def getAugImage(self,augName):
+        #Shifter/Biomod
         if augName=="AugSkullGun":
             augName = "AugDatalink"
         elif augName=="AugTracking":
             augName = "AugTarget"
+        
+        #GMDX
+        elif augName=="AugBallisticPassive":
+            augName = "AugBallistic"
+        elif augName=="AugEnergyTransfer":
+            augName = "AugEMP"
+        elif augName =="AugIcarus":
+            augName = "AugEMP"
+        elif augName =="AugCombatStrength": #note original aug is AugCombat
+            augName = "AugCombatStrengthGMDX"
+
+        #VMD
+        #These mech augs are theoretically not for player use right now
+        elif augName=="AugMechCloak":
+            augName = "AugCloak"
+        elif augName=="AugMechCombat":
+            augName = "AugCombat"
+        elif augName=="AugMechDermal":
+            augName = "AugBallistic"
+        elif augName=="AugMechEMP":
+            augName = "AugEMP"
+        elif augName=="AugMechEnergy":
+            augName = "AugBallistic" #???
+        elif augName=="AugMechEnviro":
+            augName = "AugEnviro"
+        elif augName=="AugMechMuscle":
+            augName = "AugMuscle"
+        elif augName=="AugMechSpeed":
+            augName = "AugSpeed"
+        elif augName=="AugMechStealth":
+            augName = "AugStealth"
+        elif augName=="AugMechTarget":
+            augName = "AugTarget"
+        elif augName=="AugMechVision":
+            augName = "AugVision"
+
+        return augName
+
+    def getAugImage(self,augName):
+        augName = self.remapAugImage(augName);
         imageLoc = self.ImageFolder+augName+".png"
         if not os.path.exists(imageLoc):
             return None

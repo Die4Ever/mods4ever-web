@@ -77,7 +77,7 @@ def tweet(config, playthrough_data, events, mod, version):
 		if "Inv-0" in event:
 			if (ShouldDrawInventory(event)):
 				try:
-					invDrawer = InventoryScreenDrawer(event)
+					invDrawer = InventoryScreenDrawer(event,mod)
 					invScreen = invDrawer.getImageInMemory()
 				except Exception as e:
 					err('Failed to generate inventory image:', e, e.args)
