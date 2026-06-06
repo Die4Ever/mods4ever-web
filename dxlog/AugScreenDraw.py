@@ -9,13 +9,15 @@ InactiveAugColor=(255,255,30)
 ActiveAugColor=(30,255,30)
 
 AugLevelColor=(255,255,255,255)
+GMDXAugLevelColor=(255,0,0,255)
 MaxAugLevelColor=(113,113,113,255)
+GMDXMaxAugLevelColor=(32,32,32,255)
 
 CranialCoord=(286,179)
-CranialCoordGMDX=(286,179) #TODO update with GMDX background image?
+CranialCoordGMDX=(394,166)
 EyesCoord=(907,179)
 ArmsCoord=(134,482)
-ArmsCoordGMDX=[(134,482),(134,482)] #TODO update with GMDX background image
+ArmsCoordGMDX=[(134,198),(134,434)]
 SubDermalCoord=[(134,818),(134,1054)]
 LegsCoord=(1046,1314)
 TorsoCoord=[(1046,506),(1046,742),(1046,978)]
@@ -23,10 +25,10 @@ DefaultCoord=[(135,1390),(345,1390),(558,1390)]
 
 SkillSpacing=25
 CranialSkillLevel=(410,400)
-CranialSkillLevelGMDX=(410,400) #TODO update with GMDX background image
+CranialSkillLevelGMDX=(520,390)
 EyeSkillLevel=(1030,400)
 ArmSkillLevel=(255,705)
-ArmSkillLevelGMDX=[(255,705),(255,705)] #TODO update with GMDX background image
+ArmSkillLevelGMDX=[(260,420),(260,655)]
 LegsSkillLevel=(1172,1535)
 SubdermalSkillLevel=[(255,1040),(255,1275)]
 TorsoSkillLevel=[(1172,728),(1172,965),(1172,1200)]
@@ -159,14 +161,23 @@ class AugScreenDrawer:
 
     def setSkillLevel(self,location,skillLevel,skillMax,index=0):
         #print("Setting aug in "+location+" with level "+str(skillLevel)+" and max "+str(skillMax))
+        augColor = None
+        maxColor = None
+        if ("gmdx" in self.mod.lower()):
+            augColor = GMDXAugLevelColor
+            maxColor = GMDXMaxAugLevelColor
+        else:
+            augColor = AugLevelColor
+            maxColor = MaxAugLevelColor
+        
         for i in range(0,skillLevel):
-            ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),AugLevelColor)
+            ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),augColor)
 
         if (skillMax >= 4):
             return
 
         for i in range(skillMax,4):
-            ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),MaxAugLevelColor)
+            ImageDraw.floodfill(self.image,self.getSkillPoint(self.getAugSkillCoord(location,index),i),maxColor)
 
     def drawAugLocOverlay(self,location):
         if (location=="Default"):
@@ -482,9 +493,9 @@ class AugScreenDrawer:
     def findBaseImage(self):
         if ("gmdx" in self.mod.lower()):
             if self.isFemale: #AE only
-                baseImage = "AugScreenFemale.png" #TODO change to GMDX image
+                baseImage = "AugScreenMaleGMDX.png" #TODO change to female GMDX image
             else:
-                baseImage = "AugScreenMale.png" #TODO change to GMDX image
+                baseImage = "AugScreenMaleGMDX.png"
         else:
             if self.isFemale:
                 baseImage = "AugScreenFemale.png"

@@ -143,6 +143,8 @@ class InventoryScreenDrawer:
                 invClassName="weaponflamethrowergmdx"
             elif invClassName=="weaponplasmarifle":
                 invClassName="weaponplasmariflegmdx"
+            elif invClassName=="weaponrifle":
+                invClassName="weaponriflegmdx"
 
         return invClassName
 
