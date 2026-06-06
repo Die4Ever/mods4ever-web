@@ -12,8 +12,10 @@ AugLevelColor=(255,255,255,255)
 MaxAugLevelColor=(113,113,113,255)
 
 CranialCoord=(286,179)
+CranialCoordGMDX=(286,179) #TODO update with GMDX background image?
 EyesCoord=(907,179)
 ArmsCoord=(134,482)
+ArmsCoordGMDX=[(134,482),(134,482)] #TODO update with GMDX background image
 SubDermalCoord=[(134,818),(134,1054)]
 LegsCoord=(1046,1314)
 TorsoCoord=[(1046,506),(1046,742),(1046,978)]
@@ -21,8 +23,10 @@ DefaultCoord=[(135,1390),(345,1390),(558,1390)]
 
 SkillSpacing=25
 CranialSkillLevel=(410,400)
+CranialSkillLevelGMDX=(410,400) #TODO update with GMDX background image
 EyeSkillLevel=(1030,400)
 ArmSkillLevel=(255,705)
+ArmSkillLevelGMDX=[(255,705),(255,705)] #TODO update with GMDX background image
 LegsSkillLevel=(1172,1535)
 SubdermalSkillLevel=[(255,1040),(255,1275)]
 TorsoSkillLevel=[(1172,728),(1172,965),(1172,1200)]
@@ -46,8 +50,6 @@ class AugScreenDrawer:
         #GMDX
         elif augName=="AugBallisticPassive":
             augName = "AugBallistic"
-        elif augName=="AugEnergyTransfer":
-            augName = "AugEMP"
         elif augName =="AugIcarus":
             augName = "AugEMP"
         elif augName =="AugCombatStrength": #note original aug is AugCombat
@@ -91,12 +93,19 @@ class AugScreenDrawer:
         return im
 
     def getAugCoord(self,location,index):
+        gmdx = ("gmdx" in self.mod.lower())
         if location=="Cranial":
-            return CranialCoord
+            if (not gmdx):
+                return CranialCoord
+            else:
+                return CranialCoordGMDX
         elif location=="Eyes":
             return EyesCoord
         elif location=="Arms":
-            return ArmsCoord
+            if (not gmdx):
+                return ArmsCoord
+            else:
+                return ArmsCoordGMDX[index]
         elif location=="Legs":
             return LegsCoord
         elif location=="Subdermal":
@@ -110,12 +119,20 @@ class AugScreenDrawer:
         return (0,0)
 
     def getAugSkillCoord(self,location,index):
+        gmdx = ("gmdx" in self.mod.lower())
+
         if location=="Cranial":
-            return CranialSkillLevel
+            if (not gmdx):
+                return CranialSkillLevel
+            else:
+                return CranialSkillLevelGMDX
         elif location=="Eyes":
             return EyeSkillLevel
         elif location=="Arms":
-            return ArmSkillLevel
+            if (not gmdx):
+                return ArmSkillLevel
+            else:
+                return ArmSkillLevelGMDX[index]
         elif location=="Legs":
             return LegsSkillLevel
         elif location=="Subdermal":
@@ -221,14 +238,59 @@ class AugScreenDrawer:
         b.seek(0)  #This is apparently needed, otherwise twitter will reject it
 
         return b
+    
+    def InitAugSlotTable(self):
+        slots = dict()
+        for i in range(0,6+1):
+            slots[i]=dict()
+            for j in range(0,3):
+                slots[i][j]=None
+
+        return slots
 
     def handleAugJson(self,inputJson):
+        augSlotPopulate = self.InitAugSlotTable()
+        augNum = 0
+
+
         for i in range(3,15):
             augId = "Aug-"+str(i)
             if augId in inputJson:
-                self.augs[i]=inputJson[augId]
-                if "max" not in self.augs[i]:
-                    self.augs[i]["max"] = self.DefaultAugMax(self.augs[i]["name"])
+                self.augs[augNum]=inputJson[augId]
+                if "max" not in self.augs[augNum]:
+                    self.augs[augNum]["max"] = self.DefaultAugMax(self.augs[augNum]["name"])
+                if "key" not in self.augs[augNum]:
+                    #If hotkey isn't in the json, we're probably sending it as the index
+                    self.augs[augNum]["key"]=i
+                if "loc" not in self.augs[augNum]:
+                    self.augs[augNum]["loc"]=self.getLocationFromHotkey(self.augs[augNum]["key"])
+
+                self.augs[augNum]["slot"]=self.getSlotFromHotkey(self.augs[augNum]["key"])
+
+                loc = self.augs[augNum]["loc"]
+                slot = self.augs[augNum]["slot"]
+                name = self.augs[augNum]["name"]
+
+                if (loc >= 0 and slot >= 0):
+                    augSlotPopulate[loc][slot] = name
+
+                augNum = augNum+1
+
+        for i in range(0,10):
+            augId = "PAug-"+str(i)
+            if augId in inputJson:
+                self.augs[augNum]=inputJson[augId]
+                if "max" not in self.augs[augNum]:
+                    self.augs[augNum]["max"] = self.DefaultAugMax(self.augs[augNum]["name"])
+                if "loc" not in self.augs[augNum]:
+                    self.augs[augNum]["loc"]=999
+
+                self.augs[augNum]["key"]=-1
+                self.augs[augNum]["slot"]=self.findAvailableAugSlot(augSlotPopulate,self.augs[augNum]["loc"])
+                augSlotPopulate[self.augs[augNum]["loc"]][self.augs[augNum]["slot"]]=self.augs[augNum]["name"]
+
+                augNum = augNum+1
+
 
     #Aug max levels to use if not present in the message (ie. versions before we started including it)
     def DefaultAugMax(self,augName):
@@ -242,40 +304,111 @@ class AugScreenDrawer:
 
         return 3
 
+    def findAvailableAugSlot(self,popList,loc):
+        for i in range(0,3):
+            if popList[loc][i]==None:
+                return i
+        return -1
+
     def getLocationAndIndexFromHotkey(self,hotKey):
         #Deus Ex hotkeys map to different positions
+        loc = self.getLocationName(self.GetLocationFromHotkey(hotKey))
+        idx = self.getSlotFromHotkey(hotKey)
+
+        return (loc,idx)
+    
+    def getSlotFromHotkey(self,hotKey):
+        idx=0
         if hotKey==3:
-            return ("Subdermal",0)
+            idx=0
         elif hotKey==4:
-            return ("Subdermal",1)
+            idx=1
         elif hotKey==5:
-            return ("Cranial",0)
+            idx=0
         elif hotKey==6:
-            return ("Arms",0)
+            idx=0
         elif hotKey==7:
-            return ("Legs",0)
+            idx=0
         elif hotKey==8:
-            return ("Eyes",0)
+            idx=0
         elif hotKey==9:
-            return ("Torso",0)
+            idx=0
         elif hotKey==10:
-            return ("Torso",1)
+            idx=1
         elif hotKey==11:
-            return ("Torso",2)
+            idx=2
         elif hotKey==12:
-            return ("Default",1) #Light
+            idx=1 #Light
         elif hotKey==13:
-            return ("Default",0) #IFF
+            idx=0 #IFF
         elif hotKey==14:
-            return ("Default",2) #Datalink
+            idx=2 #Datalink
         else:
-            return ("Unknown",-1)
+            idx=-1
+        
+        return idx
+
+        
+    def getLocationFromHotkey(self,hotKey):
+        if hotKey==3:
+            return 5
+        elif hotKey==4:
+            return 5
+        elif hotKey==5:
+            return 0
+        elif hotKey==6:
+            return 3
+        elif hotKey==7:
+            return 4
+        elif hotKey==8:
+            return 1
+        elif hotKey==9:
+            return 2
+        elif hotKey==10:
+            return 2
+        elif hotKey==11:
+            return 2
+        elif hotKey==12:
+            return 6 #Light
+        elif hotKey==13:
+            return 6 #IFF
+        elif hotKey==14:
+            return 6 #Datalink
+        else:
+            return -1 #Unknown
+
+        
+    def getLocationName(self,loc):
+        locName = ""
+        idx = 0
+
+        if (loc==0):
+            locName = "Cranial"
+        elif (loc==1):
+            locName = "Eyes"
+        elif (loc==2):
+            locName = "Torso"
+        elif (loc==3):
+            locName = "Arms"
+        elif (loc==4):
+            locName = "Legs"
+        elif (loc==5):
+            locName = "Subdermal"
+        elif (loc==6):
+            locName = "Default"
+        else:
+            locName = "Unknown"
+
+        return locName
+
 
     def drawAllAugs(self):
-        info("Aug list: "+str(self.augs))
-        for hotKey in self.augs.keys():
-            locIndex = self.getLocationAndIndexFromHotkey(hotKey)
-            self.drawAug(self.augs[hotKey]["name"],locIndex[0],self.augs[hotKey]["level"],self.augs[hotKey]["max"],locIndex[1])
+        for idx in self.augs.keys():
+            loc = self.augs[idx]["loc"]
+            locName = self.getLocationName(loc)
+            slot = self.augs[idx]["slot"]
+            
+            self.drawAug(self.augs[idx]["name"],locName,self.augs[idx]["level"],self.augs[idx]["max"],slot)
 
     def getAugName(self,className):
         augs=dict()
@@ -309,6 +442,25 @@ class AugScreenDrawer:
         augs["AugOnlySpeed"]="Running Enhancement"
         augs["AugJump"]="Jump Enhancement"
 
+        #GMDX
+        augs["AugBallisticPassive"]="BPN-021"
+        augs["AugIcarus"]="EMSP"
+        augs["AugCombatStrength"]="Combat Strength (Active)"
+        augs["AugEnergyTransfer"]="Energy Transference"
+
+        #VMD
+        augs["AugMechCloak"]="Glass-Shield Cloaking System"
+        augs["AugMechCombat"]="Cybernetic Arm Prosthesis"
+        augs["AugMechDermal"]="Dermal Armor"
+        augs["AugMechEMP"]="EMP Shielding"
+        augs["AugMechEnergy"]="Dermal Tempering"
+        augs["AugMechEnviro"]="Implanted Rebreather"
+        augs["AugMechMuscle"]="Heavy Cybernetic Arms"
+        augs["AugMechSpeed"]="Sprint Enhancement"
+        augs["AugMechStealth"]="Stealth Enhancement"
+        augs["AugMechTarget"]="Aim Stabilizer"
+        augs["AugMechVision"]="Smart Vision"
+
         if className not in augs:
             return profanity.censor(className) #Just in case
         else:
@@ -316,20 +468,40 @@ class AugScreenDrawer:
 
     def getAugScreenAltText(self):
         alt=""
-        for hotkey in self.augs.keys():
-            if(hotkey<=12):
-                alt+="F"+str(hotkey)+" - "+self.getAugName(self.augs[hotkey]["name"])+" (Level "+str(self.augs[hotkey]["level"]+1)+")\n"
+        for idx in self.augs.keys():
+            hotkey = self.augs[idx]["key"]
+            if (hotkey > 0 and hotkey<=12):
+                alt+="F"+str(hotkey)+" - "+self.getAugName(self.augs[idx]["name"])+" (Level "+str(self.augs[idx]["level"]+1)+")\n"
+            else:
+                alt+="Passive: " + self.getAugName(self.augs[idx]["name"])+" (Level "+str(self.augs[idx]["level"]+1)+")\n"
+
+        #info("Aug Alt Text: "+alt)
         return profanity.censor(alt)
         
 
-    def __init__(self, jsonIn, imageDir="AugDrawImages/", isFemale=False):
-        self.ImageFolder = imageDir
-        if isFemale=="True":
-            baseImage = "AugScreenFemale.png"
-            self.isFemale=True
+    def findBaseImage(self):
+        if ("gmdx" in self.mod.lower()):
+            if self.isFemale: #AE only
+                baseImage = "AugScreenFemale.png" #TODO change to GMDX image
+            else:
+                baseImage = "AugScreenMale.png" #TODO change to GMDX image
         else:
-            baseImage = "AugScreenMale.png"
-            self.isFemale=False
+            if self.isFemale:
+                baseImage = "AugScreenFemale.png"
+            else:
+                baseImage = "AugScreenMale.png"
+
+        return baseImage
+
+    def __init__(self, jsonIn, mod="", imageDir="AugDrawImages/", isFemale=False):
+        self.ImageFolder = imageDir
+
+        self.isFemale= (isFemale=="True")
+
+        self.mod = mod
+
+        baseImage = self.findBaseImage()
+
         self.image = Image.open(self.ImageFolder+baseImage)
         self.augs = {}
         self.handleAugJson(jsonIn)

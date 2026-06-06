@@ -64,7 +64,7 @@ def tweet(config, playthrough_data, events, mod, version):
 		if "Aug-12" in event: #Aug-12 should always be the light
 			if (ShouldDrawAugs(event)):
 				try:
-					augDrawer = AugScreenDrawer(event, isFemale=event["PlayerIsFemale"])
+					augDrawer = AugScreenDrawer(event, mod, isFemale=event["PlayerIsFemale"])
 					augScreen = augDrawer.getImageInMemory()
 				except Exception as e:
 					err('Failed to generate augmentations image:', e, e.args)
@@ -91,6 +91,8 @@ def tweet(config, playthrough_data, events, mod, version):
 		if msg!=None:
 			if "prevent_tweet" in config and config["prevent_tweet"]==True:
 				info("Would have tweeted:\n"+msg)
+				for attachment in attachments:
+					info("Alt Text: "+attachment[1])
 			else:
 				if twitActive:
 					send_tweet(twitApiV1,twitApiV2,msg,attachments)
