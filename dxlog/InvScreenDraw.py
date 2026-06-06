@@ -43,6 +43,7 @@ class InventoryScreenDrawer:
         x = inv.get("x",-1)
         y = inv.get("y",-1)
         count = inv.get("count",0)
+        rot = inv.get("rot",False)
         
         if (x<0 or y<0 or invClass==""):
             return
@@ -54,6 +55,8 @@ class InventoryScreenDrawer:
         invClass = profanity.censor(invClass) #censor it, in case we have to write the text into the image
 
         if(invImage!=None):
+            if (rot):
+                invImage = invImage.transpose(Image.ROTATE_270)
             self.image.paste(invImage,coord,invImage)
         else:
             font = ImageFont.truetype(DEFAULT_FONT_NAME, ERROR_FONT_SIZE)
