@@ -74,6 +74,13 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2026-06-21', "v3.8 Everyday I'm Shuffling",
+    [   "New game mode: Speedrun Shuffle!  This is the same as Speedrun Mode, but you only play a few missions, in random order.",
+        "We will be starting a tournament for Speedrun Shuffle in July! Keep an eye on our YouTube and/or Discord!",
+        "Significant fixes and improvements to GMDXv9 Randomizer!",
+        "Fixes to support Vanilla? Madder! 2.0",
+    ]))
+
     news.append(NewsItem('2026-05-07', "v3.7.1 Packaged Fun",
     [   "New game mode: Mr. Page's Nice Bingo Machine!  This is a combination of Normal Randomizer and the Mean Bingo Machine, making it a great starting point for people to learn bingo.",
         "The new game screen now shows recommended presets",
