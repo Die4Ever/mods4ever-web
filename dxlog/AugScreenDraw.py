@@ -55,7 +55,10 @@ class AugScreenDrawer:
         elif augName =="AugIcarus":
             augName = "AugEMP"
         elif augName =="AugCombatStrength": #note original aug is AugCombat
-            augName = "AugCombatStrengthGMDX"
+            if (self.mod.lower()=="gmdxaerandomizer"):
+                augName = "AugCombat" #The regular combat strength icon
+            else:
+                augName = "AugCombatStrengthGMDX" #Inexplicably, v9 uses a slightly modified EMP shield icon?
 
         #VMD
         #These mech augs are theoretically not for player use right now
@@ -329,6 +332,12 @@ class AugScreenDrawer:
         return (loc,idx)
     
     def getSlotFromHotkey(self,hotKey):
+        if ("gmdxae" in self.mod.lower()):
+            return self.getSlotFromHotkeyGMDXAE(hotKey)
+        else:
+            return self.getSlotFromHotkeyDefault(hotKey)
+        
+    def getSlotFromHotkeyDefault(self,hotKey):
         idx=0
         if hotKey==3:
             idx=0
@@ -353,6 +362,39 @@ class AugScreenDrawer:
         elif hotKey==13:
             idx=0 #IFF
         elif hotKey==14:
+            idx=2 #Datalink
+        else:
+            idx=-1
+        
+        return idx
+
+    def getSlotFromHotkeyGMDXAE(self,hotKey):
+        idx=0
+        if hotKey==3:
+            idx=0
+        elif hotKey==4:
+            idx=1
+        elif hotKey==5:
+            idx=0
+        elif hotKey==6:
+            idx=0
+        elif hotKey==7:
+            idx=1
+        elif hotKey==8:
+            idx=0
+        elif hotKey==9:
+            idx=0
+        elif hotKey==10:
+            idx=0
+        elif hotKey==11:
+            idx=1
+        elif hotKey==12:
+            idx=2
+        elif hotKey==13:
+            idx=1 #Light
+        elif hotKey==14:
+            idx=0 #IFF
+        elif hotKey==15:
             idx=2 #Datalink
         else:
             idx=-1
