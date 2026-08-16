@@ -496,7 +496,10 @@ class AugScreenDrawer:
         augs["AugJump"]="Jump Enhancement"
 
         #GMDX
-        augs["AugBallisticPassive"]="BPN-021"
+        if (self.mod.lower()=="gmdxaerandomizer"):
+            augs["AugBallisticPassive"]="Ballistic Protection (Passive)"
+        else:
+            augs["AugBallisticPassive"]="BPN-021"
         augs["AugIcarus"]="EMSP"
         augs["AugCombatStrength"]="Combat Strength (Active)"
         augs["AugEnergyTransfer"]="Energy Transference"
