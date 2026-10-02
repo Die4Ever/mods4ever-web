@@ -136,6 +136,40 @@ class InventoryScreenDrawer:
         #Remap any items that don't have icons
         if invClassName=="weaponrubberbaton":
             invClassName = "weaponbaton"
+        elif invClassName=="weaponprecisionrifle":
+            invClassName = "weaponrifle"
+        elif invClassName=="weaponpoisonknives":
+            invClassName = "weaponshuriken"
+        elif invClassName=="weapontoxinblade":
+            invClassName = "weaponcombatknife"
+        elif invClassName=="weaponblackjack":
+            invClassName = "weaponbaton"
+        elif invClassName=="weaponboomstick":
+            invClassName = "weaponsawedoffshotgun"
+        elif invClassName=="weaponrailgun":
+            invClassName = "weaponplasmarifle"
+        elif invClassName=="weaponancientsword":
+            invClassName = "weaponsword"
+        elif invClassName=="weaponmagnum":
+            invClassName = "weaponpistol"
+        elif invClassName=="weaponassaultgunx51":
+            invClassName = "weaponassaultgun"
+        elif invClassName=="revweaponstealthpistol": #Jock's pistol
+            invClassName = "weaponpistol"
+        elif invClassName=="weaponjackhammer":
+            invClassName = "weaponassaultshotgun"
+        elif invClassName=="weaponassaultheartgun":
+            invClassName = "weaponassaultshotgun"
+        elif invClassName=="weaponlobruto":
+            invClassName = "weaponstealthpistol"
+        elif invClassName=="weaponprototypesword":
+            invClassName = "weaponsword"
+        elif invClassName=="weaponprototypesworda":
+            invClassName = "weaponsword"
+        elif invClassName=="weaponprototypeswordb":
+            invClassName = "weaponsword"
+        elif invClassName=="weaponprototypeswordc":
+            invClassName = "weaponsword"
 
         if ("gmdx" in self.mod.lower()):
             if invClassName=="gmdxgepgun":
