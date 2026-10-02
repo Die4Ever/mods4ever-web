@@ -27,8 +27,8 @@ COUNT_TEXT_OFFSET_Y=42
 @typechecked
 class InventoryScreenDrawer:
 
-    def getInvImage(self,InvClass:str):
-        imageLoc = self.getInvImageLocation(InvClass)
+    def getInvImage(self,InvClass:str,small:bool):
+        imageLoc = self.getInvImageLocation(InvClass,small)
         if not os.path.exists(imageLoc):
             return None
 
@@ -44,6 +44,7 @@ class InventoryScreenDrawer:
         y = inv.get("y",-1)
         count = inv.get("count",0)
         rot = inv.get("rot",False)
+        small = inv.get("small",False)
         
         if (x<0 or y<0 or invClass==""):
             return
@@ -51,7 +52,7 @@ class InventoryScreenDrawer:
         #font = ImageFont.load_default()
         coord=self.getInventoryCoord(x,y)
 
-        invImage=self.getInvImage(invClass)
+        invImage=self.getInvImage(invClass,small)
         invClass = profanity.censor(invClass) #censor it, in case we have to write the text into the image
 
         if(invImage!=None):
@@ -170,6 +171,10 @@ class InventoryScreenDrawer:
             invClassName = "weaponsword"
         elif invClassName=="weaponprototypeswordc":
             invClassName = "weaponsword"
+        elif invClassName=="weaponuniquecrowbar":
+            invClassName = "weaponcrowbar"
+        elif invClassName=="weapongrenadelauncher":
+            invClassName = "weaponassaultshotgun"
 
         if ("gmdx" in self.mod.lower()):
             if invClassName=="gmdxgepgun":
@@ -185,10 +190,18 @@ class InventoryScreenDrawer:
 
         return invClassName
 
-    def getInvImageLocation(self,InvClass):
+    def getInvImageLocation(self,InvClass,Small):
         invClassName=InvClass.lower()
 
         invClassName = self.remapInvImage(invClassName)
+
+        if Small:
+            smallImgName = self.InvImageLookup.get(invClassName+"small","")
+            if (smallImgName!=""):
+                #Use the small image if it exists
+                #otherwise fall back to the regular size
+                return self.IconsFolder+smallImgName
+            
 
         return self.IconsFolder+self.InvImageLookup.get(invClassName,"INVALIDFILENAME.png")
 

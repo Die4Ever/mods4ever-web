@@ -2,6 +2,9 @@
 config.json
 dxrando_logs
 public/bingo.txt
+AugScreenTest.jpg
+InvScreenTest.png
+bingo.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
