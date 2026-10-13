@@ -74,6 +74,14 @@ def writebingo(data):
 def dxrando_news():
     news = []
 
+    news.append(NewsItem('2026-10-13', "v3.8.1 Edge of Halloween",
+    [   "New renderers. If you have issues, try changing your renderer in the launcher, or look in the Advanced Options of our installer. And please let us know if you had issues!",
+        "New launcher exe.",
+        "New game modes."
+        "Significant fixes and improvements to GMDX Randomizer.",
+        "Support for Revision v1.7.5.",
+    ]))
+
     news.append(NewsItem('2026-06-21', "v3.8 Everyday I'm Shuffling",
     [   "New game mode: Speedrun Shuffle!  This is the same as Speedrun Mode, but you only play a few missions, in random order.",
         "We will be starting a tournament for Speedrun Shuffle in July! Keep an eye on our YouTube and/or Discord!",
